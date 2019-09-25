@@ -1,0 +1,14 @@
+body {
+  padding: 50px;
+  font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
+}
+
+a {
+  color: #00B7FF;
+}
+
+.hi{
+  width:100px;
+  height: 100px;
+  background: url('../../upload/upload_3a914860be95f6cc3a8594cef79a29b2');
+}

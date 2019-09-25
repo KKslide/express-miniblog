@@ -1,0 +1,46 @@
+.card-container{
+  background-color: white;
+  padding: 2rem 5rem;
+  position: relative;
+  width: 80%;
+  margin: -10em auto 20px;
+
+  @media (max-width: $screen-md) {
+    padding: 2rem;
+    margin-top: -5em;
+  }
+  &.card-container-lg{
+    @media (max-width: $screen-md) {
+      width: 95%;
+      padding: 2rem 3em;
+      margin-top: -10em;
+    }
+  }
+}
+
+.black-image-project-hover{
+  display: block;
+  img{
+    -webkit-filter: contrast(200%) grayscale(100%);  /* Safari */
+    filter: contrast(200%) grayscale(100%);
+    @include transition(all .1s linear);
+
+    &:hover{
+      filter: none;
+    }
+    @media (max-width: $screen-md) {
+      filter: none;
+    }
+  }
+}
+
+.projects-carousel{
+  @media (max-width: $screen-sm) {
+    .carousel-control{
+      display: none;
+    }
+    .carousel-inner > .item{
+      display: block;
+    }
+  }
+}

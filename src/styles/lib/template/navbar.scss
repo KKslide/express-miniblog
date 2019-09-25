@@ -1,0 +1,120 @@
+.navbar{
+  border:none;
+  min-height: inherit;
+  
+  @media (min-width: $screen-sm) {
+    margin: 10px;
+  }
+}
+.navbar-inverse, .navbar-default{
+  .navbar-collapse{
+    margin: 10px -5px;
+    box-shadow:none;
+    .navbar-nav{
+      padding: 20px;
+    }
+  }
+  @media (min-width: $screen-sm) {
+    .navbar-collapse{
+      margin: 0;
+      padding: 30px 0;
+      .navbar-nav{
+        padding: 0;
+      }
+    }
+  }
+ 
+  
+  .navbar-toggle{
+    padding: 20px;
+    margin: 0;
+    border:none;
+    position: absolute;
+    right: 10px;
+    top: 10px;
+    z-index: 10;
+    background-color:white;
+    &:hover, &:focus{
+      background-color: white;
+    }
+  }
+}
+
+.navbar-inverse {
+  .navbar-nav > li > a {
+    @media (min-width: $screen-sm) {
+      border-right: 1px solid white;
+    }
+  }
+  .navbar-nav > li:last-of-type a{
+    border-right:none;
+  }
+  .navbar-toggle{
+    background-color: $gray-base;
+    &:hover, &:focus{
+      background-color:  $gray-base;
+    }
+  }
+}
+
+.navbar-default {
+  .navbar-nav{
+    border-bottom: 1px solid #eee;
+    @media (min-width: $screen-sm) {
+      border:none;
+    }
+  }
+
+  .navbar-nav > li > a {
+    @media (min-width: $screen-sm) {
+      border-right: 1px solid $gray-base;
+    }
+  }
+  .navbar-nav > li:last-of-type a{
+    border-right:none;
+  }
+  .navbar-toggle{
+    background-color:white;
+    &:hover, &:focus{
+      background-color: white;
+    }
+  }
+}
+
+
+
+@media (max-width: $screen-sm) {
+  .navbar-inverse{
+    background-color: transparent;
+    .navbar-collapse{
+       background-color:black;
+    }
+  }
+
+  .navbar-default{
+    background-color: transparent;
+    .navbar-collapse{
+       background-color:white;
+    }
+    
+  }
+}
+   
+
+.nav > li > a{
+  font-size: 14px;
+  font-weight: 300;
+  @include transition(all .1s linear);
+
+  &:hover, &.active{
+    font-weight: 700;
+  }
+}
+
+.nav.navbar-small > li > a{
+  font-size: 11px;
+
+}
+
+
+
