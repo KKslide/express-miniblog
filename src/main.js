@@ -5,17 +5,17 @@ import App from './App'
 import qs from 'qs'
 import $ from 'jquery'
 import ElementUI from 'element-ui' // 引入Element-UI
+Vue.use(ElementUI) // 使用饿了么UI
 
+import 'normalize.css' // 引入重置样式
 import 'bootstrap/dist/css/bootstrap.min.css'
 import 'bootstrap/dist/js/bootstrap.min.js'
 
-import 'normalize.css' // 引入重置样式
 import 'element-ui/lib/theme-chalk/index.css' // 引入Element-UI样式
 import 'quill/dist/quill.core.css' // 引入编辑器样式
 import 'quill/dist/quill.snow.css' // 引入编辑器样式
 import 'quill/dist/quill.bubble.css' // 引入编辑器样式
 import './styles/main.css' // 引入自己的样式
-Vue.use(ElementUI) // 使用饿了么UI
 
 import Filter from "./filter/index"
 Vue.use(Filter)
