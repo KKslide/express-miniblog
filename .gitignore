@@ -2,6 +2,7 @@
 node_modules/
 /server/node_modules
 /server/upload/*
+/server/dist
 a.txt
 /dist/
 npm-debug.log*
