@@ -14,7 +14,8 @@ var mongoose = require("mongoose");
 // var Cookies = require('cookies');
 
 // 连接数据库
-mongoose.connect("mongodb://localhost:27017/myBlog");
+mongoose.connect("mongodb://localhost:27017/myBlog"); // 本地
+// mongoose.connect("mongodb://47.107.164.180:27017/myBlog"); // 线上
 var db = mongoose.connection;
 db.once("open", function () {
     console.log("Mongo Connected");

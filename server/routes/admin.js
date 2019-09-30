@@ -44,7 +44,7 @@ router.post('/login', (req, res, next) => {
             "_id": userinfo._id,
             "username": userinfo.username,
             "isadmin": userinfo.isadmin
-        }), { maxAge: 1000 * 60, httpOnly: true })
+        }), { maxAge: 1000 * 60 * 60, httpOnly: true }) // 现在先存一个小时吧
 
         res.json({
             code: 1,
@@ -188,8 +188,8 @@ router.post('/articles/add', (req, res, next) => {
         composition: content,
         addtime: new Date(),
         num: 0,
-        // user: req.userInfo._id.toString()
-        user: "5d37d4b925c2e64b90f2d912" // 暂时写死这个 后期再加cookie
+        // user: "5d9163d84bc06239aa26d9c3" // 暂时写死这个 后期再加cookie
+        user: JSON.parse(req.cookies.userInfo)._id
     });
     newcontent.save();
     res.json({ code: 1, msg: "添加文章成功 !" })
@@ -217,7 +217,6 @@ router.post("/content/edit", function (req, res) {
     var description_sub = req.body.description_sub || "";
     var minpic_url = req.body.minpic_url || "";
     var content = req.body.content || "";
-    console.log(content);
     Content.update({ _id: id }, {
         title: title,
         category: category,
@@ -227,8 +226,7 @@ router.post("/content/edit", function (req, res) {
         composition: content,
         addtime: new Date(),
         num: 0,
-        // user: req.userInfo._id.toString()
-        user: "5d37d4b925c2e64b90f2d912" // 暂时写死这个 后期再加cookie
+        user: JSON.parse(req.cookies.userInfo)._id
     }).then(function () {
         res.json({
             // userInfo: req.userInfo,
@@ -249,8 +247,6 @@ router.post("/content/img_upload", function (req, res) {
     form.parse(req, function (err, fields, files) {
         console.log(fields);
         console.log(files);
-        // res.json({code:0})
-        // return
         if (err) {
             console.log(err);
             res.json({ code: 0, msg: "上传失败！" })
