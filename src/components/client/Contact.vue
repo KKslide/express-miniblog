@@ -11,7 +11,7 @@
 
             <div class="row">
               <div class="col-md-10 col-md-offset-1">
-                <form action class="reveal-content">
+                <form action class="reveal-content" @submit.prevent="submit">
                   <div class="row">
                     <div class="col-md-7">
                       <div class="form-group">
@@ -31,30 +31,33 @@
                           <span class="fa-icon">
                             <i class="fa fa-phone" aria-hidden="true"></i>
                           </span>
-                          + 33 9 07 45 12 65
+                          +86 131 4335 2449
                         </li>
                         <li>
                           <span class="fa-icon">
                             <i class="fa fa-at" aria-hidden="true"></i>
                           </span>
-                          e-mail@mail.io
+                          rollercompanion@163.com
                         </li>
                         <li>
                           <span class="fa-icon">
                             <i class="fa fa fa-map-marker" aria-hidden="true"></i>
                           </span>
-                          42 rue Moulbert 75016 Paris
+                          GuangZhou MingPu-Garden China
                         </li>
                       </ul>
                       <h3>Follow me on social networks</h3>
-                      <a href="http://www.facebook.com" title class="fa-icon">
+                      <a href="https://www.facebook.com/profile.php?id=100025250295698" title class="fa-icon">
                         <i class="fa fa-facebook"></i>
                       </a>
-                      <a href="http://www.twitter.com" title class="fa-icon">
+                      <a href="https://twitter.com/KK_slide" title class="fa-icon">
                         <i class="fa fa-twitter"></i>
                       </a>
-                      <a href="http://www.linkedin.com" title class="fa-icon">
-                        <i class="fa fa-linkedin"></i>
+                      <a href="https://www.instagram.com/kangkang1105_/" title class="fa-icon">
+                        <i class="fa fa-instagram"></i>
+                      </a>
+                      <a href="https://weibo.com/kkslide" title class="fa-icon">
+                        <i class="fa fa-weibo"></i>
                       </a>
                     </div>
                   </div>
@@ -76,6 +79,15 @@ export default {
   components: {
     'header-com': Header,
     'footer-com': Footer
+  },
+  methods:{
+      submit(){
+          this.$message({
+              type:"warning",
+              message:"T_T, it`s not ready yet..."
+          })
+          return false
+      }
   }
 }
 </script>

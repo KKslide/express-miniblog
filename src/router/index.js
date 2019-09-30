@@ -7,6 +7,7 @@ import AdminComponent from '@/components/admin/index.vue'
 import UserManageComponent from '@/components/admin/user/UserManage.vue'
 import CategoryManageComponent from '@/components/admin/category/CategoryManage.vue'
 import ArticleManageComponent from '@/components/admin/article/ArticleManage.vue'
+import CommentManageComponent from '@/components/admin/comment/CommentManagement,.vue'
 import LoginComponent from '@/components/admin/Login'
 /* ********* 管理端 ********** */
 
@@ -33,6 +34,7 @@ export default new Router({
             name: 'home',
             // redirect: '/admin',
             component: HomeComponent,
+            // redirect:'/admin'
             // children: [
             // 	{
             // 		path: 'user',
@@ -94,9 +96,9 @@ export default new Router({
                     component: ArticleManageComponent
                 },
                 {
-                    path: 'test',
-                    name: 'test',
-                    component: TestComponent
+                    path: 'comment',
+                    name: 'comment',
+                    component: CommentManageComponent
                 },
             ]
         }
