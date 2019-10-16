@@ -7,7 +7,7 @@ import AdminComponent from '@/components/admin/index.vue'
 import UserManageComponent from '@/components/admin/user/UserManage.vue'
 import CategoryManageComponent from '@/components/admin/category/CategoryManage.vue'
 import ArticleManageComponent from '@/components/admin/article/ArticleManage.vue'
-import CommentManageComponent from '@/components/admin/comment/CommentManagement,.vue'
+import CommentManageComponent from '@/components/admin/comment/CommentManagement.vue'
 import LoginComponent from '@/components/admin/Login'
 /* ********* 管理端 ********** */
 

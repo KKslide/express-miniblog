@@ -1,18 +1,23 @@
 <template>
   <div>
+    <!-- 多图片上传 -->
+    <el-upload v-if="multiple" action="string" list-type="picture-card" :on-preview="handlePreview" :auto-upload="false" :on-remove="handleRemove" :http-request="upload" :on-change="consoleFL" :file-list="uploadList" >
+      <i class="el-icon-plus"></i>
+    </el-upload>
     <!-- 单图片上传 -->
-    <el-upload class="avatar-uploader" action="'string'" list-type="picture-card" :auto-upload="false" :show-file-list="false" :on-change="handleCrop" :http-request="upload" >
+    <el-upload v-else class="avatar-uploader" action="'string'" list-type="picture-card" :auto-upload="false" :show-file-list="false" :on-change="handleCrop" :http-request="upload" >
       <img v-if="imageUrl" :src="imageUrl" class="avatar" ref="singleImg" @mouseenter="mouseEnter" @mouseleave="mouseLeave" :style="{width:width+'px',height:height+'px'}" />
       <i v-else class="el-icon-plus avatar-uploader-icon" :style="{width:width+'px',height:height+'px','line-height':height+'px','font-size':height/6+'px'}" ></i>
       <!-- 单图片上传状态显示 -->
       <!-- <div v-if="imageUrl" class="reupload" ref="reupload" @click.stop="handlePreviewSingle" @mouseenter="mouseEnter" @mouseleave="mouseLeave" :style="{width:reuploadWidth+'px',height:reuploadWidth+'px','line-height':reuploadWidth+'px','font-size':reuploadWidth/5+'px'}">重新上传</div> -->
       <div id="uploadIcon" v-if="imageUrl" ref="reupload" @mouseenter="mouseEnter" @mouseleave="mouseLeave" :style="{width:'100%'}" >
-        <i class="el-icon-zoom-in" title="查看原图" @click.stop="handlePreviewSingle" :style="{color:'#2E2E2E',fontSize:'25px',display:'inline-block',paddingRight:'15px'}" ></i>
-        <i class="el-icon-refresh-right" title="重新上传" :style="{color:'#2E2E2E',fontSize:'25px',display:'inline-block'}"></i>
+        <i class="el-icon-zoom-in" @click.stop="handlePreviewSingle" :style="{color:'#2E2E2E',fontSize:'25px',display:'inline-block',paddingRight:'15px'}" ></i>
+        <i class="el-icon-upload" :style="{color:'#2E2E2E',fontSize:'25px',display:'inline-block'}"></i>
       </div>
       <div class="reupload" ref="uploading" :style="{width:reuploadWidth+'px',height:reuploadWidth+'px','line-height':reuploadWidth+'px','font-size':reuploadWidth/5+'px'}" >上传中..</div>
       <div class="reupload" ref="failUpload" :style="{width:reuploadWidth+'px',height:reuploadWidth+'px','line-height':reuploadWidth+'px','font-size':reuploadWidth/5+'px'}" >上传失败</div>
     </el-upload>
+    <!-- 多图片预览弹窗 -->
     <el-dialog :visible.sync="dialogVisible">
       <img width="100%" :src="dialogImageUrl" alt />
     </el-dialog>
@@ -44,7 +49,7 @@ export default {
     fixedNumber: {
       // 剪裁框比例设置
       default: function () {
-        return [1.5416666666666667, 1]
+        return [16, 9]
       }
     },
     width: {
@@ -97,6 +102,24 @@ export default {
     }
   },
   methods: {
+    /** **************************** multiple多图情况 **************************************/
+    handlePreview(file) {
+      // 点击进行图片展示
+      this.dialogImageUrl = file.url
+      this.dialogVisible = true
+    },
+    handleRemove(file, fileList) {
+      // 删除图片后更新图片文件列表并通知父级变化
+      this.uploadList = fileList
+      this.$emit('imgupload', this.formatImgArr(this.uploadList))
+    },
+    consoleFL(file, fileList) {
+      // 弹出剪裁框，将当前文件设置为文件
+      this.cropperModel = true
+      this.file = file
+      this.uploadList = fileList
+    },
+    /************************************************************************************/
 
     /****************************** single单图情况 **************************************/
     handlePreviewSingle(file) {//点击进行图片展示
@@ -125,21 +148,40 @@ export default {
 
     upload(data) {
       // 自定义upload事件
-      this.$refs.uploading.style.display = 'block'
+      if (!this.multiple) {
+        // 如果单图，则显示正在上传
+        this.$refs.uploading.style.display = 'block'
+      }
       let imgData = new FormData();
       imgData.append('file', data);
       imgData.image = data;
       this.$axios.post(this.targetUrl, imgData).then(res => {
-        // 上传完成后隐藏正在上传
-        this.$refs.uploading.style.display = 'none'
+        // console.log(res);
+        if (!this.multiple) {
+          // 上传完成后隐藏正在上传
+          this.$refs.uploading.style.display = 'none'
+        }
         if (res.status === 200) {
           // 上传成功将照片传回父组件
           const currentPic = res.data.imageUrl
-          this.$emit('imgupload', currentPic)
-          this.imageUrl = currentPic
+          if (this.multiple) {
+            this.uploadList.push({
+              url: currentPic,
+              uid: '111'
+            })
+            this.uploadList.pop()
+            this.$emit('imgupload', this.formatImgArr(this.uploadList))
+          } else {
+            this.$emit('imgupload', currentPic)
+            this.imageUrl = currentPic
+          }
         } else {
-            // 上传失败则显示上传失败，如多图则从图片列表删除图片
+          // 上传失败则显示上传失败，如多图则从图片列表删除图片
+          if (!this.multiple) {
             this.$refs.failUpload.style.display = 'block'
+          } else {
+            this.uploadList.pop()
+          }
         }
       })
       this.cropperModel = false
