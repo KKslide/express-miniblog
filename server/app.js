@@ -8,6 +8,7 @@ var logger = require('morgan');
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
 var adminRouter = require('./routes/admin');
+var uploadRouter = require('./routes/upload'); // 上传图片路由接口
 
 //加载mongoose数据库，这个中间件是nodejs与mongoDB数据库的桥梁
 var mongoose = require("mongoose");
@@ -61,6 +62,8 @@ app.use(express.static(path.join(__dirname, 'dist')));
 app.use('/index', indexRouter);
 app.use('/users', usersRouter);
 app.use('/admin', adminRouter);
+
+app.use('/pic',uploadRouter);
 
 /* GET page. */
 app.get('/', function(req, res, next) {

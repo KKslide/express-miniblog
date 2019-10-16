@@ -1,6 +1,3 @@
-/**
- * Created by Administrator on 2017/10/24.
- */
 var express = require("express");
 var path = require("path");
 var md5 = require("md5");
@@ -245,17 +242,22 @@ router.post("/content/img_upload", function (req, res) {
     form.uploadDir = "./upload";
     form.keepExtentsions = true;
     form.parse(req, function (err, fields, files) {
-        console.log(fields);
-        console.log(files);
+        // console.log(fields);
+        // console.log(files);
+        console.log(req.body);
+        console.log('-------------------------------------------------------');
+        console.log(req.query);
+        return
         if (err) {
             console.log(err);
             res.json({ code: 0, msg: "上传失败！" })
         } else {
-            var ip = req.headers['x-real-ip'] ? req.headers['x-real-ip'] : req.ip.replace(/::ffff:/, '');
+            var ip = req.headers['x-real-ip'] ? req.headers['x-real-ip'] : req.ip.replace(/::ffff:/, ''); // 有问题
             res.json({
                 code: 1,
                 msg: "上传成功！",
-                path: 'http://' + ip + '/' + path.basename(files.image.path)
+                // path: 'http://' + ip + '/' + path.basename(files.image.path)
+                path: 'http://47.107.164.180/' + path.basename(files.image.path)
             })
         }
     })
@@ -276,7 +278,8 @@ router.post("/content/mpic_upload", function (req, res, next) {
             res.json({
                 code: 1,
                 msg: "上传成功！",
-                path: 'http://' + ip + '/' + path.basename(files.file.path)
+                // path: 'http://' + ip + '/' + path.basename(files.file.path)
+                path: 'http://47.107.164.180/' + path.basename(files.file.path)
             })
         }
 
