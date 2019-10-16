@@ -6,10 +6,10 @@
       <el-table-column prop="title" label="文章标题"></el-table-column>
       <el-table-column prop="category" label="文章分类"></el-table-column>
       <el-table-column prop="user" label="作者"></el-table-column>
-      <el-table-column  label="添加时间">
-          <template slot-scope="scope">
-              <p>{{scope.row.addtime|date}}</p>
-          </template>
+      <el-table-column label="添加时间">
+        <template slot-scope="scope">
+          <p>{{scope.row.addtime|date}}</p>
+        </template>
       </el-table-column>
       <el-table-column prop="num" label="阅读量"></el-table-column>
       <el-table-column label="操作">
@@ -21,7 +21,10 @@
     </el-table>
     <!-- 抽屉组件 -->
     <!-- <el-button type="text" @click="table = true">打开嵌套表格的 Drawer</el-button> -->
-    <el-button type="text" @click="dialog = true;dialogType='add'; rest();drawer_title='添加文章';minpic_url_list=[];">添加文章</el-button>
+    <el-button
+      type="text"
+      @click="dialog = true;dialogType='add'; rest();drawer_title='添加文章';minpic_url_list=[];"
+    >添加文章</el-button>
     <el-drawer
       :title="drawer_title"
       :before-close="handleClose"
@@ -149,8 +152,8 @@ export default {
         //   addtime: '2016-05-02',
         //   num: 188
         // }
-	  ],
-	  drawer_title:'',
+      ],
+      drawer_title: '',
       imageUrl: '', // 文章title缩略图
       categoryData: [], // 分类列表
       table: false,
@@ -266,7 +269,7 @@ export default {
           if (!this.form.content) this.$message({ type: "danger", message: "没有填写文章内容！" })
           return false
         }
-	  });
+      });
       if (this.dialogType == 'add') {
         this.$axios({
           url: "/admin/articles/add",
@@ -292,7 +295,7 @@ export default {
         })
       }
       if (this.dialogType == 'edit') {
-        console.log(this.form);
+        // console.log(this.form);
         this.$axios({
           url: '/admin/content/edit',
           method: 'post',
@@ -391,29 +394,20 @@ export default {
             that.handleSuccess(res.data)
           })
         }
-
-        // reader.onload = function (e) {
-        //   that.uploadPic().then(res => {   //上传图片到服务器
-        //     console.log(res);
-        //     that.handleSuccess(res)
-        //   }).catch(err => {
-        //     console.log(err);
-        //   });
-        // };
       }
     },
     handleSuccess(res) {
       let quill = this.$refs.myQuillEditor.quill
       let length = quill.getSelection().index;    // 获取光标所在位置
-      quill.insertEmbed(length, 'image', res.path);   // 插入图片  res.url为服务器返回的图片地址  
+      quill.insertEmbed(length, 'image', res.imageUrl);   // 插入图片  res.url为服务器返回的图片地址  
       quill.setSelection(length + 1);              // 调整光标到最后
     },
     uploadPic: function (item) {  //提交图片
       let form = document.getElementById('upload'),
         formData = new FormData(form);
-      formData.image = item;
-      // return api.uploadFile({ url: api.API_UPLOAD_IMAGES, data: formData }) // 调用接口上传图片
-      return this.$axios({ url: "/admin/content/img_upload", method: "post", data: formData })
+      formData.file = item;
+    //   return this.$axios({ url: "/admin/content/img_upload", method: "post", data: formData }) // 调用接口上传图片
+      return this.$axios({ url: "/pic/upload", method: "post", data: formData }) // 调用接口上传图片
     },
     /* ********* 富文本编辑器图片上传操作 *********** */
 
@@ -428,10 +422,10 @@ export default {
     },
     beforeAvatarUpload(file) {
       const isJPG = file.type === 'image/jpeg';
-      //   const isPNG = file.type === 'image/png';
+      const isPNG = file.type === 'image/png';
       const isLt2M = file.size / 1024 / 1024 < 2;
 
-      if (!isJPG) {
+      if (!isJPG || !isPNG) {
         this.$message.error('上传头像图片只能是 JPG 或 PNG  格式!');
       }
       if (!isLt2M) {
@@ -445,13 +439,16 @@ export default {
       imgData.image = files.raw;
 
       this.$axios({
-        url: "/admin/content/mpic_upload",
+        // url: "/admin/content/mpic_upload",
+        // url: "/admin/content/img_upload",
+        url: "/pic/upload",
         method: 'post',
         data: imgData
       }).then(res => {
-        if (res.data.code == 1) {
-          this.imageUrl = res.data.path
-          this.form.minpic_url = res.data.path
+        // console.log(res);
+        if (res.status == 200) {
+          this.imageUrl = res.data.imageUrl
+          this.form.minpic_url = res.data.imageUrl
           //   this.handleAvatarSuccess(res, files)
           this.hideUpload = fileList.length >= this.limitCount;
         }
