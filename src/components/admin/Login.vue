@@ -1,7 +1,7 @@
 <template>
   <div>
     <main>
-      <form class="form">
+      <form class="form" @submit="submit">
         <div class="form__cover"></div>
         <div class="form__loader">
           <div class="spinner active">
@@ -19,7 +19,7 @@
           </div>
         </div>
         <div class="form__content">
-          <h1>Login</h1>
+          <h1 class="form__content_h1">Login</h1>
           <div class="styled-input">
             <input
               type="text"
@@ -38,6 +38,7 @@
               class="styled-input__input"
               name="password"
               v-model="userForm.password"
+              @keydown="typing($event)"
             />
             <div class="styled-input__placeholder">
               <span class="styled-input__placeholder-text">Password</span>
@@ -138,7 +139,7 @@ export default {
 
     setTimeout(function () {
       document.body.classList.add('document-loaded');
-    }, 1800);
+    }, 1500);
 
   },
   methods: {
@@ -170,6 +171,11 @@ export default {
             return false;
           }
         })
+      }
+    },
+    typing(e) {
+      if (e.keyCode == 13) {
+        this.submit();
       }
     }
   },
@@ -347,7 +353,7 @@ body.document-loaded .form__cover:before {
   transform: scale(2);
   opacity: 0;
 }
-h1 {
+h1.form__content_h1 {
   font-size: 40px;
   margin: 15px 0 20px 0;
   letter-spacing: 0.05em;
