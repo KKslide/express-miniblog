@@ -6,8 +6,7 @@
           <div class="col-xs-12">
             <p>
               © UNTITLED | Website created with
-              <a href="javascript:;">KKslide.cloud</a>/
-              <a href="javascript:;" title="Beautiful Free Images">Lykang.</a>
+              <a href="http://www.kkslide.fun">KKslide.fun</a>/<a href="javascript:;">Lykang</a>
             </p>
           </div>
         </div>

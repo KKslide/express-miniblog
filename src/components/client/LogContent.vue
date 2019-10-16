@@ -65,14 +65,16 @@
                       <span class="input__label-content input__label-content--isao"></span>
                     </label>
 
-                    <label for="visitorEmail">Name</label>
-                    <input
-                      type="text"
-                      class="form-control"
-                      id="visitorEmail"
-                      placeholder="Leave a name"
-                      v-model="commentData.visitor"
-                    />
+                    <label for="visitorEmail">
+                      <span>Name</span>
+                      <input
+                        type="text"
+                        class="form-control"
+                        id="visitorEmail"
+                        placeholder="Leave a name"
+                        v-model="commentData.visitor"
+                      />
+                    </label>
 
                     <button type="submit" class="btn btn-default btn-lg" @click="submitComment">Send</button>
                   </span>
@@ -224,7 +226,7 @@ export default {
         this.$message({ type: "warning", message: "The comment can`t be blank" })
         return false;
       }
-      if ( !this.commentData.visitor) {
+      if (!this.commentData.visitor) {
         this.$message({ type: "warning", message: "leave a name please~~~" })
         return false;
       }
