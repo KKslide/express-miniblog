@@ -6,6 +6,7 @@ var router = express.Router();
 var User = require("../models/user");
 var Category = require("../models/category");
 var Content = require("../models/content");
+var Massage = require("../models/massage");
 var formidable = require("formidable"); // 用来处理上传图片的
 
 // 检测是否登陆
@@ -27,7 +28,8 @@ router.post('/login', (req, res, next) => {
 
     User.findOne({
         username: username,
-        password: md5(password)
+        // password: md5(password)
+        password: password
     }, function (err, userinfo) {
         if (err) {
             console.log(err);
@@ -161,13 +163,37 @@ router.post('/categories/edit', (req, res, next) => {
 
 // 获取文章接口
 router.get("/articles", (req, res, next) => {
-    Content.find().populate(["category", "user"]).sort({ _id: -1 }).then(function (contents) {
-        // console.log(contents);
+    var resObj = {
+        // category : req.query.category||req.body.category||"",
+        count: 0, // 总数
+        page: Number(req.query.page || req.body.page || 1), // 当前页
+        limit: 5, // 页容量(每页有多少条数据)
+        pages: 0, // 页总数
+    };
+
+    Content.count().then(count => {
+        resObj.count = count; // 
+        resObj.pages = Math.ceil(resObj.count / resObj.limit); // 页总数
+        resObj.page = Math.min(resObj.page, resObj.pages); // 取值不能超过总页数
+        resObj.page = Math.max(resObj.page, 1); // 取值不能小于1
+        var skip = (resObj.page - 1) * resObj.limit;
+        return Content.find().limit(resObj.limit).skip(skip).populate(["category", "user"]).sort({ addtime: -1 });
+    }).then(contents => {
         res.json({
             userInfo: req.userInfo,
-            contents: contents
+            contents: contents,
+            total: resObj.count,
+            pages: resObj.pages,
+            pageSize: resObj.limit
         });
-    });
+    })
+
+    // Content.find().populate(["category", "user"]).sort({ _id: -1 }).then(function (contents) {
+    //     res.json({
+    //         userInfo: req.userInfo,
+    //         contents: contents
+    //     });
+    // });
 })
 
 // 添加文章接口
@@ -177,12 +203,14 @@ router.post('/articles/add', (req, res, next) => {
     var description = req.body.description || "";
     var description_sub = req.body.description_sub || "";
     var content = req.body.content || "";
+    var minpic_url = req.body.minpic_url || req.query.minpic_url || "";
     var newcontent = new Content({
         title: title,
         category: category,
         description: description,
         description_sub: description_sub,
         composition: content,
+        minpic_url: minpic_url,
         addtime: new Date(),
         num: 0,
         // user: "5d9163d84bc06239aa26d9c3" // 暂时写死这个 后期再加cookie
@@ -244,10 +272,6 @@ router.post("/content/img_upload", function (req, res) {
     form.parse(req, function (err, fields, files) {
         // console.log(fields);
         // console.log(files);
-        console.log(req.body);
-        console.log('-------------------------------------------------------');
-        console.log(req.query);
-        return
         if (err) {
             console.log(err);
             res.json({ code: 0, msg: "上传失败！" })
@@ -261,7 +285,7 @@ router.post("/content/img_upload", function (req, res) {
             })
         }
     })
-})
+});
 
 // 文章缩略图上传接口
 router.post("/content/mpic_upload", function (req, res, next) {
@@ -284,6 +308,55 @@ router.post("/content/mpic_upload", function (req, res, next) {
         }
 
     })
-})
+});
+
+// 获取留言列表
+router.get("/massage", function (req, res, next) {
+    var resObj = {
+        count: 0, // 总数
+        page: Number(req.query.page || req.body.page || 1), // 当前页
+        limit: 5, // 页容量(每页有多少条数据)
+        pages: 0, // 页总数
+    };
+    Massage.count().then(count => {
+        resObj.count = count; // 
+        resObj.pages = Math.ceil(resObj.count / resObj.limit); // 页总数
+        resObj.page = Math.min(resObj.page, resObj.pages); // 取值不能超过总页数
+        resObj.page = Math.max(resObj.page, 1); // 取值不能小于1
+        var skip = (resObj.page - 1) * resObj.limit;
+        return Massage.find().limit(resObj.limit).skip(skip).sort({ addtime: -1 });
+    }).then(contents => {
+        res.json({
+            userInfo: req.userInfo,
+            massages: contents,
+            total: resObj.count,
+            pages: resObj.pages,
+            pageSize: resObj.limit
+        });
+    })
+    // Massage.find().sort({ addtime: -1 }).then(function (contents) {
+    //     res.json({
+    //         userInfo: req.userInfo,
+    //         massages: contents
+    //     });
+    // });
+});
+
+// 留言删除接口
+router.post("/massage/del", function (req, res, next) {
+    var id = req.body.ids || req.query.ids || [];
+    Massage.deleteMany({ _id: { $in: id } }).then((err, resData) => {
+        // if (err) {
+        console.log(err);
+        //     res.json({ code: 0, msg: "删除失败!" })
+        // } else {
+        res.json({
+            code: 1,
+            msg: "删除成功!",
+            resData: resData
+        })
+        // }
+    })
+});
 
 module.exports = router;

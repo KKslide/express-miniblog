@@ -92,3 +92,8 @@
 #article img {
   max-width: 100%;
 }
+
+.quill-editor.myQuillEditor .ql-editor {
+    max-height: 400px;
+}
+  

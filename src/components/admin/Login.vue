@@ -67,6 +67,7 @@
 </template>
 
 <script>
+import md5 from 'js-md5'
 export default {
   data() {
     return {
@@ -152,6 +153,7 @@ export default {
         return false;
       }
       else {
+        this.userForm.password = md5(this.userForm.password)
         this.$axios({
           url: "/admin/login",
           method: "post",

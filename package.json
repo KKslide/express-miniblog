@@ -10,13 +10,14 @@
     "build": "node build/build.js"
   },
   "dependencies": {
-    "normalize.css": "^8.0.1",
-    "style-loader": "^1.0.0",
-    "vue": "^2.5.2",
-    "vue-router": "^3.0.1",
     "bootstrap": "^3.3.7",
     "jquery": "^3.2.1",
-    "typed.js": "^2.0.4"
+    "js-md5": "^0.7.3",
+    "normalize.css": "^8.0.1",
+    "style-loader": "^1.0.0",
+    "typed.js": "^2.0.4",
+    "vue": "^2.5.2",
+    "vue-router": "^3.0.1"
   },
   "devDependencies": {
     "autoprefixer": "^7.1.2",

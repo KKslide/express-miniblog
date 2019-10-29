@@ -19,12 +19,26 @@
         </template>
       </el-table-column>
     </el-table>
-    <!-- 抽屉组件 -->
+
     <!-- <el-button type="text" @click="table = true">打开嵌套表格的 Drawer</el-button> -->
     <el-button
       type="text"
-      @click="dialog = true;dialogType='add'; rest();drawer_title='添加文章';minpic_url_list=[];"
+      @click="dialog = true;dialogType='add'; rest();drawer_title='添加文章';minpic_url_list=[];imageUrl=''"
+      style="float:right;margin-right:20px;"
     >添加文章</el-button>
+
+    <!-- 分页组件 -->
+    <el-pagination
+      background
+      layout="prev, pager, next"
+      :page-size="5"
+      :page-count="pages"
+      :total="total"
+      @current-change="pageChange"
+    ></el-pagination>
+    <!-- 分页组件 -->
+
+    <!-- 抽屉组件 -->
     <el-drawer
       :title="drawer_title"
       :before-close="handleClose"
@@ -60,7 +74,8 @@
             <form id="minPicForm" method="post" enctype="multipart/form-data">
               <!-- :http-request="handleUpload" -->
               <!-- :file-list="ad_url_list" -->
-              <el-upload
+              <!-- 暂时废弃掉原来的上传组件 -->
+              <!-- <el-upload
                 ref="upload"
                 action="/admin/content/mpic_upload"
                 :auto-upload="false"
@@ -75,11 +90,33 @@
                 :on-change="handleUploadMinPic"
                 v-model="form.minpic_url"
               >
-                <!-- <img v-if="imageUrl" :src="imageUrl" class="avatar" />
-                <i v-else class="el-icon-plus avatar-uploader-icon"></i>-->
                 <span class="font-14">选择jpg或png</span>
                 <div slot="tip" class="el-upload__tip" style="display:none;">尺寸360*233px, 1M以内</div>
-              </el-upload>
+              </el-upload>-->
+              <!-- 暂时废弃掉原来的上传组件 -->
+              <!-- 新上的cropper组件 -->
+              <!-- 单图片上传 -->
+                <el-upload class="avatar-uploader" v-model="form.minpic_url" action="'string'" list-type="picture-card" :auto-upload="false" :show-file-list="false" :on-change="handleCrop" :http-request="upload" >
+                <img v-if="imageUrl" :src="imageUrl" class="avatar" ref="singleImg" @mouseenter="mouseEnter" @mouseleave="mouseLeave" :style="{width:width+'px',height:height+'px'}" />
+                <i v-else class="el-icon-plus avatar-uploader-icon" :style="{width:width+'px',height:height+'px','line-height':height+'px','font-size':height/6+'px'}" ></i>
+                <!-- 单图片上传状态显示 -->
+                <!-- <div v-if="imageUrl" class="reupload" ref="reupload" @click.stop="handlePreviewSingle" @mouseenter="mouseEnter" @mouseleave="mouseLeave" :style="{width:reuploadWidth+'px',height:reuploadWidth+'px','line-height':reuploadWidth+'px','font-size':reuploadWidth/5+'px'}">重新上传</div> -->
+                <div id="uploadIcon" v-if="imageUrl" ref="reupload" @mouseenter="mouseEnter" @mouseleave="mouseLeave" :style="{width:'100%'}" >
+                    <i class="el-icon-zoom-in" title="查看原图" @click.stop="handlePreviewSingle" :style="{color:'#2E2E2E',fontSize:'25px',display:'inline-block',paddingRight:'15px'}" ></i>
+                    <i class="el-icon-refresh-right" title="重新上传" :style="{color:'#2E2E2E',fontSize:'25px',display:'inline-block'}"></i>
+                </div>
+                <div class="reupload" ref="uploading" :style="{width:reuploadWidth+'px',height:reuploadWidth+'px','line-height':reuploadWidth+'px','font-size':reuploadWidth/5+'px'}" >上传中..</div>
+                <div class="reupload" ref="failUpload" :style="{width:reuploadWidth+'px',height:reuploadWidth+'px','line-height':reuploadWidth+'px','font-size':reuploadWidth/5+'px'}" >上传失败</div>
+                </el-upload>
+                <el-dialog :visible.sync="dialogVisible">
+                <img width="100%" :src="dialogImageUrl" alt />
+                </el-dialog>
+                <!-- 剪裁组件弹窗 -->
+                <el-dialog :visible.sync="cropperModel" width="800px" :before-close="beforeClose">
+                    <Cropper :img-file="file" ref="vueCropper" :fixedNumber="fixedNumber" @upload="upload"></Cropper>
+                </el-dialog>
+                <!-- 剪裁组件弹窗 -->
+              <!-- 新上的cropper组件 -->
             </form>
           </el-form-item>
           <!-- 文章内容 -->
@@ -104,7 +141,7 @@
             </form>
           </el-form-item>
         </el-form>
-        <div class="demo-drawer__footer">
+        <div class="demo-drawer__footer" style="margin-bottom:10px;">
           <el-button @click="dialog = false">取 消</el-button>
           <!-- <el-button type="primary" @click="$refs.drawer.closeDrawer()" :loading="loading" >{{ loading ? '提交中 ...' : '确 定' }}</el-button> -->
           <el-button
@@ -119,6 +156,7 @@
 </template>
 
 <script>
+import Cropper from '../../cropper.vue'
 import { quillEditor } from 'vue-quill-editor'
 import 'quill/dist/quill.core.css'
 import 'quill/dist/quill.snow.css'
@@ -142,7 +180,7 @@ const toolbarOptions = [ // 富文本编辑器配置
 export default {
   data() {
     return {
-      originArticleData: [], // 接口传过来的
+      originArticleData: null, // 接口传过来的
       articleData: [ // 转化好的文章列表格式
         // {
         //   _id: 'sadfsadfsdaf',
@@ -153,6 +191,9 @@ export default {
         //   num: 188
         // }
       ],
+      total: 1, // 总条数
+      pages: 1, // 总页数
+      curPage: 1, // 当前页
       drawer_title: '',
       imageUrl: '', // 文章title缩略图
       categoryData: [], // 分类列表
@@ -163,6 +204,16 @@ export default {
       hideUpload: false, //   缩略图上传按钮隐藏
       limitCount: 1, //   缩略图上传按钮隐藏
       minpic_url_list: [], // 缩略图列表
+      //   cropper配置------------------------------------------------------
+      file: '', // 当前被选择的图片文件
+      imageUrl: '', // 单图情况框内图片链接
+      dialogImageUrl: '', // 多图情况弹窗内图片链接
+      uploadList: [], // 上传图片列表
+      reupload: true, // 控制"重新上传"开关
+      dialogVisible: false, // 展示弹窗开关
+      cropperModel: false, // 剪裁组件弹窗开关
+      reuploadWidth: this.height * 0.7, // 动态改变”重新上传“大小
+      //   cropper配置------------------------------------------------------
 
       form: {
         title: '',
@@ -191,7 +242,7 @@ export default {
           }
         }
       },
-      rules: {
+      rules: { // 校验规则
         title: [{ required: true, message: '写一下文章标题啦', trigger: 'blur' }],
         category: [{ required: true, message: '选一下文章类型啦', trigger: 'blur' }],
         minpic_url: [{ required: true, message: '没有上传封面图片噢', trigger: 'blur' }],
@@ -199,12 +250,73 @@ export default {
       },
     }
   },
+  //   *************cropper组件配置****************
+  props: {
+    targetUrl: {
+      // 上传地址
+      type: String,
+      default: '/pic/upload'
+    },
+    multiple: {
+      // 多图开关
+      type: Boolean,
+      default: false
+    },
+    initUrl: {
+      // 初始图片链接
+      default: ''
+    },
+    fixedNumber: {
+      // 剪裁框比例设置
+      default: function () {
+        return [1.5416666666666667, 1]
+      }
+    },
+    width: {
+      // 单图剪裁框宽度
+      type: Number,
+      default: 148
+    },
+    height: {
+      // 单图剪裁框高度
+      type: Number,
+      default: 96
+    }
+  },
+  //   *************cropper组件配置****************
   components: {
-    quillEditor
+    quillEditor,
+    Cropper
   },
   created() {
     this.getArticles();
     this.getCates();
+  },
+  mounted() {
+    if (typeof this.initUrl === 'string') {
+      this.imageUrl = this.initUrl
+    } else {
+      this.uploadList = this.formatImgArr(this.initUrl)
+    }
+  },
+  updated() {
+    if (this.$refs.vueCropper) {
+      this.$refs.vueCropper.Update()
+    }
+  },
+  watch: {
+    initUrl: function (val) {
+      // 监听传入初始化图片
+      console.info('watch')
+      console.info(val)
+      if (val) {
+        if (typeof this.initUrl === 'string') {
+          this.imageUrl = val
+        } else {
+          this.uploadList = this.formatImgArr(val)
+        }
+      }
+    }
   },
   methods: {
     //   重置表单
@@ -236,8 +348,10 @@ export default {
     },
     // 获取文章列表
     getArticles() {
-      this.$axios({ url: '/admin/articles' })
+      this.$axios({ url: '/admin/articles', params: { page: this.curPage }, method: 'get' })
         .then(res => {
+          this.total = res.data.total;
+          this.pages = res.data.pages;
           // 先保存原格式的文章信息
           this.originArticleData = res.data;
           var newContents = [];
@@ -254,6 +368,10 @@ export default {
           })
           this.articleData = newContents; // 格式化后的文章信息
         })
+    },
+    pageChange(currentPage) { // 点击分页按钮
+      this.curPage = currentPage;
+      this.getArticles();
     },
     // 获取文章分类
     getCates() {
@@ -279,7 +397,6 @@ export default {
           if (res.data.code == 1) {
             this.$message({
               type: 'success',
-              // message: res.code.msg
               message: "添加文章成功 !"
             });
           } else {
@@ -295,7 +412,6 @@ export default {
         })
       }
       if (this.dialogType == 'edit') {
-        // console.log(this.form);
         this.$axios({
           url: '/admin/content/edit',
           method: 'post',
@@ -304,7 +420,6 @@ export default {
           if (res.data.code == 1) {
             this.$message({
               type: 'success',
-              // message: res.code.msg
               message: "修改文章成功 !"
             });
           } else {
@@ -364,7 +479,7 @@ export default {
         if (v._id == id) {
           nowForm = v
         }
-      })
+      });
       nowForm.category = row.category
       nowForm.content = nowForm.composition
       nowForm.id = id
@@ -373,6 +488,8 @@ export default {
       this.dialogType = 'edit'
       if (nowForm.minpic_url != "") {
         this.minpic_url_list.push({ url: nowForm.minpic_url })
+        this.imageUrl = nowForm.minpic_url
+        this.form.minpic_url = nowForm.minpic_url
       } else {
         this.hideUpload = false
       }
@@ -406,59 +523,123 @@ export default {
       let form = document.getElementById('upload'),
         formData = new FormData(form);
       formData.file = item;
-    //   return this.$axios({ url: "/admin/content/img_upload", method: "post", data: formData }) // 调用接口上传图片
+      //   return this.$axios({ url: "/admin/content/img_upload", method: "post", data: formData }) // 调用接口上传图片
       return this.$axios({ url: "/pic/upload", method: "post", data: formData }) // 调用接口上传图片
     },
     /* ********* 富文本编辑器图片上传操作 *********** */
 
     /* ********* 缩略图 图片上传操作 *********** */
-    handleExceed: function () {
-      this.$alert('请先删除选择的图片或视频，再上传', '提示', {
-        type: 'warning'
-      });
-    },
-    handleAvatarSuccess(res, file) {
-      this.imageUrl = URL.createObjectURL(file.raw);
-    },
-    beforeAvatarUpload(file) {
-      const isJPG = file.type === 'image/jpeg';
-      const isPNG = file.type === 'image/png';
-      const isLt2M = file.size / 1024 / 1024 < 2;
+    // handleExceed: function () {
+    //   this.$alert('请先删除选择的图片或视频，再上传', '提示', {
+    //     type: 'warning'
+    //   });
+    // },
+    // handleAvatarSuccess(res, file) {
+    //   this.imageUrl = URL.createObjectURL(file.raw);
+    // },
+    // beforeAvatarUpload(file) {
+    //   const isJPG = file.type === 'image/jpeg';
+    //   const isPNG = file.type === 'image/png';
+    //   const isLt2M = file.size / 1024 / 1024 < 2;
 
-      if (!isJPG || !isPNG) {
-        this.$message.error('上传头像图片只能是 JPG 或 PNG  格式!');
-      }
-      if (!isLt2M) {
-        this.$message.error('上传头像图片大小不能超过 2MB!');
-      }
-      return isJPG && isLt2M;
-    },
-    handleUploadMinPic(files, fileList) {
-      let form = document.getElementById("minPicForm");
-      let imgData = new FormData(form);
-      imgData.image = files.raw;
+    //   if (!isJPG || !isPNG) {
+    //     this.$message.error('上传头像图片只能是 JPG 或 PNG  格式!');
+    //   }
+    //   if (!isLt2M) {
+    //     this.$message.error('上传头像图片大小不能超过 2MB!');
+    //   }
+    //   return isJPG && isLt2M;
+    // },
+    // handleUploadMinPic(files, fileList) {
+    //   let form = document.getElementById("minPicForm");
+    //   let imgData = new FormData(form);
+    //   imgData.image = files.raw;
 
-      this.$axios({
-        // url: "/admin/content/mpic_upload",
-        // url: "/admin/content/img_upload",
-        url: "/pic/upload",
-        method: 'post',
-        data: imgData
-      }).then(res => {
-        // console.log(res);
-        if (res.status == 200) {
-          this.imageUrl = res.data.imageUrl
-          this.form.minpic_url = res.data.imageUrl
-          //   this.handleAvatarSuccess(res, files)
-          this.hideUpload = fileList.length >= this.limitCount;
-        }
-      })
-    },
-    handleRemove(file, fileList) {
-      this.hideUpload = fileList.length >= this.limitCount;
-    }
+    //   this.$axios({
+    //     // url: "/admin/content/mpic_upload",
+    //     // url: "/admin/content/img_upload",
+    //     url: "/pic/upload",
+    //     method: 'post',
+    //     data: imgData
+    //   }).then(res => {
+    //     // console.log(res);
+    //     if (res.status == 200) {
+    //       this.imageUrl = res.data.imageUrl
+    //       this.form.minpic_url = res.data.imageUrl
+    //       //   this.handleAvatarSuccess(res, files)
+    //       this.hideUpload = fileList.length >= this.limitCount;
+    //     }
+    //   })
+    // },
+    // handleRemove(file, fileList) {
+    //   this.hideUpload = fileList.length >= this.limitCount;
+    // }
     /* ********* 缩略图 图片上传操作 *********** */
 
+    /* ************* cropper截图上传 ************** */
+    handlePreviewSingle(file) {//点击进行图片展示
+      this.dialogImageUrl = this.file.url
+      this.dialogVisible = true
+    },
+    mouseEnter() {//鼠标划入显示“重新上传”
+      this.$refs.reupload.style.display = 'block'
+      if (this.$refs.failUpload.style.display === 'block') {
+        this.$refs.failUpload.style.display = 'none'
+      }
+      this.$refs.singleImg.style.opacity = '0.6'
+    },
+    mouseLeave() {
+      // 鼠标划出隐藏“重新上传”
+      this.$refs.reupload.style.display = 'none'
+      this.$refs.singleImg.style.opacity = '1'
+    },
+    handleCrop(files, fileList) {
+      // 点击弹出剪裁框
+      this.cropperModel = true
+      this.file = files
+      //  this.imageUrl = file.url
+    },
+    upload(data) {
+      // 自定义upload事件
+      this.$refs.uploading.style.display = 'block'
+      let imgData = new FormData();
+      imgData.append('file', data);
+      imgData.image = data;
+      this.$axios.post(this.targetUrl, imgData).then(res => {
+        // 上传完成后隐藏正在上传
+        this.$refs.uploading.style.display = 'none'
+        if (res.status === 200) {
+          // 上传成功将照片传回父组件
+          const currentPic = res.data.imageUrl
+          this.$emit('imgupload', currentPic)
+          this.imageUrl = currentPic
+          this.form.minpic_url = currentPic
+        } else {
+          // 上传失败则显示上传失败，如多图则从图片列表删除图片
+          this.$refs.failUpload.style.display = 'block'
+        }
+        console.log('上传成功,url为 ',this.imageUrl)
+      })
+      this.cropperModel = false
+    },
+    formatImgArr(arr) {
+      const result = arr.map((item, index) => {
+        if (typeof item === 'string') {
+          return {
+            url: item,
+            uid: `index${index}`
+          }
+        } else {
+          return item.url
+        }
+      })
+      return result
+    },
+    beforeClose(done) {
+      this.uploadList.pop()
+      this.cropperModel = false
+    }
+    /* ************* cropper截图上传 ************** */
   }
 }
 </script>
@@ -492,6 +673,48 @@ export default {
   height: 96px;
   line-height: 96px;
   text-align: center;
+}
+
+// 新增的上传组件样式
+.avatar-uploader .el-upload {
+  border: 1px dashed #d9d9d9;
+  border-radius: 6px;
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+}
+.avatar-uploader .el-upload:hover {
+  border-color: #409eff;
+}
+.avatar-uploader-icon {
+  color: #8c939d;
+  text-align: center;
+}
+.avatar {
+  display: block;
+}
+.reupload {
+  border-radius: 50%;
+  position: absolute;
+  color: #fff;
+  background-color: #000000;
+  opacity: 0.6;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  display: none;
+}
+#uploadIcon {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  display: none;
+}
+
+.avatar-uploader .el-upload.el-upload--picture-card {
+  width: unset !important;
+  height: unset !important;
 }
 
 // *********************** 富文本编辑器 ************************

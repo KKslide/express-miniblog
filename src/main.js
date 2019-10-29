@@ -31,7 +31,7 @@ const service = axios.create({
     timeout: 5000
 })
 axios.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded;charset=UFT-8'
-service.interceptors.request.use(
+service.interceptors.request.use( // 把默认的object类型请求转化为post
     config => { // onFullfilled:
         if (config === 'post') {
             config.data = qs.stringify(config.data)

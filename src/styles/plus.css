@@ -31,3 +31,14 @@
     position: relative;
     /* overflow: hidden; */
 }
+
+/* table 单元格样式重写 - 超出设置省略号 */
+.cell_nowrap>div.cell{
+    white-space: nowrap;
+}
+
+/* 留言管理面板 - disabled样式修改 */
+#massage_list .disabled input{
+    color:#333;
+    cursor: default;
+}

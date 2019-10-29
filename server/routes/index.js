@@ -2,8 +2,8 @@ var express = require('express');
 var router = express.Router();
 var Category = require("../models/category");
 var Content = require("../models/content");
-
-var data;
+var Massage = require("../models/massage");
+var viewCount = 0;
 
 /* 前端 */
 /* 获取文章列表页 */
@@ -48,6 +48,20 @@ router.post('/comment', function (req, res, next) {
 
     });
 
+});
+
+router.post("/massage/add", function (req, res, next) {
+    var viewer = req.query.viewer || req.body.viewer || "nobody";
+    var subject = req.query.subject || req.body.subject || "no subject";
+    var massage = req.query.massage || req.body.massage || "";
+    var newMsg = new Massage({
+        viewer: viewer,
+        subject: subject,
+        massage: massage,
+        addtime: new Date()
+    });
+    newMsg.save();
+    res.json({ code: 1, msg: "哔~ 留言完毕~ 感谢支持" });
 });
 
 module.exports = router;

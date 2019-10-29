@@ -12,6 +12,16 @@
       </el-table-column>
     </el-table>
     <el-button type="text" @click="open">新增分类</el-button>
+    <!-- 分页组件 -->
+    <!-- <el-pagination
+      background
+      layout="prev, pager, next"
+      :page-size="5"
+      :page-count="pages"
+      :total="total"
+      @current-change="pageChange"
+    ></el-pagination> -->
+    <!-- 分页组件 -->
   </div>
 </template>
 

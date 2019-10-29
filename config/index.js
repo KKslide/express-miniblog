@@ -15,22 +15,23 @@ module.exports = {
     proxyTable: {
       '/index': {
         changeOrigin: true,
-        target: devUrl
-        // target: proUrl // 线上
+        // target: devUrl
+        target: proUrl // 线上
       },
       '/index/*': {
         changeOrigin: true,
-        target: devUrl
-        // target: proUrl // 线上
+        // target: devUrl
+        target: proUrl // 线上
       },
       '/admin/*': {
         changeOrigin: true,
-        target: devUrl
-        // target: proUrl // 线上
+        // target: devUrl
+        target: proUrl // 线上
       },
       '/pic/**':{
           changeOrigin:true,
-          target:devUrl
+        //   target:devUrl, // 本地
+          target:proUrl // 线上
       }
     },
 

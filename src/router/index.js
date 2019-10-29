@@ -7,7 +7,7 @@ import AdminComponent from '@/components/admin/index.vue'
 import UserManageComponent from '@/components/admin/user/UserManage.vue'
 import CategoryManageComponent from '@/components/admin/category/CategoryManage.vue'
 import ArticleManageComponent from '@/components/admin/article/ArticleManage.vue'
-import CommentManageComponent from '@/components/admin/comment/CommentManagement.vue'
+import MassageManageComponent from '@/components/admin/massage/MassageManagement.vue'
 import LoginComponent from '@/components/admin/Login'
 /* ********* 管理端 ********** */
 
@@ -23,7 +23,6 @@ import LogContentComponent from '../components/client/LogContent'
 // import routerGuard from './routerGuard'
 
 import CameraComponent from '../components/Camera.vue'
-import TestComponent from '../components/admin/Upload1.vue'
 
 Vue.use(Router)
 
@@ -32,16 +31,7 @@ export default new Router({
         {
             path: '/',
             name: 'home',
-            // redirect: '/admin',
             component: HomeComponent,
-            // redirect:'/admin'
-            // children: [
-            // 	{
-            // 		path: 'user',
-            // 		name: 'user',
-            // 		component: UserManageComponent
-            // 	}
-            // ]
         },
         {
             path: '/camera',
@@ -96,9 +86,9 @@ export default new Router({
                     component: ArticleManageComponent
                 },
                 {
-                    path: 'comment',
-                    name: 'comment',
-                    component: CommentManageComponent
+                    path: 'massage',
+                    name: 'massage',
+                    component: MassageManageComponent
                 },
             ]
         }
