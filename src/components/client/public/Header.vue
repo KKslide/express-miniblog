@@ -19,30 +19,23 @@
           <div class="collapse navbar-collapse" id="navbar-collapse">
             <ul class="nav navbar-nav">
               <li>
-                <!-- <a href="./index.html" title>01 : Home</a> -->
                 <router-link :to="{name:'home'}">01 : Home</router-link>
               </li>
               <li>
-                <!-- <a href="./works.html" title>02 : Works</a> -->
                 <router-link :to="{name:'log'}">02 : Logs</router-link>
               </li>
               <li>
-                <!-- <a href="./about.html" title>03 : About me</a> -->
                 <router-link :to="{name:'about'}">03 : About me</router-link>
               </li>
               <li>
-                <!-- <a href="./contact.html" title>04 : Contact</a> -->
-                <router-link :to="{name:'contact'}">04 : Contact</router-link>
+				<router-link :to="{name:'works'}">04 : Works</router-link>
               </li>
-              <!-- <li>
-                <a href="./components.html" title>05 : Components</a>
-				<router-link :to="{name:'contact'}">04 : Contact</router-link>
-              </li>-->
+              <li>
+                <router-link :to="{name:'contact'}">05 : Contact</router-link>
+              </li>
             </ul>
-            <ul
-              v-if="this.$route.name=='logcontent'"
-              class="nav navbar-nav navbar-right navbar-small visible-md visible-lg"
-            >
+            <!-- 文章导航 -->
+            <ul v-if="this.$route.name=='logcontent'" class="nav navbar-nav navbar-right navbar-small visible-md visible-lg" >
               <li v-for="(item,index) in currentArticles" :key="index">
                 <a
                   href="javascript:;"
@@ -53,6 +46,7 @@
                 ></a>
               </li>
             </ul>
+            <!-- 文章导航 -->
           </div>
         </div>
       </nav>

@@ -14,7 +14,7 @@ module.exports = new mongoose.Schema({
         type: String,
         default: ""
     },
-    description_sub: {
+    video_src: {
         type: String,
         default: ""
     },

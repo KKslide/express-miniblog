@@ -3,8 +3,8 @@
 // see http://vuejs-templates.github.io/webpack for documentation.
 
 const path = require('path')
-const devUrl = 'http://localhost:80'
-const proUrl = 'http://47.107.164.180:80'
+// const proUrl = 'http://localhost:80' // 本地
+const proUrl = 'http://47.107.164.180:80' // 线上
 
 module.exports = {
   dev: {
@@ -15,23 +15,19 @@ module.exports = {
     proxyTable: {
       '/index': {
         changeOrigin: true,
-        // target: devUrl
-        target: proUrl // 线上
+        target: proUrl 
       },
       '/index/*': {
         changeOrigin: true,
-        // target: devUrl
-        target: proUrl // 线上
+        target: proUrl 
       },
       '/admin/*': {
         changeOrigin: true,
-        // target: devUrl
-        target: proUrl // 线上
+        target: proUrl 
       },
       '/pic/**':{
           changeOrigin:true,
-        //   target:devUrl, // 本地
-          target:proUrl // 线上
+          target:proUrl 
       }
     },
 

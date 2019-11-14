@@ -1,6 +1,6 @@
 var createError = require('http-errors');
 var express = require('express');
-// var session = require("express-session");
+// var ejs = require("ejs");
 var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
@@ -47,8 +47,9 @@ var app = express();
 // }));
 
 // view engine setup
-app.set('views', path.join(__dirname, 'views'));
-app.set('view engine', 'jade');
+app.set('views', path.join(__dirname, 'work'));
+// app.engine('html', ejs.__express);
+app.set('view engine', 'html');
 
 app.use(logger('dev'));
 app.use(express.json());
@@ -58,18 +59,25 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(express.static(path.join(__dirname, 'upload')));
 app.use(express.static(path.join(__dirname, 'dist')));
+// app.use(express.static(path.join(__dirname, 'work')));
 
 app.use('/index', indexRouter);
 app.use('/users', usersRouter);
 app.use('/admin', adminRouter);
 
-app.use('/pic',uploadRouter);
+app.use('/pic', uploadRouter);
 
 /* GET page. */
-app.get('/', function(req, res, next) {
+app.get('/', function (req, res, next) {
     res.type('html');
     res.render('index');
-  });
+});
+
+/* get works page */
+// app.get('/works', function (req, res, next) {
+//     res.type('html');
+//     res.render('index');
+// });
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {

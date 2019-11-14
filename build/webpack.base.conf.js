@@ -23,13 +23,13 @@ module.exports = {
       ? config.build.assetsPublicPath
       : config.dev.assetsPublicPath
   },
-  plugins: [
-    new webpack.ProvidePlugin({ // 使用jQuery插件要引入这个
-      $: "jquery",
-      jQuery: "jquery",
-      "windows.jQuery": "jquery"
-    })
-  ],
+//   plugins: [
+//     new webpack.ProvidePlugin({ // 使用jQuery插件要引入这个
+//       $: "jquery",
+//       jQuery: "jquery",
+//       "windows.jQuery": "jquery"
+//     })
+//   ],
   resolve: {
     extensions: ['.js', '.vue', '.json'],
     alias: {
@@ -94,5 +94,15 @@ module.exports = {
     net: 'empty',
     tls: 'empty',
     child_process: 'empty'
+  },
+  externals: { // 一些cdn的引用配置
+    'vue': 'Vue',
+    'element-ui': 'element-ui',
+    'jquery': 'jQuery',
+    'bootstrap': 'bootstrap',
+    'Typed': 'typed.js',
+    'axios': 'axios',
+    'qs': 'qs',
+    'vue-router': 'VueRouter',
   }
 }

@@ -5,7 +5,7 @@
       <div class="container">
         <div class="row">
           <div class="col-xs-12">
-            <img src="../../assets/images/work001-01.jpg" class="img-responsive" alt />
+            <img src="http://example.kkslide.fun/banner.jpg" class="img-responsive" alt />
             <div class="card-container">
               <div class="text-center">
                 <h1 class="h2" v-html="content.title"></h1>
@@ -18,18 +18,6 @@
               </blockquote>
             </div>
           </div>
-          <div class="col-md-8 col-md-offset-2 section-container-spacer" v-if="false">
-            <div class="row">
-              <div class="col-xs-12 col-md-6">
-                <img src="../../assets/images/work001-02.jpg" class="img-responsive" alt />
-                <p>Menphis skyline</p>
-              </div>
-              <div class="col-xs-12 col-md-6">
-                <img src="../../assets/images/work001-03.jpg" class="img-responsive" alt />
-                <p>Menphis skyline</p>
-              </div>
-            </div>
-          </div>
           <!-- 这里是正文了 -->
           <div class="col-xs-12">
             <article id="article" v-html="content.composition"></article>
@@ -37,13 +25,11 @@
             <!-- <article id="article">
 				  <h1 class="ql-align-center">HAHAHA</h1><p class="ql-align-center"><strong>&nbsp;&nbsp;life isn`t about how to live through the storm but how to dance in the rain.</strong></p><p class="ql-align-center"><strong>---------------------------------------------------------------------------------------------------------------------------------------</strong></p><p class="ql-align-center"><br></p><p class="ql-align-center"><br></p><p class="ql-align-center"><br></p><p class="ql-align-center"><br></p><p class="ql-align-center"><br></p><p class="ql-align-center"><br></p><h1 class="ql-align-center"><span style="background-color: rgb(230, 0, 0); color: rgb(255, 255, 0);">I am bad, and that`s good,&nbsp;</span></h1><h1 class="ql-align-center"><span style="background-color: rgb(230, 0, 0); color: rgb(255, 255, 0);">I will never be good and that`s not bad,&nbsp;</span></h1><h1 class="ql-align-center"><span style="background-color: rgb(230, 0, 0); color: rgb(255, 255, 0);">there is no one I would rather be than me.</span></h1><p class="ql-align-center"><br></p><p class="ql-align-center"><img src="http://127.0.0.1/upload_83e39c8107f2a3b4b2b8fa006372cfb9"></p><p class="ql-align-center"><img src="http://127.0.0.1/upload_12a63371708bff71d9a564ac42848731"></p><p><br></p>
             </article>-->
+            <!-- 视频播放 -->
+            <video-com v-if="category=='Video'" :videoSrc="videoSrc" :posterSrc="posterSrc"></video-com>
+            <!-- 视频播放 -->
           </div>
           <!-- 这里是正文了 -->
-          <!-- 底部图片 -->
-          <div class="col-xs-12" v-if="false">
-            <img src="../../assets/images/work001-04.jpg" class="img-responsive" alt />
-          </div>
-          <!-- 底部图片 -->
           <div class="col-xs-12">
             <hr class="line" />
           </div>
@@ -84,7 +70,7 @@
               <!-- 评论列表 -->
               <ul class="media-list">
                 <li class="media" v-for="item in content.comment" :key="item.time">
-                  <div class="media-left">
+                  <div class="media-left" v-if="false">
                     <!-- 头像 - 后面再做 -->
                     <a href="javascript:;">
                       <img
@@ -96,8 +82,8 @@
                   </div>
                   <!-- 评论内容 -->
                   <div class="media-body">
-                    <h4 class="media-heading" v-if="item.user" v-html="item.user"></h4>
-                    <h4 class="media-heading" v-else>somebody</h4>
+                    <h4 class="media-heading" v-if="item.user" v-html="item.user+':'" style="font-size:18px;"></h4>
+                    <h4 class="media-heading" v-else style="font-size:18px;">somebody</h4>
 
                     <p v-text="item.comment"></p>
 
@@ -189,18 +175,24 @@
 <script>
 import Header from './public/Header'
 import Footer from './public/Footer'
+import VideoCom from './Video'
 export default {
   components: {
     'header-com': Header,
-    'footer-com': Footer
+    'footer-com': Footer,
+    'video-com': VideoCom
   },
   data() {
     return {
-      content: { user: { username: "" }, comment: [] },
-      commentData: {
+      category: '',
+      content: { user: { username: "" }, comment: [] }, // 文章内容
+      commentData: { // 评论列表
         comment: '',
         visitor: ''
-      }
+      },
+      videoSrc: '', // 视频七牛云地址
+      posterSrc: '', // 视频封面
+      isError: false
     }
   },
   beforeMount() {
@@ -218,7 +210,12 @@ export default {
           contentid: contentid
         }
       }).then(res => {
-        if (res.status == 200) { this.content = res.data; this.content.comment.reverse() }
+        if (res.status == 200) {
+          this.content = res.data; this.content.comment.reverse()
+          this.category = res.data.category.name
+          this.videoSrc = res.data.video_src
+          this.posterSrc = res.data.minpic_url
+        }
       })
     },
     submitComment() {
@@ -237,7 +234,7 @@ export default {
         data: this.commentData
       }).then(res => {
         if (res.data.code == 1) {
-          this.$message({ type: "success", msg: res.data.msg });
+          this.$message({ type: "success", message: res.data.msg });
           this.commentData.comment = '';
           this.commentData.visitor = '';
         }
@@ -271,6 +268,7 @@ h3 {
 }
 p {
   margin: 0 0 10px;
+  word-wrap: break-word;
 }
 .media-list a {
   text-decoration: none;

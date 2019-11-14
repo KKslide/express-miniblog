@@ -16,6 +16,8 @@
     "normalize.css": "^8.0.1",
     "style-loader": "^1.0.0",
     "typed.js": "^2.0.4",
+    "video.js": "^7.6.5",
+    "videojs-contrib-hls": "^5.15.0",
     "vue": "^2.5.2",
     "vue-router": "^3.0.1"
   },

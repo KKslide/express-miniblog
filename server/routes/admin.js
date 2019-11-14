@@ -201,14 +201,14 @@ router.post('/articles/add', (req, res, next) => {
     var title = req.body.title || "";
     var category = req.body.category || "";
     var description = req.body.description || "";
-    var description_sub = req.body.description_sub || "";
+    var video_src = req.body.video_src || "";
     var content = req.body.content || "";
     var minpic_url = req.body.minpic_url || req.query.minpic_url || "";
     var newcontent = new Content({
         title: title,
         category: category,
         description: description,
-        description_sub: description_sub,
+        video_src: video_src,
         composition: content,
         minpic_url: minpic_url,
         addtime: new Date(),
@@ -239,14 +239,14 @@ router.post("/content/edit", function (req, res) {
     var title = req.body.title || "";
     var category = req.body.category || "";
     var description = req.body.description || "";
-    var description_sub = req.body.description_sub || "";
+    var video_src = req.body.video_src || "";
     var minpic_url = req.body.minpic_url || "";
     var content = req.body.content || "";
     Content.update({ _id: id }, {
         title: title,
         category: category,
         description: description,
-        description_sub: description_sub,
+        video_src: video_src,
         minpic_url: minpic_url,
         composition: content,
         addtime: new Date(),

@@ -43,13 +43,21 @@ router.post('/comment', function (req, res, next) {
         }
         //thiscon.comment.reverse();
         thiscon.save().then(function (newcon) {
-            res.json({code:1,msg:"评论成功"});
+            res.json({ code: 1, msg: "评论成功" });
         });
 
     });
 
 });
 
+/* 获取留言接口 */
+router.get("/massage", function (req, res, next) {
+    Massage.find().sort({ addtime: -1 }).then(contents => {
+        res.json(contents);
+    });
+});
+
+/* 留言接口 */
 router.post("/massage/add", function (req, res, next) {
     var viewer = req.query.viewer || req.body.viewer || "nobody";
     var subject = req.query.subject || req.body.subject || "no subject";

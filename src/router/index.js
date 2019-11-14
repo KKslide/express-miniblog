@@ -1,5 +1,5 @@
-import Vue from 'vue'
-import Router from 'vue-router'
+// import Vue from 'vue'
+// import Router from 'vue-router'
 import HelloWorld from '@/components/HelloWorld'
 import AdminComponent from '@/components/admin/index.vue'
 
@@ -18,15 +18,15 @@ import LogComponent from '../components/client/Log'
 import AboutComponent from '../components/client/About'
 import ContactComponent from '../components/client/Contact'
 import LogContentComponent from '../components/client/LogContent'
+import WorksComponent from '../components/client/Works'
 /* ********* 前端 ********** */
-
-// import routerGuard from './routerGuard'
 
 import CameraComponent from '../components/Camera.vue'
 
-Vue.use(Router)
+// Vue.use(Router)
 
-export default new Router({
+// export default new Router({
+export default new VueRouter({
     routes: [
         {
             path: '/',
@@ -52,6 +52,11 @@ export default new Router({
             path: '/about',
             name: 'about',
             component: AboutComponent
+        },
+        {
+            path: '/works',
+            name: 'works',
+            component: WorksComponent
         },
         {
             path: '/contact',

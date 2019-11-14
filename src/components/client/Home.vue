@@ -29,7 +29,7 @@
 </template>
 
 <script>
-import Typed from 'typed.js'
+// import Typed from 'typed.js'
 import Header from './public/Header'
 export default {
   components: {
@@ -71,7 +71,7 @@ export default {
 
 <style lang="less" scoped>
 .hero-full-container {
-  background-image: url("../../assets/images/space.jpg");
+  background-image: url("http://example.kkslide.fun/space.jpg");
 }
 .text-content {
   h1 {

@@ -65,9 +65,13 @@
           <el-form-item label="文章简介" :label-width="formLabelWidth" prop="description">
             <el-input v-model="form.description" autocomplete="off"></el-input>
           </el-form-item>
-          <!-- 文章简介2 -->
-          <el-form-item label="文章描述" :label-width="formLabelWidth">
-            <el-input v-model="form.description_sub" autocomplete="off"></el-input>
+          <!-- 视频链接 -->
+          <el-form-item
+            v-if="form.category==isVideo('Video')"
+            label="视频链接"
+            :label-width="formLabelWidth"
+          >
+            <el-input v-model="form.video_src" autocomplete="off"></el-input>
           </el-form-item>
           <!-- 缩略图 -->
           <el-form-item label="缩略图" :label-width="formLabelWidth" prop="minpic_url">
@@ -96,26 +100,76 @@
               <!-- 暂时废弃掉原来的上传组件 -->
               <!-- 新上的cropper组件 -->
               <!-- 单图片上传 -->
-                <el-upload class="avatar-uploader" v-model="form.minpic_url" action="'string'" list-type="picture-card" :auto-upload="false" :show-file-list="false" :on-change="handleCrop" :http-request="upload" >
-                <img v-if="imageUrl" :src="imageUrl" class="avatar" ref="singleImg" @mouseenter="mouseEnter" @mouseleave="mouseLeave" :style="{width:width+'px',height:height+'px'}" />
-                <i v-else class="el-icon-plus avatar-uploader-icon" :style="{width:width+'px',height:height+'px','line-height':height+'px','font-size':height/6+'px'}" ></i>
+              <el-upload
+                class="avatar-uploader"
+                v-model="form.minpic_url"
+                action="'string'"
+                list-type="picture-card"
+                :auto-upload="false"
+                :show-file-list="false"
+                :on-change="handleCrop"
+                :http-request="upload"
+              >
+                <img
+                  v-if="imageUrl"
+                  :src="imageUrl"
+                  class="avatar"
+                  ref="singleImg"
+                  @mouseenter="mouseEnter"
+                  @mouseleave="mouseLeave"
+                  :style="{width:width+'px',height:height+'px'}"
+                />
+                <i
+                  v-else
+                  class="el-icon-plus avatar-uploader-icon"
+                  :style="{width:width+'px',height:height+'px','line-height':height+'px','font-size':height/6+'px'}"
+                ></i>
                 <!-- 单图片上传状态显示 -->
                 <!-- <div v-if="imageUrl" class="reupload" ref="reupload" @click.stop="handlePreviewSingle" @mouseenter="mouseEnter" @mouseleave="mouseLeave" :style="{width:reuploadWidth+'px',height:reuploadWidth+'px','line-height':reuploadWidth+'px','font-size':reuploadWidth/5+'px'}">重新上传</div> -->
-                <div id="uploadIcon" v-if="imageUrl" ref="reupload" @mouseenter="mouseEnter" @mouseleave="mouseLeave" :style="{width:'100%'}" >
-                    <i class="el-icon-zoom-in" title="查看原图" @click.stop="handlePreviewSingle" :style="{color:'#2E2E2E',fontSize:'25px',display:'inline-block',paddingRight:'15px'}" ></i>
-                    <i class="el-icon-refresh-right" title="重新上传" :style="{color:'#2E2E2E',fontSize:'25px',display:'inline-block'}"></i>
+                <div
+                  id="uploadIcon"
+                  v-if="imageUrl"
+                  ref="reupload"
+                  @mouseenter="mouseEnter"
+                  @mouseleave="mouseLeave"
+                  :style="{width:'100%'}"
+                >
+                  <i
+                    class="el-icon-zoom-in"
+                    title="查看原图"
+                    @click.stop="handlePreviewSingle"
+                    :style="{color:'#2E2E2E',fontSize:'25px',display:'inline-block',paddingRight:'15px'}"
+                  ></i>
+                  <i
+                    class="el-icon-refresh-right"
+                    title="重新上传"
+                    :style="{color:'#2E2E2E',fontSize:'25px',display:'inline-block'}"
+                  ></i>
                 </div>
-                <div class="reupload" ref="uploading" :style="{width:reuploadWidth+'px',height:reuploadWidth+'px','line-height':reuploadWidth+'px','font-size':reuploadWidth/5+'px'}" >上传中..</div>
-                <div class="reupload" ref="failUpload" :style="{width:reuploadWidth+'px',height:reuploadWidth+'px','line-height':reuploadWidth+'px','font-size':reuploadWidth/5+'px'}" >上传失败</div>
-                </el-upload>
-                <el-dialog :visible.sync="dialogVisible">
+                <div
+                  class="reupload"
+                  ref="uploading"
+                  :style="{width:reuploadWidth+'px',height:reuploadWidth+'px','line-height':reuploadWidth+'px','font-size':reuploadWidth/5+'px'}"
+                >上传中..</div>
+                <div
+                  class="reupload"
+                  ref="failUpload"
+                  :style="{width:reuploadWidth+'px',height:reuploadWidth+'px','line-height':reuploadWidth+'px','font-size':reuploadWidth/5+'px'}"
+                >上传失败</div>
+              </el-upload>
+              <el-dialog :visible.sync="dialogVisible">
                 <img width="100%" :src="dialogImageUrl" alt />
-                </el-dialog>
-                <!-- 剪裁组件弹窗 -->
-                <el-dialog :visible.sync="cropperModel" width="800px" :before-close="beforeClose">
-                    <Cropper :img-file="file" ref="vueCropper" :fixedNumber="fixedNumber" @upload="upload"></Cropper>
-                </el-dialog>
-                <!-- 剪裁组件弹窗 -->
+              </el-dialog>
+              <!-- 剪裁组件弹窗 -->
+              <el-dialog :visible.sync="cropperModel" width="800px" :before-close="beforeClose">
+                <Cropper
+                  :img-file="file"
+                  ref="vueCropper"
+                  :fixedNumber="fixedNumber"
+                  @upload="upload"
+                ></Cropper>
+              </el-dialog>
+              <!-- 剪裁组件弹窗 -->
               <!-- 新上的cropper组件 -->
             </form>
           </el-form-item>
@@ -219,7 +273,7 @@ export default {
         title: '',
         category: '',
         description: '',
-        description_sub: '',
+        video_src: '',
         content: '',
         minpic_url: ''
       },
@@ -319,14 +373,12 @@ export default {
     }
   },
   methods: {
-    //   重置表单
-    rest() {
+    rest() { //   重置表单
       for (var key in this.form) {
         this.form[key] = ''
       }
     },
-    //   在关闭窗口前的处理操作
-    handleClose(done) {
+    handleClose(done) { //   在关闭窗口前的处理操作
       this.confirmClose(this.close, done)
     },
     confirmClose(flag, done) {
@@ -346,8 +398,7 @@ export default {
         })
         .catch(_ => { });
     },
-    // 获取文章列表
-    getArticles() {
+    getArticles() {  // 获取文章列表
       this.$axios({ url: '/admin/articles', params: { page: this.curPage }, method: 'get' })
         .then(res => {
           this.total = res.data.total;
@@ -373,15 +424,13 @@ export default {
       this.curPage = currentPage;
       this.getArticles();
     },
-    // 获取文章分类
-    getCates() {
+    getCates() { // 获取文章分类
       this.$axios({ url: '/admin/categories' })
         .then(res => {
           this.categoryData = res.data.categories
         })
     },
-    // 文章提交事件
-    submit() {
+    submit() { // 文章提交事件
       this.$refs.form.validate((valid) => {
         if (!valid) {
           if (!this.form.content) this.$message({ type: "danger", message: "没有填写文章内容！" })
@@ -435,8 +484,7 @@ export default {
         })
       }
     },
-    // 删除文章
-    handleDelete(index, row) {
+    handleDelete(index, row) { // 删除文章
       this.$confirm('永久删除分类"' + row.title + '", 是否继续?', '提示', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
@@ -470,8 +518,7 @@ export default {
       });
 
     },
-    // 编辑文章
-    handleEdit(index, row) {
+    handleEdit(index, row) { // 编辑文章
       this.minpic_url_list = [] // 先清空
       let id = row._id
       let nowForm = {}
@@ -618,7 +665,7 @@ export default {
           // 上传失败则显示上传失败，如多图则从图片列表删除图片
           this.$refs.failUpload.style.display = 'block'
         }
-        console.log('上传成功,url为 ',this.imageUrl)
+        console.log('上传成功,url为 ', this.imageUrl)
       })
       this.cropperModel = false
     },
@@ -638,8 +685,13 @@ export default {
     beforeClose(done) {
       this.uploadList.pop()
       this.cropperModel = false
-    }
+    },
     /* ************* cropper截图上传 ************** */
+    isVideo(val) {
+      let temp = null;
+      this.categoryData.forEach(v => { if (v.name == val) temp = v._id; });
+      return temp;
+    }
   }
 }
 </script>
