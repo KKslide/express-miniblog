@@ -27,7 +27,8 @@ import router from './router'
 // axios.defaults.baseURL = 'http://localhost:8080'
 const service = axios.create({
     // baseURL: 'http://localhost:8080', // 本地开发的时候..
-    baseURL: 'http://47.107.164.180', // 线上发布的时候
+    // baseURL: 'http://47.107.164.180', // 线上发布的时候- 阿里云
+    baseURL: 'http://134.175.129.219', // 线上发布的时候- 腾讯云
     timeout: 5000
 })
 axios.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded;charset=UFT-8'

@@ -16,7 +16,9 @@ var mongoose = require("mongoose");
 
 // 连接数据库
 // mongoose.connect("mongodb://localhost:27017/myBlog"); // 本地
-mongoose.connect("mongodb://47.107.164.180:27017/myBlog"); // 线上
+// mongoose.connect("mongodb://47.107.164.180:27017/myBlog"); // 线上- 阿里云
+mongoose.connect("mongodb://134.175.129.219:27017/myBlog"); // 线上- 腾讯云
+
 var db = mongoose.connection;
 db.once("open", function () {
     console.log("Mongo Connected");

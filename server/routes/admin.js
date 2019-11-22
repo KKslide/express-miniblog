@@ -303,7 +303,8 @@ router.post("/content/mpic_upload", function (req, res, next) {
                 code: 1,
                 msg: "上传成功！",
                 // path: 'http://' + ip + '/' + path.basename(files.file.path)
-                path: 'http://47.107.164.180/' + path.basename(files.file.path)
+                // path: 'http://47.107.164.180/' + path.basename(files.file.path) // 阿里云- 原来的上传接口
+                path: 'http://134.175.129.219/' + path.basename(files.file.path) // 腾讯云- 现在的上传接口
             })
         }
 
