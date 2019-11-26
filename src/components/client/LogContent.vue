@@ -251,6 +251,10 @@ export default {
 </script>
 
 <style lang="less" scoped>
+.card-container{
+    background: linear-gradient(180deg, rgba(255,255,255,.45) 1%,rgba(255,255,255,.75) 10%, rgba(255,255,255,1) 100%);
+    border-radius: 15px;
+}
 .ds-comment-footer {
   line-height: 1.5em;
 }
