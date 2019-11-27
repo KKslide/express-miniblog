@@ -6,7 +6,9 @@
         <div class="row">
           <div class="col-xs-12">
             <div class="section-container-spacer text-center">
-              <h1 class="h2">Contact me</h1>
+              <h1 class="h2" v-text="$t('navbar.Contact')">
+                <!-- Contact me -->
+              </h1>
             </div>
 
             <div class="row">
@@ -20,7 +22,7 @@
                           type="text"
                           class="form-control"
                           id="email"
-                          placeholder="Email or name"
+                          :placeholder="$t('contact.placeholder.one')"
                           v-model="viewer"
                         />
                       </div>
@@ -29,7 +31,7 @@
                           type="text"
                           class="form-control"
                           id="subject"
-                          placeholder="Subject"
+                          :placeholder="$t('contact.placeholder.two')"
                           v-model="subject"
                         />
                       </div>
@@ -37,11 +39,17 @@
                         <textarea
                           class="form-control"
                           rows="5"
-                          placeholder="Enter your message"
+                          :placeholder="$t('contact.placeholder.three')"
                           v-model="massage"
                         ></textarea>
                       </div>
-                      <button type="submit" class="btn btn-default btn-lg">Send</button>
+                      <button
+                        type="submit"
+                        class="btn btn-default btn-lg"
+                        v-text="$t('contact.placeholder.four')"
+                      >
+                        <!-- Send -->
+                      </button>
                     </div>
                     <div class="col-md-5 address-container">
                       <ul class="list-unstyled">
@@ -53,15 +61,21 @@
                         <li>
                           <span class="fa-icon">
                             <i class="fa fa-at" aria-hidden="true"></i>
-                          </span> rollercompanion@163.com
+                          </span>
+                          <!-- rollercompanion@163.com -->
+                          {{ $t('contact.mail')}}
                         </li>
                         <li>
                           <span class="fa-icon">
                             <i class="fa fa fa-map-marker" aria-hidden="true"></i>
-                          </span> GuangZhou MingPu-Garden China
+                          </span>
+                          <!-- GuangZhou MingPu-Garden China -->
+                          {{ $t('contact.addr')}}
                         </li>
                       </ul>
-                      <h3>Follow me on social networks</h3>
+                      <h3 v-text="$t('contact.social')">
+                        <!-- Follow me on social networks -->
+                      </h3>
                       <a
                         href="https://www.facebook.com/profile.php?id=100025250295698"
                         title
@@ -81,7 +95,7 @@
                     </div>
                   </div>
                 </form>
-                <hr>
+                <hr />
                 <ul class="media-list">
                   <li class="media" v-for="(item,index) in totalData.slice(0,a)" :key="index">
                     <!-- 评论内容 -->
@@ -109,15 +123,22 @@
                       <hr />
                     </div>
                   </li>
-                  <li>
-                    <a href="javascript:;" v-if="a<totalData.length" @click="loadmore">loadmore</a>
-                    <span v-else style="text-decoration:none;">there is no more</span>
+                  <li style="list-style:none;">
+                    <a
+                      href="javascript:;"
+                      v-if="a<totalData.length"
+                      @click="loadmore"
+                      style="text-decoration:none;"
+                      v-text="$t('contact.loadmore')"
+                    ></a>
+                    <!-- there is no more -->
+                    <span v-else style="text-decoration:none;" v-text="$t('contact.nomore')"></span>
                   </li>
                   <hr />
                 </ul>
               </div>
               <!-- <div class="col-md-10  col-md-offset-1">
-              </div> -->
+              </div>-->
             </div>
           </div>
         </div>
@@ -146,6 +167,10 @@ export default {
   },
   methods: {
     submit() { // 留言
+      if (!this.viewer || !this.subject || !this.massage) {
+        this.$message({ type: 'warning', message: this.$i18n.t('contact.warning') })
+        return;
+      }
       this.$axios({
         url: '/index/massage/add',
         method: 'post',
@@ -165,12 +190,11 @@ export default {
         this.resetForm();
       })
     },
-    resetForm(){this.viewer='';this.subject='';this.massage='';},
+    resetForm() { this.viewer = ''; this.subject = ''; this.massage = ''; },
     getData() { // 获取留言
       this.$axios({
         url: "/index/massage"
       }).then(res => {
-        console.log(res);
         this.totalData = res.data
       })
     },
@@ -178,8 +202,8 @@ export default {
       this.a += 5;
     }
   },
-  mounted(){
-      this.getData()
+  mounted() {
+    this.getData()
   }
 }
 </script>

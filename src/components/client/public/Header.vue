@@ -19,23 +19,54 @@
           <div class="collapse navbar-collapse" id="navbar-collapse">
             <ul class="nav navbar-nav">
               <li>
-                <router-link :to="{name:'home'}">01 : Home</router-link>
+                <!-- <router-link :to="{name:'home'}">01 : Home</router-link> -->
+                <router-link :to="{name:'home'}" v-text="'01 : '+$t('navbar.Home')"></router-link>
               </li>
               <li>
-                <router-link :to="{name:'log'}">02 : Logs</router-link>
+                <!-- <router-link :to="{name:'log'}">02 : Logs</router-link> -->
+                <router-link :to="{name:'log'}" v-text="'02 : '+$t('navbar.Logs')"></router-link>
               </li>
               <li>
-                <router-link :to="{name:'about'}">03 : About me</router-link>
+                <!-- <router-link :to="{name:'about'}">03 : About me</router-link> -->
+                <router-link :to="{name:'about'}" v-text="'03 : '+$t('navbar.About')"></router-link>
               </li>
               <li>
-				<router-link :to="{name:'works'}">04 : Works</router-link>
+                <!-- <router-link :to="{name:'works'}">04 : Works</router-link> -->
+                <router-link :to="{name:'works'}" v-text="'04 : '+$t('navbar.Works')"></router-link>
               </li>
               <li>
-                <router-link :to="{name:'contact'}">05 : Contact</router-link>
+                <!-- <router-link :to="{name:'contact'}">05 : Contact</router-link> -->
+                <router-link :to="{name:'contact'}" v-text="'05 : '+$t('navbar.Contact')"></router-link>
+              </li>
+              <li v-if="false">
+                <a href="javascript:;">
+                  <div class="dropdown">
+                    <div
+                      id="dropdownMenu"
+                      data-toggle="dropdown"
+                      aria-haspopup="true"
+                      aria-expanded="true"
+                    >
+                      Dropdown
+                      <span class="caret"></span>
+                    </div>
+                    <ul class="dropdown-menu" aria-labelledby="dropdownMenu">
+                      <li>
+                        <a href="#">中文</a>
+                      </li>
+                      <li>
+                        <a href="#">English</a>
+                      </li>
+                    </ul>
+                  </div>
+                </a>
               </li>
             </ul>
             <!-- 文章导航 -->
-            <ul v-if="this.$route.name=='logcontent'" class="nav navbar-nav navbar-right navbar-small visible-md visible-lg" >
+            <ul
+              v-if="this.$route.name=='logcontent'"
+              class="nav navbar-nav navbar-right navbar-small visible-md visible-lg"
+            >
               <li v-for="(item,index) in currentArticles" :key="index">
                 <a
                   href="javascript:;"
@@ -68,9 +99,9 @@ export default {
         if (isActive) el.classList.add('active');
       },
       update(el, binding, node) {
-		  let index = el.getAttribute('data-index'), contentIndex = node.context.$route.params.id
-		  $("ul.navbar-right li a").eq(index).removeClass('active')
-		  $("ul.navbar-right li a").eq(contentIndex).addClass('active')
+        let index = el.getAttribute('data-index'), contentIndex = node.context.$route.params.id
+        $("ul.navbar-right li a").eq(index).removeClass('active')
+        $("ul.navbar-right li a").eq(contentIndex).addClass('active')
       },
     }
   },

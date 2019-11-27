@@ -6,67 +6,73 @@
         <div class="row">
           <div class="col-xs-12">
             <div class="section-container-spacer text-center">
-              <h1 class="h2">WORKS</h1>
+              <h1 class="h2"  v-text="$t('navbar.Works')"><!-- WORKS --></h1>
               <div id="content">
-                <!-- <div class="title">👇 Chcek Here 👇</div> -->
                 <div class="list">
                   <ul class="scroll_content">
                     <li style="border-top:none;font-weight:bold;">
-                      <a href="javascript:;">👇 Chcek Here 👇</a>
+                      <a href="javascript:;" v-text="$t('work.click')"><!-- 👇 Chcek Here 👇 --></a>
                     </li>
                     <li>
                       <a
                         target="_blank"
                         href="https://kkslide.github.io/CSS-Collection.github.io/02-scroll-behavior/index.html"
-                      >scroll-behavior</a>
+                         v-text="$t('work.tit1')"
+                      ><!-- scroll-behavior --></a>
                     </li>
                     <li>
                       <a
                         target="_blank"
                         href="https://kkslide.github.io/CSS-Collection.github.io/03-css-change-color/index.html"
-                      >css-change-color</a>
+                        v-text="$t('work.tit2')"
+                      ><!-- css-change-color --></a>
                     </li>
-                    <li>
+                    <!-- <li>
                       <a
                         target="_blank"
                         href="https://kkslide.github.io/CSS-Collection.github.io/04-css-nav-underline/index.html"
                       >css-nav-underline</a>
-                    </li>
+                    </li> -->
                     <li>
                       <a
                         target="_blank"
                         href="https://kkslide.github.io/CSS-Collection.github.io/05-thanos-snap-effect/index.html"
-                      >thanos-snap-effect</a>
+                        v-text="$t('work.tit3')"
+                      ><!-- thanos-snap-effect --></a>
                     </li>
-                    <li>
+                    <!-- <li>
                       <a
                         target="_blank"
                         href="https://kkslide.github.io/CSS-Collection.github.io/06-hover-effects/index.html"
                       >hover-effects</a>
-                    </li>
+                    </li> -->
                     <li>
                       <a
                         target="_blank"
                         href="https://kkslide.github.io/CSS-Collection.github.io/07-light-effect/index.html"
-                      >light-effects</a>
+                        v-text="$t('work.tit4')"
+                      ><!-- light-effects --></a>
                     </li>
                     <li>
                       <a
                         target="_blank"
                         href="https://kkslide.github.io/CSS-Collection.github.io/08-Glitch/index.html"
-                      >Glitch-effects</a>
+                        v-text="$t('work.tit5')"
+                      ><!-- Glitch-effects --></a>
                     </li>
                     <li>
                       <a
                         target="_blank"
                         href="https://kkslide.github.io/CSS-Collection.github.io/09-waterfall/index.html"
-                      >WaterFall-effects</a>
+                        v-text="$t('work.tit6')"
+                      ><!-- WaterFall-effects --></a>
                     </li>
                     <li>
                       <a
                         target="_blank"
                         href="https://kkslide.github.io/CSS-Collection.github.io/10-echarts-drill-down/index.html"
-                      >Map-Drill-Down</a>
+                        v-text="$t('work.tit7')"
+                      ><!-- Map-Drill-Down --></a>
                     </li>
                   </ul>
                 </div>

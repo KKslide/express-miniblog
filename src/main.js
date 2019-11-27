@@ -20,7 +20,10 @@ import 'quill/dist/quill.bubble.css' // 引入编辑器样式
 import './styles/main.css' // 引入自己的样式
 
 import Filter from "./filter/index"
-Vue.use(Filter)
+Vue.use(Filter) // 使用路由守卫
+
+// Vue.use(VueI18n) // 使用语言切换插件
+import i18n from './locales/index' // 使用自定义语言切换插件
 
 import router from './router'
 // import axios from 'axios'
@@ -52,8 +55,9 @@ router.beforeEach(routerGuard)
 
 /* eslint-disable no-new */
 new Vue({
-    el: '#app',
+    // el: '#app',
+    i18n,
     router,
     components: { App },
     template: '<App/>'
-})
+}).$mount("#app")

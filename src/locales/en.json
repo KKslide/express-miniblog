@@ -1,0 +1,57 @@
+{
+    "homepage": {
+        "part1": "Hello",
+        "part2": "I'm Lykang.",
+        "part3": "Web Designer",
+        "part4": "Work in GuangZhou"
+    },
+    "navbar": {
+        "Home": "Home",
+        "Logs": "Logs",
+        "About": "About Me",
+        "Works": "Works",
+        "Contact": "Contact me"
+    },
+    "message": {
+        "hello": "hello world",
+        "logs": "So many ways to record life, I prefer to do it in my own way, Welcome to my life😎"
+    },
+    "about": {
+        "part1": {
+            "title": "Front End Engineer",
+            "content": "A Two years working experience front end programmer, I started to get into this industrial in about 5 years ago. So we had a course called 'HTML & CSS Web Design' in college which made me very impressed, I used to wonder how those amazing Web effects were made by codes, and I have to figure it out. That`s the motivation that keeps me moving on."
+        },
+        "part2": {
+            "title": "My Hobbies",
+            "‘content": "Besides Coding, Basketball and RollingSkate also fullfill my spare life. I dreamed of being a big Star when I was a kid 🤣but I stop growing taller when I was 18. So I started to try something else to see if I could get a little bit taller, and I bought my first skating shoes , and that changed my whole life.."
+        },
+        "part3": {
+            "title": "Next Movement",
+            "content": "Keep trying and learing new things <br> Keep challenge my limits and striving for excellence"
+        }
+    },
+    "work": {
+        "click": "👇 Chcek Here 👇",
+        "tit1": "scroll-behavior",
+        "tit2": "css-change-color",
+        "tit3": "thanos-snap-effect",
+        "tit4": "light-effects",
+        "tit5": "Glitch-effects",
+        "tit6": "WaterFall-effects",
+        "tit7": "Map-Drill-Down"
+    },
+    "contact":{
+        "placeholder":{
+            "one":"Email or name",
+            "two":"Subject",
+            "three":"Enter your message",
+            "four":"send"
+        },
+        "mail":"rollercompanion@163.com",
+        "addr":"GuangZhou MingPu-Garden China",
+        "social":"Follow me on social networks",
+        "warning":"Fullfill the form please",
+        "loadmore":"loadmore🕵️‍♂️",
+        "nomore":"there is no more🤷‍♂️"
+    }
+}

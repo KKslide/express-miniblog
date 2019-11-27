@@ -10,12 +10,16 @@
             <div class="hero-full-wrapper">
               <div class="text-content">
                 <h1>
-                  Hello,
+                  <!-- {{Hello}}, -->
+                  <span v-text="$t('homepage.part1')+','"></span>
                   <br />
                   <span id="typed-strings">
-                    <span>I'm Lykang.</span>
-                    <span>Web Designer</span>
-                    <span>Work in GuangZhou</span>
+                    <!-- <span>I'm Lykang.</span> -->
+                    <span  v-text="$t('homepage.part2')"></span>
+                    <!-- <span>Web Designer</span> -->
+                    <span v-text="$t('homepage.part3')"></span>
+                    <!-- <span>Work in GuangZhou</span> -->
+                    <span v-text="$t('homepage.part4')"></span>
                   </span>
                   <span id="typed"></span>
                 </h1>

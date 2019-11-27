@@ -6,8 +6,10 @@
         <div class="row">
           <div class="col-sm-8 col-sm-offset-2 section-container-spacer">
             <div class="text-center">
-              <h1 class="h2">Logs</h1>
-              <p>So many ways to record life, I prefer to do it in my own way, Welcome to my life😎</p>
+              <!-- <h1 class="h2">Logs</h1> -->
+              <h1 class="h2" v-text="$t('navbar.Logs')"></h1>
+              <!-- <p>So many ways to record life, I prefer to do it in my own way, Welcome to my life😎</p> -->
+              <p v-text="$t('message.logs')"></p>
             </div>
           </div>
           <div class="col-md-12">

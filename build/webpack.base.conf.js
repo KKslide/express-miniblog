@@ -104,5 +104,6 @@ module.exports = {
     'axios': 'axios',
     'qs': 'qs',
     'vue-router': 'VueRouter',
+    'VueI18n': 'vue-i18n',
   }
 }
