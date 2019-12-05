@@ -40,18 +40,19 @@
         "tit6": "WaterFall-effects",
         "tit7": "Map-Drill-Down"
     },
-    "contact":{
-        "placeholder":{
-            "one":"Email or name",
-            "two":"Subject",
-            "three":"Enter your message",
-            "four":"send"
+    "contact": {
+        "placeholder": {
+            "one": "Email or name",
+            "two": "Subject",
+            "three": "Enter your message",
+            "four": "send"
         },
-        "mail":"rollercompanion@163.com",
-        "addr":"GuangZhou MingPu-Garden China",
-        "social":"Follow me on social networks",
-        "warning":"Fullfill the form please",
-        "loadmore":"loadmore🕵️‍♂️",
-        "nomore":"there is no more🤷‍♂️"
-    }
+        "mail": "rollercompanion@163.com",
+        "addr": "GuangZhou MingPu-Garden China",
+        "social": "Follow me on social networks",
+        "warning": "Fullfill the form please",
+        "loadmore": "loadmore🕵️‍♂️",
+        "nomore": "there is no more🤷‍♂️"
+    },
+    "lang": "Cn/En"
 }

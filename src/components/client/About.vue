@@ -7,7 +7,7 @@
           <div class="col-xs-12">
             <div class="section-container-spacer text-center">
               <!-- <h1 class="h2">About me</h1> -->
-              <h1 class="h2" style="cursor:pointer" @click="switchLang">{{$t("navbar.About")}}</h1>
+              <h1 class="h2" style="cursor:pointer" >{{$t("navbar.About")}}</h1>
             </div>
 
             <div class="row">
@@ -65,7 +65,7 @@ export default {
   },
   methods: {
     switchLang() {
-      localStorage.getItem('localeLanguage') == 'en' ? setup('zh') : setup('en');
+    //   localStorage.getItem('localeLanguage') == 'en' ? setup('zh') : setup('en');
     }
   }
 }

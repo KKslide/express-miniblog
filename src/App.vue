@@ -4,26 +4,28 @@
     <div id="site-border-right"></div>
     <div id="site-border-top"></div>
     <div id="site-border-bottom"></div>
-    <!-- 悬浮球 -->
-    <float-ball></float-ball>
+    <!-- 翻译悬浮按钮 -->
+    <lang-com v-show="isShow"></lang-com>
     <router-view />
   </div>
 </template>
 
 <script>
-import FloatBall from './components/client/public/Setting';
+import TranslationBar from './components/client/public/TranslateBar';
 export default {
   name: 'App',
   components: {
-    'float-ball': FloatBall
+    'lang-com': TranslationBar
   },
-  // beforeCreate() {
-  //   this.$axios({
-  //     url: '/index/getpage',
-  //     method: 'get'
-  //   }).then(res => {
-  //     console.log(res);
-  //   })
-  // }
+  data() { return { isShow: true } },
+  watch: {
+    '$route': function (nv, ov) {
+      if (!nv || nv.name == 'login' || nv.path.indexOf('admin') > -1) {
+        this.isShow = false
+      } else {
+        this.isShow = true
+      }
+    }
+  }
 }
 </script>
