@@ -412,7 +412,7 @@ export default {
               _id: v._id,
               title: v.title,
               category: v.category.name,
-              user: v.user.username,
+              user: v.user.username||'unknown',
               addtime: v.addtime,
               num: v.num,
             })

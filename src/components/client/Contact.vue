@@ -107,7 +107,7 @@
                         style="font-size:18px;"
                       ></h4>
 
-                      <p v-text="item.massage"></p>
+                      <p class="commentText commentTextHide">{{item.massage}}</p>
 
                       <div class="ds-comment-footer">
                         <span

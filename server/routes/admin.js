@@ -214,7 +214,7 @@ router.post('/articles/add', (req, res, next) => {
         addtime: new Date(),
         num: 0,
         // user: "5d9163d84bc06239aa26d9c3" // 暂时写死这个 后期再加cookie
-        user: JSON.parse(req.cookies.userInfo)._id
+        user: JSON.parse(req.cookies.userInfo)._id||'unknown'
     });
     newcontent.save();
     res.json({ code: 1, msg: "添加文章成功 !" })
@@ -281,7 +281,7 @@ router.post("/content/img_upload", function (req, res) {
                 code: 1,
                 msg: "上传成功！",
                 // path: 'http://' + ip + '/' + path.basename(files.image.path)
-                path: 'http://47.107.164.180/' + path.basename(files.image.path)
+                path: 'http://134.175.129.219/' + path.basename(files.image.path)
             })
         }
     })
@@ -303,7 +303,6 @@ router.post("/content/mpic_upload", function (req, res, next) {
                 code: 1,
                 msg: "上传成功！",
                 // path: 'http://' + ip + '/' + path.basename(files.file.path)
-                // path: 'http://47.107.164.180/' + path.basename(files.file.path) // 阿里云- 原来的上传接口
                 path: 'http://134.175.129.219/' + path.basename(files.file.path) // 腾讯云- 现在的上传接口
             })
         }

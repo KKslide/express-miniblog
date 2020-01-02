@@ -4,7 +4,6 @@
 
 const path = require('path')
 // const proUrl = 'http://localhost:80' // 本地
-// const proUrl = 'http://47.107.164.180:80' // 线上- 阿里云
 const proUrl = 'http://134.175.129.219' // 线上- 腾讯云
 
 module.exports = {
