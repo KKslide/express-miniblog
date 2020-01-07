@@ -3,8 +3,26 @@ var router = express.Router();
 var Category = require("../models/category");
 var Content = require("../models/content");
 var Massage = require("../models/massage");
-var viewCount = 0;
-
+// var getClientIP = function (req) {
+//     return req.headers['x-forwarded-for'] || // 判断是否有反向代理 IP
+//         req.connection.remoteAddress || // 判断 connection 的远程 IP
+//         req.socket.remoteAddress || // 判断后端的 socket 的 IP
+//         req.connection.socket.remoteAddress;
+// };
+/**
+* 获取用户ip
+*/
+function getClientIp(req) {
+	try{
+		return req.headers['x-wq-realip'] ||
+        req.connection.remoteAddress ||
+        req.socket.remoteAddress ||
+        req.connection.socket.remoteAddress;
+	}catch(e){
+		logger.info("getClientIp error");
+		return "";
+	}
+}
 /* 前端 */
 /* 获取文章列表页 */
 router.get('/getpage', function (req, res, next) {
@@ -13,7 +31,8 @@ router.get('/getpage', function (req, res, next) {
     //     "name": "kk",
     //     "age": 18
     //   }
-    Content.find().sort({ addtime: -1 }).limit(6).then(contents => {
+    console.log(getClientIp(req));
+    Content.find({isShow:{$eq:1}}).sort({ addtime: -1 })/* .limit(6) */.then(contents => {
         res.json(contents)
     })
 });

@@ -36,6 +36,14 @@
 .cell_nowrap>div.cell{
     white-space: nowrap;
 }
+/* tabel 单元格 - 按钮控件不换行 */
+.btn_flex>div.cell{
+    display: flex;
+    justify-content: space-around;
+}
+div.cell>p{
+    margin-bottom: 0;
+}
 
 /* 留言管理面板 - disabled样式修改 */
 #massage_list .disabled input{

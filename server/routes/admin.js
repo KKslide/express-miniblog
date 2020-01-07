@@ -167,7 +167,7 @@ router.get("/articles", (req, res, next) => {
         // category : req.query.category||req.body.category||"",
         count: 0, // 总数
         page: Number(req.query.page || req.body.page || 1), // 当前页
-        limit: 5, // 页容量(每页有多少条数据)
+        limit: 6, // 页容量(每页有多少条数据)
         pages: 0, // 页总数
     };
 
@@ -204,6 +204,7 @@ router.post('/articles/add', (req, res, next) => {
     var video_src = req.body.video_src || "";
     var content = req.body.content || "";
     var minpic_url = req.body.minpic_url || req.query.minpic_url || "";
+    var isShow = req.body.isShow || req.query.isShow || 1;
     var newcontent = new Content({
         title: title,
         category: category,
@@ -213,8 +214,9 @@ router.post('/articles/add', (req, res, next) => {
         minpic_url: minpic_url,
         addtime: new Date(),
         num: 0,
+        isShow: isShow,
         // user: "5d9163d84bc06239aa26d9c3" // 暂时写死这个 后期再加cookie
-        user: JSON.parse(req.cookies.userInfo)._id||'unknown'
+        user: JSON.parse(req.cookies.userInfo)._id || 'unknown'
     });
     newcontent.save();
     res.json({ code: 1, msg: "添加文章成功 !" })
@@ -242,6 +244,7 @@ router.post("/content/edit", function (req, res) {
     var video_src = req.body.video_src || "";
     var minpic_url = req.body.minpic_url || "";
     var content = req.body.content || "";
+    var isShow = req.body.isShow || req.query.isShow || 1;
     Content.update({ _id: id }, {
         title: title,
         category: category,
@@ -249,8 +252,9 @@ router.post("/content/edit", function (req, res) {
         video_src: video_src,
         minpic_url: minpic_url,
         composition: content,
-        addtime: new Date(),
-        num: 0,
+        // addtime: new Date(),
+        // num: 0,
+        isShow: isShow,
         user: JSON.parse(req.cookies.userInfo)._id
     }).then(function () {
         res.json({

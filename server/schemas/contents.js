@@ -37,5 +37,9 @@ module.exports = new mongoose.Schema({
     comment: {
         type: Array,
         default: []
+    },
+    isShow: { // 是否显示
+        type: Number,
+        default: 1
     }
 });
