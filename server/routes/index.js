@@ -3,26 +3,31 @@ var router = express.Router();
 var Category = require("../models/category");
 var Content = require("../models/content");
 var Massage = require("../models/massage");
-// var getClientIP = function (req) {
-//     return req.headers['x-forwarded-for'] || // 判断是否有反向代理 IP
-//         req.connection.remoteAddress || // 判断 connection 的远程 IP
-//         req.socket.remoteAddress || // 判断后端的 socket 的 IP
-//         req.connection.socket.remoteAddress;
-// };
+var Visitor = require("../models/visitor");
 /**
 * 获取用户ip
 */
 function getClientIp(req) {
-	try{
-		return req.headers['x-wq-realip'] ||
-        req.connection.remoteAddress ||
-        req.socket.remoteAddress ||
-        req.connection.socket.remoteAddress;
-	}catch(e){
-		logger.info("getClientIp error");
-		return "";
-	}
+    try {
+        return req.headers['x-wq-realip'] ||
+            req.connection.remoteAddress ||
+            req.socket.remoteAddress ||
+            req.connection.socket.remoteAddress;
+    } catch (e) {
+        logger.info("getClientIp error");
+        return "";
+    }
 }
+/* 统计访问者IP和时间 */
+router.post('/visit', function (req, res, next) {
+    var newvisitor = new Visitor({
+        ip: getClientIp(req).replace(/::ffff:/,''),
+        time: new Date()
+    });
+    newvisitor.save()
+    res.json({ msg: 'ok' })
+});
+
 /* 前端 */
 /* 获取文章列表页 */
 router.get('/getpage', function (req, res, next) {
@@ -31,8 +36,7 @@ router.get('/getpage', function (req, res, next) {
     //     "name": "kk",
     //     "age": 18
     //   }
-    console.log(getClientIp(req));
-    Content.find({isShow:{$eq:1}}).sort({ addtime: -1 })/* .limit(6) */.then(contents => {
+    Content.find({ isShow: { $eq: 1 } }).sort({ addtime: -1 })/* .limit(6) */.then(contents => {
         res.json(contents)
     })
 });
@@ -49,13 +53,14 @@ router.post('/getcontent', function (req, res, next) {
 
 /* 评论文章 */
 router.post('/comment', function (req, res, next) {
-    var id = req.body.contentid || req.query.contentid || "";
+    var id = req.body.contentid || req.query.contentid || ""; // 文章ID
+    var ip = getClientIp(req).match(/(25[0-5]|2[0-4]\d|[0-1]\d{2}|[1-9]?\d)\.(25[0-5]|2[0-4]\d|[0-1]\d{2}|[1-9]?\d)\.(25[0-5]|2[0-4]\d|[0-1]\d{2}|[1-9]?\d)\.(25[0-5]|2[0-4]\d|[0-1]\d{2}|[1-9]?\d)/)[0];
     var commentdata = {
         comment: req.body.comment || req.query.comment || "",
         user: req.body.visitor || req.query.visitor || "",
+        ip: ip,
         time: new Date()
     }
-
     Content.findOne({ _id: id }).then(function (thiscon) {
         if (commentdata.comment != "") {
             thiscon.comment.push(commentdata);
@@ -64,9 +69,23 @@ router.post('/comment', function (req, res, next) {
         thiscon.save().then(function (newcon) {
             res.json({ code: 1, msg: "评论成功" });
         });
-
     });
+});
 
+/* 后端删除文章评论 - 后期做成前端也能删除 - 带标识 */
+router.post('/comment/del', function (req, res, next) {
+    var id = req.body.contentid || req.query.contentid || ""; // 文章ID
+    var comment_time = req.body.time || req.query.time || ""; // 评论时间
+    Content.findOne({ _id: id }).then(function (thiscon) {
+        thiscon.comment.forEach((v, i) => {
+            if ((v.time + '') === new Date(comment_time).toString()) {
+                thiscon.comment.splice(i, 1)
+            }
+        })
+        thiscon.save().then(function (newcon) {
+            res.json({ code: 1, msg: "删除成功" });
+        });
+    });
 });
 
 /* 获取留言接口 */

@@ -104,6 +104,8 @@ module.exports = {
     'axios': 'axios',
     'qs': 'qs',
     'vue-router': 'VueRouter',
-    'VueI18n': 'vue-i18n',
+    'VueI18n': 'vue-i18n', // 翻译插件
+    'echarts': 'echarts',
+    // 'Rx':'rxjs'
   }
 }

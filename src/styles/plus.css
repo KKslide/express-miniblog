@@ -1,4 +1,9 @@
 /* 重新elementUI的部分样式 */
+
+/* nav去掉底部白色边框 */
+.el-menu.el-menu--horizontal{
+    border-bottom: none;
+}
 .el-drawer__body {
     overflow-y: scroll !important;
 }
@@ -33,20 +38,38 @@
 }
 
 /* table 单元格样式重写 - 超出设置省略号 */
-.cell_nowrap>div.cell{
+.cell_nowrap>div.cell {
     white-space: nowrap;
 }
+.cell_content>div.cell{
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+
 /* tabel 单元格 - 按钮控件不换行 */
-.btn_flex>div.cell{
+.btn_flex>div.cell {
     display: flex;
     justify-content: space-around;
 }
-div.cell>p{
+
+div.cell>p {
     margin-bottom: 0;
 }
 
 /* 留言管理面板 - disabled样式修改 */
-#massage_list .disabled input{
-    color:#333;
+#massage_list .disabled input {
+    color: #333;
     cursor: default;
+}
+
+/* 评论详情的input去掉margin */
+#comment_detail .el-form-item__content{
+    margin: 0 !important;
+}
+
+#comment_detail .content_detail input{
+    color:#333 !important;
+    cursor: default !important;
 }

@@ -58,13 +58,8 @@
                                             v-model="commentData.comment"
                                         ></textarea>
                                         <!-- 黑框修饰 -->
-                                        <label
-                                            class="input__label input__label--isao"
-                                            for="input-38"
-                                        >
-                                            <span
-                                                class="input__label-content input__label-content--isao"
-                                            ></span>
+                                        <label class="input__label input__label--isao" for="input-38" >
+                                            <span class="input__label-content input__label-content--isao" ></span>
                                         </label>
 
                                         <label for="visitorEmail">
@@ -102,17 +97,10 @@
                                     </div>
                                     <!-- 评论内容 -->
                                     <div class="media-body">
-                                        <h4
-                                            class="media-heading"
-                                            v-if="item.user"
-                                            v-html="item.user+':'"
-                                            style="font-size:18px;"
-                                        ></h4>
-                                        <h4
-                                            class="media-heading"
-                                            v-else
-                                            style="font-size:18px;"
-                                        >somebody</h4>
+                                        <h4 class="media-heading" v-if="item.user" style="font-size:18px;" >
+                                            {{item.user}} <span class="ip">|{{item.ip}}|</span> 🎈
+                                        </h4>
+                                        <h4 class="media-heading" v-else style="font-size:18px;" >somebody</h4>
 
                                         <p v-text="item.comment"></p>
 
@@ -524,5 +512,9 @@ a:active {
         background: rgb(54, 54, 54);
         cursor: pointer;
     }
+}
+.ip{
+    font-size: 15px;
+    font-weight: normal;
 }
 </style>

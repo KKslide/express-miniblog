@@ -12,6 +12,15 @@
                 </template>
             </el-table-column>
             <el-table-column prop="num" label="阅读量"></el-table-column>
+            <el-table-column prop="comment_count" label="评论">
+                <template slot-scope="scope">
+                    <el-button
+                        @click="checkComment(scope.row)"
+                        type="text"
+                        size="normal"
+                    >{{scope.row.comment_count}}</el-button>
+                </template>
+            </el-table-column>
             <el-table-column prop="isShow" label="是否显示"></el-table-column>
             <el-table-column label="操作">
                 <template slot-scope="scope">
@@ -27,6 +36,16 @@
                 </template>
             </el-table-column>
         </el-table>
+
+        <!-- 评论列表弹窗 -->
+        <el-dialog :title="'文章【'+curChosenArcData.title+'】的评论'" :visible.sync="commentModel" width="80%" center :close-on-click-modal="false">
+            <CommentCom :curChosenArcComment="curChosenArcData" :upDateArc="getArticles"></CommentCom>
+            <span slot="footer" class="dialog-footer">
+                <el-button @click="commentModel = false">取 消</el-button>
+                <el-button type="primary" @click="commentModel = false">确 定</el-button>
+            </span>
+        </el-dialog>
+        <!-- 评论列表弹窗 -->
 
         <!-- <el-button type="text" @click="table = true">打开嵌套表格的 Drawer</el-button> -->
         <el-button
@@ -70,9 +89,8 @@
                             active-color="#13ce66"
                             inactive-color="#ff4949"
                             active-value="1"
-                            inactive-value="0">
-                        </el-switch>
-                        (绿色为开启显示,选择关闭则不会在页面中显示)
+                            inactive-value="0"
+                        ></el-switch>(绿色为开启显示,选择关闭则不会在页面中显示)
                     </el-form-item>
                     <!-- 文章分类 -->
                     <el-form-item label="文章分类" :label-width="formLabelWidth" prop="category">
@@ -220,6 +238,7 @@
 </template>
 
 <script>
+import CommentCom from './CommentManage'
 import Cropper from '../../cropper.vue'
 import { quillEditor } from 'vue-quill-editor'
 import 'quill/dist/quill.core.css'
@@ -265,6 +284,8 @@ export default {
             dialog: false,
             dialogType: null, // 判断是添加还是编辑
             loading: false,
+            curChosenArcData: {}, // 当前选中文章的评论数据
+            commentModel: false, // 评论模块弹窗
             hideUpload: false, //   缩略图上传按钮隐藏
             limitCount: 1, //   缩略图上传按钮隐藏
             minpic_url_list: [], // 缩略图列表
@@ -351,7 +372,8 @@ export default {
     //   *************cropper组件配置****************
     components: {
         quillEditor,
-        Cropper
+        Cropper,
+        CommentCom
     },
     created() {
         this.getArticles();
@@ -413,7 +435,7 @@ export default {
             if (column.property == '_id') {
                 return 'cell_nowrap'
             }
-            else if(column.label == '操作'){
+            else if (column.label == '操作') {
                 return 'btn_flex'
             }
         },
@@ -434,12 +456,18 @@ export default {
                             user: v.user.username || 'unknown',
                             addtime: v.addtime,
                             num: v.num,
-                            isShow: v.isShow == 1 ? '是': '否'
+                            isShow: v.isShow == 1 ? '是' : '否',
+                            comment_count: v.comment.length,
+                            comment: v.comment
                         })
                     })
                     this.articleData = newContents; // 格式化后的文章信息
-                    this.isShow = newContents.isShow 
+                    this.isShow = newContents.isShow
                 })
+        },
+        checkComment(params) { // 查看评论模块
+            this.commentModel = true;
+            this.curChosenArcData = params;
         },
         pageChange(currentPage) { // 点击分页按钮
             this.curPage = currentPage;
@@ -512,7 +540,7 @@ export default {
             });
         },
         handleDelete(index, row) { // 删除文章
-            this.$confirm('永久删除分类"' + row.title + '", 是否继续?', '提示', {
+            this.$confirm('永久删除文章【"' + row.title + '】", 是否继续?', '提示', {
                 confirmButtonText: '确定',
                 cancelButtonText: '取消',
                 type: 'warning'
@@ -567,7 +595,7 @@ export default {
             } else {
                 this.hideUpload = false
             }
-            this.isShow = nowForm.isShow+"" || "0"
+            this.isShow = nowForm.isShow + "" || "0"
         },
         /* ********* 富文本编辑器图片上传操作 *********** */
         selectImg() {  //选择图片

@@ -81,12 +81,6 @@ app.get('/', function (req, res, next) {
     res.render('index');
 });
 
-/* get works page */
-// app.get('/works', function (req, res, next) {
-//     res.type('html');
-//     res.render('index');
-// });
-
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
     next(createError(404));
@@ -102,11 +96,5 @@ app.use(function (err, req, res, next) {
     res.status(err.status || 500);
     res.render('error');
 });
-
-//分模块开发，便于管理，分为前台展示模块，后台管理模块及逻辑接口模块
-// app.use("/admin", require("./routes/admin"));
-// app.use("/", require("./routers/main"));
-// app.use("/api", require("./routers/api"));
-
 
 module.exports = app;

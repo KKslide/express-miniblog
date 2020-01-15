@@ -1,7 +1,7 @@
 <template>
   <div>
     <nav-com></nav-com>
-    <h3 v-if="this.$route.name=='admin'" style="text-indent:2em;">这里啥都没有,先去逛逛别的页面吧... - -||</h3>
+    <!-- <h3 v-if="this.$route.name=='admin'" style="text-indent:2em;">这里啥都没有,先去逛逛别的页面吧... - -||</h3> -->
     <router-view></router-view>
     <!-- <footer-com></footer-com> -->
   </div>

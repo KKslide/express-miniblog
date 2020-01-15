@@ -26,7 +26,6 @@ export default {
       url: '/admin/getuser',
       method: 'get'
     }).then(res => {
-      console.log(res);
       this.users = res.data.users
     })
   },

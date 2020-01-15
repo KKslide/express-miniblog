@@ -7,6 +7,7 @@ var User = require("../models/user");
 var Category = require("../models/category");
 var Content = require("../models/content");
 var Massage = require("../models/massage");
+var Visitor = require("../models/visitor");
 var formidable = require("formidable"); // 用来处理上传图片的
 
 // 检测是否登陆
@@ -62,6 +63,69 @@ router.post('/login', (req, res, next) => {
 router.get('/logout', (req, res, next) => {
     res.cookie('userInfo', null, { expires: new Date(0) });
     res.json({ code: 1, msg: "退出成功" })
+})
+
+// 后台首页接口
+router.get('/getgeneral', (request, response, next) => {
+    let tempUserNum, tempAtcNum;
+    let pieData = [];
+    User.find()
+        .then(res => {
+            tempUserNum = res
+            return Content.find().populate('category')
+                .then(res => {
+                    tempAtcNum = res // 查询出的文章内容信息
+                    // 分类名去重
+                    let temp = Array.from(new Set(tempAtcNum.map(v => { return v.category.name })))
+                    for (let i = 0; i < temp.length; i++) {
+                        let tempObj = {}
+                        let tempAtcArr = []
+                        for (let j = 0; j < tempAtcNum.length; j++) {
+                            if (temp[i] == tempAtcNum[j].category.name) {
+                                tempAtcArr.push(tempAtcNum[j])
+                            }
+                        }
+                        tempObj.name = temp[i]
+                        tempObj.value = tempAtcArr.length
+                        pieData.push(tempObj)
+                    }
+                    return Visitor.find().then(result => {
+                        let toDayData = result.filter((v, i) => { // 过滤今日数据
+                            return new Date().getTime() - new Date(v.time) < 86400000
+                        })
+                        // console.log(toDayData.length, '----', toDayData);
+                        let line_chart_data = []
+                        let curHour = new Date().getHours()
+                        // for (let i = 0; i < 24; i++) {
+                        //     let _temparr = toDayData.filter(v => {
+                        //         return new Date(v.time).getHours() == i
+                        //     })
+                        //     line_chart_data.push({ time: i, value: _temparr.length })
+                        // }
+                        for (let i = curHour; i > (curHour - 24); i--) {
+                            let _temparr = toDayData.filter(v => {
+                                let tempHour = i < 0 ? (i + 24) : i;
+                                return new Date(v.time).getHours() == tempHour
+                            })
+                            // if(i<0){
+
+                            // }else{
+                            // }
+                            line_chart_data.push({ time: i < 0 ? (i + 24) : i, value: _temparr.length })
+                        }
+                        response.json({
+                            tag_list: [
+                                { tag: "总访问量", value: result.length },
+                                { tag: "今日访问量", value: toDayData.length },
+                                { tag: "用户", value: tempUserNum.length },
+                                { tag: "文章数", value: tempAtcNum.length }
+                            ],
+                            pie_chart_data: pieData,
+                            line_chart_data: line_chart_data.reverse()
+                        })
+                    })
+                })
+        })
 })
 
 // 获取用户列表接口
@@ -245,6 +309,7 @@ router.post("/content/edit", function (req, res) {
     var minpic_url = req.body.minpic_url || "";
     var content = req.body.content || "";
     var isShow = req.body.isShow || req.query.isShow || 1;
+    var comment = req.body.comment || req.query.comment || [];
     Content.update({ _id: id }, {
         title: title,
         category: category,
@@ -253,7 +318,7 @@ router.post("/content/edit", function (req, res) {
         minpic_url: minpic_url,
         composition: content,
         // addtime: new Date(),
-        // num: 0,
+        comment: comment,
         isShow: isShow,
         user: JSON.parse(req.cookies.userInfo)._id
     }).then(function () {
@@ -265,7 +330,6 @@ router.post("/content/edit", function (req, res) {
     }).catch(err => {
         console.log(err);
     })
-
 });
 
 // 图片上传接口
