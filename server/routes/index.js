@@ -36,7 +36,7 @@ router.get('/getpage', function (req, res, next) {
     //     "name": "kk",
     //     "age": 18
     //   }
-    Content.find({ isShow: { $eq: 1 } }).sort({ addtime: -1 })/* .limit(6) */.then(contents => {
+    Content.find({ isShow: { $eq: 1 } }).populate('category').sort({ addtime: -1 })/* .limit(6) */.then(contents => {
         res.json(contents)
     })
 });
