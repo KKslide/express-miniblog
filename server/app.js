@@ -15,8 +15,10 @@ var mongoose = require("mongoose");
 // var Cookies = require('cookies');
 
 // 连接数据库
+// mongoose.connect(‘mongodb://username:password@host:port/database?options…’);
 // mongoose.connect("mongodb://localhost:27017/myBlog"); // 本地
-mongoose.connect("mongodb://134.175.129.219:27017/myBlog"); // 线上- 腾讯云
+mongoose.connect("mongodb://root:root@localhost:27017/myBlog");
+// mongoose.connect("mongodb://134.175.129.219:27017/myBlog"); // 线上- 腾讯云
 
 var db = mongoose.connection;
 db.once("open", function () {
