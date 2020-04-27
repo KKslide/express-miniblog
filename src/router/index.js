@@ -8,20 +8,20 @@ import UserManageComponent from '@/components/admin/user/UserManage.vue'
 import CategoryManageComponent from '@/components/admin/category/CategoryManage.vue'
 import ArticleManageComponent from '@/components/admin/article/ArticleManage.vue'
 import MassageManageComponent from '@/components/admin/massage/MassageManagement.vue'
-import LoginComponent from '@/components/admin/Login'
+import LoginComponent from '@/components/admin/login/Login'
 /* ********* 管理端 ********** */
 
 
 /* ********* 前端 ********** */
 import HomeComponent from '../components/client/Home'
-import LogComponent from '../components/client/Log'
-import AboutComponent from '../components/client/About'
-import ContactComponent from '../components/client/Contact'
-import LogContentComponent from '../components/client/LogContent'
-import WorksComponent from '../components/client/Works'
+import LogComponent from '../components/client/LogsComponent/Log.vue'
+import LogContentComponent from '../components/client/LogsComponent/LogContent.vue'
+import AboutComponent from '../components/client/AboutMeComponent/About.vue'
+import WorksComponent from '../components/client/WorksComponent/Works.vue'
+import ContactComponent from '../components/client/ContactComponent/Contact.vue'
 /* ********* 前端 ********** */
 
-import CameraComponent from '../components/Camera.vue'
+// import CameraComponent from '../components/other/Camera.vue' // 测试单图上传组件
 
 // Vue.use(Router)
 
@@ -34,11 +34,11 @@ export default new VueRouter({
             name: 'home',
             component: HomeComponent,
         },
-        {
-            path: '/camera',
-            name: 'camera',
-            component: CameraComponent
-        },
+        // {
+        //     path: '/camera',
+        //     name: 'camera',
+        //     component: CameraComponent
+        // },
         {
             path: '/log',
             name: 'log',
