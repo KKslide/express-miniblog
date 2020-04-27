@@ -17,7 +17,8 @@ import App from './App'
 import 'quill/dist/quill.core.css' // 引入编辑器样式
 import 'quill/dist/quill.snow.css' // 引入编辑器样式
 import 'quill/dist/quill.bubble.css' // 引入编辑器样式
-import './styles/main.css' // 引入自己的样式
+// import './styles/main.css' // 引入自己的样式
+import './styles/main.scss' // 引入自己的样式
 
 import Filter from "./filter/index"
 Vue.use(Filter) // 使用路由守卫
@@ -29,8 +30,8 @@ import router from './router'
 // import axios from 'axios'
 // axios.defaults.baseURL = 'http://localhost:8080'
 const service = axios.create({
-    // baseURL: 'http://localhost:8080', // 本地开发的时候..
-    baseURL: 'http://134.175.129.219', // 线上发布的时候- 腾讯云
+    baseURL: 'http://localhost:8080', // 本地开发的时候..
+    // baseURL: 'http://134.175.129.219', // 线上发布的时候- 腾讯云
     timeout: 5000
 })
 axios.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded;charset=UFT-8'
