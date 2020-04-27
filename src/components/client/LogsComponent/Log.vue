@@ -19,21 +19,26 @@
                                 <div v-for="(item,index) in articles" :key="index" :class="{'item':true,'active':index==0?true:false}" >
                                     <div class="row">
                                         <div class="col-sm-4" v-for="(sub_item,sub_index) in item" :key="sub_index" >
-                                            <a href="javascript:;" title class="black-image-project-hover" >
-                                                <img
-                                                    :src="sub_item.minpic_url"
+                                            <span style="display:none;">{{sub_item.category.name}}</span>
+                                            <a href="javascript:;" :title="sub_item.title" class="black-image-project-hover tag" :tag="sub_item.category.name">
+                                                <!-- <img
+                                                    src="../../../static/img/loading.png"
                                                     class="img-responsive img-responsive-auto-width"
-                                                    :onerror="defaultImg"
                                                     :data-index="index==0?(sub_index+1):(sub_index+1+item.length)"
+                                                    @load="showImg(sub_item.minpic_url,$event)"
                                                     @click="goto(sub_item,$event)"
-                                                />
+                                                /> -->
+                                                <lazy-img 
+                                                    :src="sub_item.minpic_url" 
+                                                    :dataIndex="index==0?(sub_index+1):(sub_index+1+item.length)"
+                                                    imgClass="img-responsive img-responsive-auto-width"
+                                                ></lazy-img>
                                             </a>
                                             <div class="card-container card-container-lg">
                                                 <h4>{{pageIndex(sub_item)}}/00{{origenArticles.length}}</h4>
                                                 <h3 v-html="sub_item.title"></h3>
                                                 <p v-html="sub_item.description"></p>
-                                                <a
-                                                    href="javascript:;"
+                                                <a href="javascript:;"
                                                     title
                                                     class="btn btn-default"
                                                     :data-index="index==0?(sub_index+1):(sub_index+1+item.length)"
@@ -60,16 +65,19 @@
 </template>
 
 <script>
-import Header from './public/Header'
-import Footer from './public/Footer'
+import Header from '../public/Header'
+import Footer from '../public/Footer'
+import LazyImg from '../public/LazyImg'
 export default {
     components: {
         'header-com': Header,
-        'footer-com': Footer
+        'footer-com': Footer,
+        'lazy-img': LazyImg
     },
     data() {
         return {
-            defaultImg: 'this.src="' + require('../../assets/images/space.jpg') + '"',
+            loadingUrl:"../../../../static/img/loading.png",
+            defaultImg: '../../../assets/images/space.jpg',
             origenArticles: [],
             articles: []
         }
@@ -88,6 +96,9 @@ export default {
         }
     },
     methods: {
+        showImg(url,event){
+            console.log(event);
+        },
         goto(sub_item, event) {
             this.$router.push({ name: 'logcontent', params: { contentid: sub_item._id } })
         },
@@ -117,9 +128,23 @@ export default {
 </script>
 <style lang="less" scoped>
 .error-img {
-    src: url("../../assets/images/space.jpg");
+    src: url("../../../assets/images/space.jpg");
 }
 .img-responsive-auto-width{
     width: 100%;
+}
+.black-image-project-hover.tag {
+    position: relative;
+}
+.black-image-project-hover.tag::after{
+    content: attr(tag);
+    position: absolute;
+    top: 0;
+    left: 0;
+    color:#fff;
+    background-color: rgba(0, 0, 0, .5);
+    font-size: 1em;
+    padding: 0em 0.5em;
+    border-bottom-right-radius: 20%;
 }
 </style>

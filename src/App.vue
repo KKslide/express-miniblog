@@ -29,3 +29,14 @@ export default {
   }
 }
 </script>
+
+<style lang="less" scoped>
+// #app{
+//     #site-border-left,
+//     #site-border-right,
+//     #site-border-top,
+//     #site-border-bottom{
+//         z-index: 99999 !important;
+//     }
+// }
+</style>

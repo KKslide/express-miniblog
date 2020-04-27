@@ -182,8 +182,8 @@
 </template>
 
 <script>
-import Header from './public/Header'
-import Footer from "./public/Footer";
+import Header from '../public/Header'
+import Footer from "../public/Footer";
 export default {
     components: {
         'header-com': Header,
@@ -225,11 +225,9 @@ export default {
                     massage: this.massage
                 }
             }).then(res => {
-                if (res.data.code == 1) {
-                    this.$message({ type: 'success', message: res.data.msg });
-                } else {
-                    this.$message({ type: 'warning', message: res.data.msg });
-                }
+                let msgType={type:'',message:this.$t('contact.responsemsg')};
+                msgType.type=res.data.code == 1?'success':'warning';
+                this.$message(msgType);
                 this.getData();
                 $(".reveal-content")[0].reset(); // 我也不晓得为啥这个不成功
                 this.resetForm();

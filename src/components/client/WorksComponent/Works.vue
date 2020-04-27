@@ -87,8 +87,8 @@
 </template>
 
 <script>
-import Header from './public/Header'
-import Footer from './public/Footer'
+import Header from '../public/Header'
+import Footer from '../public/Footer'
 export default {
   components: {
     'header-com': Header,

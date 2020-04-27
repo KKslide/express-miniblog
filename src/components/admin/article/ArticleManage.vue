@@ -239,7 +239,7 @@
 
 <script>
 import CommentCom from './CommentManage'
-import Cropper from '../../cropper.vue'
+import Cropper from './cropper.vue'
 import { quillEditor } from 'vue-quill-editor'
 import 'quill/dist/quill.core.css'
 import 'quill/dist/quill.snow.css'

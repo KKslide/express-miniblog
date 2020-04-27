@@ -11,7 +11,7 @@
                                 <h1 class="h2" v-html="content.title"></h1>
                             </div>
                             <!-- <p v-html="content.description"></p> -->
-                            <p>Author: {{content.user.username}} | View: {{content.num}} | Comments: {{content.comment.length}} | Time: {{content.addtime | date}}</p>
+                            <p>{{$t('logContent.author')}}: {{content.user.username}} | {{$t('logContent.view')}}: {{content.num}} | {{$t('logContent.comments')}}: {{content.comment.length}} | {{$t('logContent.time')}}: {{content.addtime | date}}</p>
                             <blockquote v-if="content.description_sub">
                                 <p v-html="content.description_sub"></p>
                                 <small class="pull-right" v-if="false">Irina Martin</small>
@@ -36,8 +36,8 @@
                     <!-- 上一篇和下一篇 -->
                     <div class="col-xs-12 content_nav">
                         <!-- <router-link></router-link> -->
-                        <router-link :to="{name:'logcontent',params:{contentid:changePage('prev')._id}}" class="pull-left" > <i class="el-icon-back">&nbsp;上一篇：</i> {{changePage('prev').title}} </router-link>
-                        <router-link :to="{name:'logcontent',params:{contentid:changePage('next')._id}}" class="pull-right" > 下一篇：{{changePage('next').title}} &nbsp; <i class="el-icon-right"></i> </router-link>
+                        <router-link :to="{name:'logcontent',params:{contentid:changePage('prev')._id}}" @click.native="handleClick" class="pull-left" > <i class="el-icon-back">&nbsp;{{$t('logContent.prev')}}: </i> [{{changePage('prev').title}}] </router-link>
+                        <router-link :to="{name:'logcontent',params:{contentid:changePage('next')._id}}" @click.native="handleClick" class="pull-right" > {{$t('logContent.next')}}: [{{changePage('next').title}}]  <i class="el-icon-right"></i> </router-link>
                         <!-- <a class="pull-right">下一篇：{{nextData.title}} &nbsp;<i class="el-icon-right"></i></a> -->
                     </div>
                     <!-- 分割线 -->
@@ -54,7 +54,7 @@
                                         <textarea
                                             class="form-control input__field input__field--isao"
                                             rows="3"
-                                            placeholder="just say something"
+                                            :placeholder="$t('logContent.commentPlaceHolder')"
                                             v-model="commentData.comment"
                                         ></textarea>
                                         <!-- 黑框修饰 -->
@@ -63,21 +63,18 @@
                                         </label>
 
                                         <label for="visitorEmail">
-                                            <span>Name</span>
+                                            <!-- <span>Name</span> -->
+                                            <span v-text="$t('logContent.name')"></span>
                                             <input
                                                 type="text"
                                                 class="form-control"
                                                 id="visitorEmail"
-                                                placeholder="Leave a name"
+                                                :placeholder="$t('logContent.namePlaceHolder')"
                                                 v-model="commentData.visitor"
                                             />
                                         </label>
 
-                                        <button
-                                            type="submit"
-                                            class="btn btn-default btn-lg"
-                                            @click="submitComment"
-                                        >Send</button>
+                                        <button type="submit" class="btn btn-default btn-lg" @click="submitComment" v-text="$t('logContent.sendButton')"></button>
                                     </span>
                                 </div>
                             </form>
@@ -90,7 +87,7 @@
                                         <a href="javascript:;">
                                             <img
                                                 class="media-object img-circle"
-                                                src="../../../static/skull.png"
+                                                src="../../../../static/skull.png"
                                                 width="50"
                                             />
                                         </a>
@@ -102,7 +99,7 @@
                                         </h4>
                                         <h4 class="media-heading" v-else style="font-size:18px;" >somebody</h4>
 
-                                        <p v-text="item.comment"></p>
+                                        <p v-html="item.comment"></p>
 
                                         <div class="ds-comment-footer">
                                             <span
@@ -199,8 +196,8 @@
 </template>
 
 <script>
-import Header from './public/Header'
-import Footer from './public/Footer'
+import Header from '../public/Header'
+import Footer from '../public/Footer'
 import VideoCom from './Video'
 export default {
     components: {
@@ -222,23 +219,6 @@ export default {
         }
     },
     computed: {
-        changePage() {
-            return function (params) {
-                let allArticles = JSON.parse(sessionStorage.getItem('allArticles')),
-                    curArticle = this.$route.params.contentid, prevOrNextPage;
-                allArticles.forEach((v, i) => {
-                    if (v._id == curArticle) {
-                        if (params == 'prev') {
-                            prevOrNextPage = (i - 1) < 0 ? allArticles[allArticles.length - 1] : allArticles[i - 1]
-                        }
-                        else if (params == 'next') {
-                            prevOrNextPage = (i + 1) >= allArticles.length ? allArticles[0] : allArticles[i + 1]
-                        }
-                    }
-                });
-                return prevOrNextPage;
-            }
-        },
         prevData: function () {
             let allArticles = JSON.parse(sessionStorage.getItem('allArticles')),
                 curArticle = this.$route.params.contentid, prevArc;
@@ -257,7 +237,6 @@ export default {
                     nextArc = (i + 1) >= allArticles.length ? allArticles[0] : allArticles[i + 1]
                 }
             });
-            // console.log(nextArc);
             return nextArc
         }
     },
@@ -265,19 +244,10 @@ export default {
         this.getContent()
     },
     mounted() {
-        // let allArticles = JSON.parse(sessionStorage.getItem('allArticles')),
-        //     curArticle = this.$route.params.contentid;
-        // let prevArc, nextArc;
-        // allArticles.forEach((v, i) => {
-        //     if (v._id == curArticle) {
-        //         prevArc = (i - 1) < 0 ? allArticles[0] : allArticles[i - 1]
-        //         nextArc = (i + 1) > allArticles.length ? allArticles[allArticles.length - 1] : allArticles[i + 1]
-        //     }
-        // })
     },
     methods: {
         dontSubmit() { return false },
-        getContent() {
+        getContent() { // 获取文章内容
             let id = this.$route.params.id,
                 contentid = this.$route.params.contentid;
             this.$axios({
@@ -295,13 +265,14 @@ export default {
                 }
             })
         },
-        submitComment() {
-            if (!this.commentData.comment) {
-                this.$message({ type: "warning", message: "The comment can`t be blank" })
+        submitComment() { // 提交评论
+            if (!this.commentData.comment) { // 评论内容为空
+                // this.$message({ type: "warning", message: "The comment can`t be blank" })
+                this.$message({ type: "warning", message: this.$t('logContent.emptyCommentTip') })
                 return false;
             }
-            if (!this.commentData.visitor) {
-                this.$message({ type: "warning", message: "leave a name please~~~" })
+            if (!this.commentData.visitor) { // 不留名
+                this.$message({ type: "warning", message: this.$t('logContent.emptyVisitor') })
                 return false;
             }
             this.commentData.contentid = this.content._id;
@@ -310,7 +281,7 @@ export default {
                 method: "post",
                 data: this.commentData
             }).then(res => {
-                if (res.data.code == 1) {
+                if (res.data.code == 1) { // 评论成功提示
                     this.$message({ type: "success", message: res.data.msg });
                     this.commentData.comment = '';
                     this.commentData.visitor = '';
@@ -318,19 +289,29 @@ export default {
                 this.getContent()
             })
         },
-        changePage(item, index) { // 上一篇和下一篇
-            if (index == this.$route.params.id) return false;
-            var _this = this,
-                obj = JSON.parse(JSON.stringify(_this.$router.currentRoute.query)) // 这里我们需要的应该是值，因此必须转为深拷贝
-            Object.assign(obj, { id: index, contentid: item._id })
-            _this.$router.push({
-                params: obj
-            })
+        changePage(params) { // 后期再解决执行N次的问题
+            let allArticles = JSON.parse(sessionStorage.getItem('allArticles')),
+                    curArticle = this.$route.params.contentid, prevOrNextPage;
+                allArticles.forEach((v, i) => {
+                    if (v._id == curArticle) {
+                        if (params == 'prev') {
+                            prevOrNextPage = (i - 1) < 0 ? allArticles[allArticles.length - 1] : allArticles[i - 1]
+                        }
+                        else if (params == 'next') {
+                            prevOrNextPage = (i + 1) >= allArticles.length ? allArticles[0] : allArticles[i + 1]
+                        }
+                    }
+                });
+                return prevOrNextPage;
         },
+        handleClick(){ // 跳转其他篇时的 类型判断
+            this.category = '';
+        }
     },
     watch: {
         '$route': function (nv, ov) {
             this.getContent();
+            window.scrollTo(0,0)
         }
     }
 }
@@ -338,12 +319,13 @@ export default {
 
 <style lang="less" scoped>
 .card-container {
-    background: linear-gradient(
-        180deg,
-        rgba(255, 255, 255, 0.45) 1%,
-        rgba(255, 255, 255, 0.75) 10%,
-        rgba(255, 255, 255, 1) 100%
-    );
+    // background: linear-gradient(
+    //     180deg,
+    //     rgba(255, 255, 255, 0.45) 1%,
+    //     rgba(255, 255, 255, 0.75) 10%,
+    //     rgba(255, 255, 255, 1) 100%
+    // );
+    background: linear-gradient(180deg, rgba(255, 255, 255, 0.45) 5%, rgba(255, 255, 255, 0.75) 30%, #ffffff 60%);
     border-radius: 15px;
 }
 .ds-comment-footer {

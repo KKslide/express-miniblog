@@ -74,7 +74,7 @@ export default {
             method: 'post',
             data: {}
         }).then(res => {
-            console.log(res);
+            // console.log(res); // 这里打个彩蛋
         })
     }
 }
