@@ -12,6 +12,20 @@
         "Works": "Works",
         "Contact": "Contact me"
     },
+    "logContent": {
+        "author":"Author",
+        "view":"View",
+        "comments":"Comments",
+        "time":"Time",
+        "commentPlaceHolder": "just say something",
+        "name":"Name",
+        "namePlaceHolder":"Leave a nickname or email 🐷",
+        "sendButton":"send",
+        "emptyCommentTip":"The comment can`t be blank",
+        "emptyVisitor":"leave a name please~~~",
+        "prev":"prev",
+        "next":"next"
+    },
     "message": {
         "hello": "hello world",
         "logs": "So many ways to record life, I prefer to do it in my own way, Welcome to my life😎"
@@ -51,9 +65,10 @@
         "addr": "GuangZhou MingPu-Garden China",
         "social": "Follow me on social networks",
         "warning": "Fullfill the form please",
-        "first":"leave the first message 🤪",
+        "first": "leave the first message 🤪",
         "loadmore": "loadmore🕵️‍♂️",
-        "nomore": "there is no more🤷‍♂️"
+        "nomore": "there is no more🤷‍♂️",
+        "responsemsg":"thanks for your comment"
     },
     "lang": "Cn/En"
 }

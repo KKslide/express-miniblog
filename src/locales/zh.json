@@ -12,6 +12,20 @@
         "Works": "作品",
         "Contact": "联系"
     },
+    "logContent":{
+        "author":"作者",
+        "view":"浏览",
+        "comments":"评论",
+        "time":"时间",
+        "commentPlaceHolder":"说些什么吧",
+        "name":"昵称",
+        "namePlaceHolder":"留个昵称或者姓名吧",
+        "sendButton":"发送",
+        "emptyCommentTip":"留言板空的呃T_T.., 说些啥呗~",
+        "emptyVisitor":"大侠请留名T_T..",
+        "prev":"上一篇",
+        "next":"下一篇"
+    },
     "message": {
         "hello": "你好世界",
         "logs": "喜欢用自己的方式记录生活😎"
@@ -53,7 +67,8 @@
         "warning":"表格没填完整啦T_T||",
         "first":"沙发是你了🤪",
         "loadmore":"查看更多留言🕵️‍♂️",
-        "nomore":"你已经看完所有留言了🤷‍♂️"
+        "nomore":"你已经看完所有留言了🤷‍♂️",
+        "responsemsg":"哔~ 留言完毕~ 感谢支持"
     },
     "lang": "中/英"
 }
