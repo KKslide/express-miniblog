@@ -36,6 +36,7 @@
             </span>
         </el-dialog>
         <!-- 弹窗组件 -->
+        <el-divider></el-divider>
         <!-- 分页组件 -->
         <el-pagination
             background
