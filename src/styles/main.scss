@@ -1,6 +1,7 @@
 // Imports fonts that you will used in the application or in the template
 @import url('https://fonts.googleapis.com/css?family=Roboto:900|Roboto+Mono:300,400,700');
-@import url('https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css');
+// @import url('https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css');
+@import url("https://cdn.bootcdn.net/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css");
 
 // Import all your dependencies
 @import "lib/_bootstrap";
@@ -11,9 +12,4 @@
 // Import your custom SCSS
 @import "mashup-example";
 
-
-.demo-drawer{
-    .el-drawer__body {
-      overflow-y: scroll !important;
-    }
-  }
+@import url("./editor.css");

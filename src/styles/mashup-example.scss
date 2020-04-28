@@ -1,7 +1,8 @@
 // 这里是 覆盖elementUI或者部分样式内容
-
+// body{height: 100vh;}
 #app {
-
+    width: 100%;
+    height: 100vh;
     #site-border-left,
     #site-border-right,
     #site-border-top,
@@ -25,4 +26,84 @@
             outline: none !important;
         }
     }
+}
+
+// 抽屉组件滚动样式
+.demo-drawer{
+    .el-drawer__body {
+      overflow-y: scroll !important;
+    }
+}
+
+// 全局设置elementUI滚动样式
+.el-scrollbar__wrap{
+    overflow-y: scroll;
+    overflow-x: hidden;
+}
+
+
+.el-upload__input {
+    display: none !important;
+}
+
+.avatar-uploader .el-upload.el-upload--picture-card {
+    width: 148px;
+    height: 96px;
+    line-height: 96px;
+}
+
+.el-upload-list--picture-card .el-upload-list__item {
+    width: 148px;
+    height: 96px;
+    /* line-height: 96px; */
+}
+
+.noshow .el-upload--picture-card {
+    display: none;
+}
+
+/* element上传组件 */
+.avatar-uploader .el-upload {
+    /* border: 1px dashed #d9d9d9;
+    border-radius: 6px;
+    cursor: pointer; */
+    position: relative;
+    /* overflow: hidden; */
+}
+
+/* table 单元格样式重写 - 超出设置省略号 */
+.cell_nowrap>div.cell {
+    white-space: nowrap;
+}
+.cell_content>div.cell{
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+
+/* tabel 单元格 - 按钮控件不换行 */
+.btn_flex>div.cell {
+    display: flex;
+    justify-content: space-around;
+}
+
+div.cell>p {
+    margin-bottom: 0;
+}
+
+/* 留言管理面板 - disabled样式修改 */
+#massage_list .disabled input {
+    color: #333;
+    cursor: default;
+}
+
+/* 评论详情的input去掉margin */
+#comment_detail .el-form-item__content{
+    margin: 0 !important;
+}
+
+#comment_detail .content_detail input{
+    color:#333 !important;
+    cursor: default !important;
 }

@@ -19,7 +19,7 @@ z-index: 1;
 
 
 body{
-  padding: 10px;
+  padding: 0 10px;
   min-height: 100vh;
   &.minimal{
     border:none;
@@ -65,7 +65,7 @@ body{
 }
 
 .section-container{
-  padding: 60px 0;
+  padding: 80px 0;
   @media (min-width: $screen-lg) {
     padding: 80px 0;
   }
