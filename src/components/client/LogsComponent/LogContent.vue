@@ -35,10 +35,8 @@
                     <!-- 这里是正文了 -->
                     <!-- 上一篇和下一篇 -->
                     <div class="col-xs-12 content_nav">
-                        <!-- <router-link></router-link> -->
                         <router-link :to="{name:'logcontent',params:{contentid:changePage('prev')._id}}" @click.native="handleClick" class="pull-left" > <i class="el-icon-back">&nbsp;{{$t('logContent.prev')}}: </i> [{{changePage('prev').title}}] </router-link>
                         <router-link :to="{name:'logcontent',params:{contentid:changePage('next')._id}}" @click.native="handleClick" class="pull-right" > {{$t('logContent.next')}}: [{{changePage('next').title}}]  <i class="el-icon-right"></i> </router-link>
-                        <!-- <a class="pull-right">下一篇：{{nextData.title}} &nbsp;<i class="el-icon-right"></i></a> -->
                     </div>
                     <!-- 分割线 -->
                     <div class="col-xs-12">
@@ -46,21 +44,25 @@
                     </div>
                     <!-- 评论 -->
                     <div class="col-xs-12">
-                        <div class="comment">
+                        <div class="comment" v-if="false">
                             <form class="form-inline" @submit.prevent="dontSubmit">
                                 <div class="form-group">
                                     <span class="input input--isao">
-                                        <!-- 改用文本域 -->
-                                        <textarea
-                                            class="form-control input__field input__field--isao"
-                                            rows="3"
-                                            :placeholder="$t('logContent.commentPlaceHolder')"
-                                            v-model="commentData.comment"
-                                        ></textarea>
-                                        <!-- 黑框修饰 -->
-                                        <label class="input__label input__label--isao" for="input-38" >
-                                            <span class="input__label-content input__label-content--isao" ></span>
-                                        </label>
+                                        <div class="textArea">
+                                            <!-- 改用文本域 -->
+                                            <textarea
+                                                class="form-control input__field input__field--isao"
+                                                rows="3"
+                                                :placeholder="$t('logContent.commentPlaceHolder')"
+                                                v-model="commentData.comment"
+                                            >
+                                            </textarea>
+                                            <!-- 黑框修饰 -->
+                                            <label class="input__label input__label--isao" for="input-38" >
+                                                <span class="input__label-content input__label-content--isao" ></span>
+                                            </label>
+                                            <div class="box"></div>
+                                        </div>
 
                                         <label for="visitorEmail">
                                             <!-- <span>Name</span> -->
@@ -186,6 +188,7 @@
                             </ul>
                             <!-- 评论列表 -->
                         </div>
+                        <log-comment :commentDataProp="content.comment" @refresh="getContent"></log-comment>
                     </div>
                     <!-- 评论 -->
                 </div>
@@ -198,21 +201,23 @@
 <script>
 import Header from '../public/Header'
 import Footer from '../public/Footer'
+import CommentCom from './comment/LogComment'
 import VideoCom from './Video'
 export default {
     components: {
         'header-com': Header,
         'footer-com': Footer,
-        'video-com': VideoCom
+        'video-com': VideoCom,
+        'log-comment': CommentCom
     },
     data() {
         return {
             category: '',
             content: { user: { username: "" }, comment: [] }, // 文章内容
-            commentData: { // 评论列表
-                comment: '',
-                visitor: ''
-            },
+            // commentData: { // 评论列表
+            //     comment: '',
+            //     visitor: ''
+            // },
             videoSrc: '', // 视频七牛云地址
             posterSrc: '', // 视频封面
             isError: false
@@ -246,7 +251,7 @@ export default {
     mounted() {
     },
     methods: {
-        dontSubmit() { return false },
+        // dontSubmit() { return false },
         getContent() { // 获取文章内容
             let id = this.$route.params.id,
                 contentid = this.$route.params.contentid;
@@ -265,30 +270,30 @@ export default {
                 }
             })
         },
-        submitComment() { // 提交评论
-            if (!this.commentData.comment) { // 评论内容为空
-                // this.$message({ type: "warning", message: "The comment can`t be blank" })
-                this.$message({ type: "warning", message: this.$t('logContent.emptyCommentTip') })
-                return false;
-            }
-            if (!this.commentData.visitor) { // 不留名
-                this.$message({ type: "warning", message: this.$t('logContent.emptyVisitor') })
-                return false;
-            }
-            this.commentData.contentid = this.content._id;
-            this.$axios({
-                url: '/index/comment',
-                method: "post",
-                data: this.commentData
-            }).then(res => {
-                if (res.data.code == 1) { // 评论成功提示
-                    this.$message({ type: "success", message: res.data.msg });
-                    this.commentData.comment = '';
-                    this.commentData.visitor = '';
-                }
-                this.getContent()
-            })
-        },
+        // submitComment() { // 提交评论
+        //     if (!this.commentData.comment) { // 评论内容为空
+        //         // this.$message({ type: "warning", message: "The comment can`t be blank" })
+        //         this.$message({ type: "warning", message: this.$t('logContent.emptyCommentTip') })
+        //         return false;
+        //     }
+        //     if (!this.commentData.visitor) { // 不留名
+        //         this.$message({ type: "warning", message: this.$t('logContent.emptyVisitor') })
+        //         return false;
+        //     }
+        //     this.commentData.contentid = this.content._id;
+        //     this.$axios({
+        //         url: '/index/comment',
+        //         method: "post",
+        //         data: this.commentData
+        //     }).then(res => {
+        //         if (res.data.code == 1) { // 评论成功提示
+        //             this.$message({ type: "success", message: res.data.msg });
+        //             this.commentData.comment = '';
+        //             this.commentData.visitor = '';
+        //         }
+        //         this.getContent()
+        //     })
+        // },
         changePage(params) { // 后期再解决执行N次的问题
             let allArticles = JSON.parse(sessionStorage.getItem('allArticles')),
                     curArticle = this.$route.params.contentid, prevOrNextPage;
@@ -319,184 +324,18 @@ export default {
 
 <style lang="less" scoped>
 .card-container {
-    // background: linear-gradient(
-    //     180deg,
-    //     rgba(255, 255, 255, 0.45) 1%,
-    //     rgba(255, 255, 255, 0.75) 10%,
-    //     rgba(255, 255, 255, 1) 100%
-    // );
     background: linear-gradient(180deg, rgba(255, 255, 255, 0.45) 5%, rgba(255, 255, 255, 0.75) 30%, #ffffff 60%);
     border-radius: 15px;
 }
-.ds-comment-footer {
-    line-height: 1.5em;
-}
-
-/*.ds-comment-footer {*/
-/*font-size: 12px;*/
-/*color: #999;*/
-/*}*/
-
-h3 {
-    border-bottom: 1px dotted #ccc;
-    margin: 5px 0px;
-    padding: 10px 0px;
-    margin: 10px 0 30px;
-}
-p {
-    margin: 0 0 10px;
-    word-wrap: break-word;
-}
-.media-list a {
-    text-decoration: none;
-    color: #5f5f5f;
-    cursor: pointer;
-}
-a:link {
-    text-decoration: none;
-}
-a:visited {
-    text-decoration: none;
-}
-a:hover {
-    text-decoration: none;
-    color: #e5e1ea;
-}
-a:active {
-    text-decoration: none;
-}
-
-.input {
-    position: relative;
-    z-index: 1;
-    display: inline-block;
-    margin: 1em;
-    width: calc(100% - 2em);
-    vertical-align: top;
-}
-
-.input__field:focus {
-    outline: none;
-}
-
-/* Isao */
-.input__field {
-    position: relative;
-    display: block;
-    //   float: right;
-    padding: 0.8em;
-    width: 60%;
-    //   border: none;
-    border-radius: 0;
-    background: #f0f0f0;
-    color: #aaa;
-    font-weight: bold;
-    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
-    -webkit-appearance: none; /* for box shadows to show on iOS */
-}
-
-.input__field--isao {
-    z-index: 10;
-    padding: 0.75em 0.2em 0.25em;
-    width: 100%;
-    background: transparent;
-    color: #afb3b8;
-}
-
-.input__label--isao {
-    position: relative;
-    overflow: hidden;
-    padding: 0;
-    width: 100%;
-    color: #dadada;
-    text-align: left;
-}
-
-.input__label--isao::before {
-    content: "";
-    position: absolute;
-    top: 0;
-    width: 100%;
-    height: 7px;
-    background: #dadada;
-    -webkit-transform: scale3d(1, 0.4, 1);
-    transform: scale3d(1, 0.4, 1);
-    -webkit-transform-origin: 50% 100%;
-    transform-origin: 50% 100%;
-    -webkit-transition: -webkit-transform 0.3s, background-color 0.3s;
-    transition: transform 0.3s, background-color 0.3s;
-    -webkit-transition-timing-function: cubic-bezier(0.2, 1, 0.3, 1);
-    transition-timing-function: cubic-bezier(0.2, 1, 0.3, 1);
-}
-
-.input__label--isao::after {
-    content: attr(data-content);
-    position: absolute;
-    top: 0;
-    left: 0;
-    padding: 0.75em 0.15em;
-    //   color: #da7071; // 改为映衬一点的色调
-    color: #333;
-    opacity: 0;
-    -webkit-transform: translate3d(0, 50%, 0);
-    transform: translate3d(0, 50%, 0);
-    -webkit-transition: opacity 0.3s, -webkit-transform 0.3s;
-    transition: opacity 0.3s, transform 0.3s;
-    -webkit-transition-timing-function: cubic-bezier(0.2, 1, 0.3, 1);
-    transition-timing-function: cubic-bezier(0.2, 1, 0.3, 1);
-    pointer-events: none;
-}
-
-.input__field--isao:focus + .input__label--isao::before {
-    //   background-color: #da7071;
-    background-color: #333;
-    -webkit-transform: scale3d(1, 1, 1);
-    transform: scale3d(1, 1, 1);
-}
-
-.input__field--isao:focus + .input__label--isao {
-    pointer-events: none;
-}
-
-.input__field--isao:focus + .input__label--isao::after {
-    opacity: 1;
-    -webkit-transform: translate3d(0, 0, 0);
-    transform: translate3d(0, 0, 0);
-}
-
-.input__label-content--isao {
-    padding: 0.55em 0.15em;
-    -webkit-transition: opacity 0.3s, -webkit-transform 0.3s;
-    transition: opacity 0.3s, transform 0.3s;
-    -webkit-transition-timing-function: cubic-bezier(0.2, 1, 0.3, 1);
-    transition-timing-function: cubic-bezier(0.2, 1, 0.3, 1);
-}
-
-.input__field--isao:focus + .input__label--isao .input__label-content--isao {
-    opacity: 0;
-    -webkit-transform: translate3d(0, -50%, 0);
-    transform: translate3d(0, -50%, 0);
-}
-// *****************************************************
-
-.comment {
-    .form-inline {
-        .form-group {
-            width: 100%;
-        }
-    }
-}
 .content_nav {
     a {
-        transition: background 0.3s, color 0.3s;
+        text-decoration: none;
+        transition: background 0.3s, color 0.3s,color 0.3s, color 0.3s;
     }
     a:hover {
         background: rgb(54, 54, 54);
+        color:aliceblue;
         cursor: pointer;
     }
-}
-.ip{
-    font-size: 15px;
-    font-weight: normal;
 }
 </style>

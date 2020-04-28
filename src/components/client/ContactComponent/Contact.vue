@@ -6,9 +6,7 @@
                 <div class="row">
                     <div class="col-xs-12">
                         <div class="section-container-spacer text-center">
-                            <h1 class="h2" v-text="$t('navbar.Contact')">
-                                <!-- Contact me -->
-                            </h1>
+                            <h1 class="h2" v-text="$t('navbar.Contact')"></h1>
                         </div>
 
                         <div class="row">
@@ -18,33 +16,25 @@
                                     <div class="row">
                                         <div class="col-md-7">
                                             <div class="form-group">
-                                                <input
-                                                    type="text"
-                                                    class="form-control"
-                                                    id="email"
-                                                    :placeholder="$t('contact.placeholder.one')"
-                                                    v-model="viewer"
-                                                />
+                                                <input type="text" class="form-control" id="email" :placeholder="$t('contact.placeholder.one')" v-model="viewer" />
                                             </div>
-                                            <!-- <div class="form-group">
-                                                <input type="text" class="form-control" id="subject" :placeholder="$t('contact.placeholder.two')" v-model="subject" />
-                                            </div>-->
-                                            <div class="form-group">
+                                            <!-- 留言框 -->
+                                            <div class="form-group msg_textarea">
                                                 <textarea
+                                                    id="msg_textarea"
                                                     class="form-control"
                                                     rows="5"
                                                     :placeholder="$t('contact.placeholder.three')"
                                                     v-model="massage"
                                                 ></textarea>
+                                                <!-- emoji按钮 -->
+                                                <div class="emoji_btn" ref="contact_emoji_btn" @click="showEmojiPanel">
+                                                    <emoji-panel @emojiClick="appendEmoji" v-if="isShowEmojiPanel"></emoji-panel>
+                                                </div>
                                             </div>
-                                            <button
-                                                type="submit"
-                                                class="btn btn-default btn-lg"
-                                                v-text="$t('contact.placeholder.four')"
-                                            >
-                                                <!-- Send -->
-                                            </button>
+                                            <button type="submit" class="btn btn-default btn-lg" v-text="$t('contact.placeholder.four')" ></button>
                                         </div>
+                                        <!-- 个人信息展示 -->
                                         <div class="col-md-5 address-container">
                                             <ul class="list-unstyled">
                                                 <li>
@@ -105,12 +95,9 @@
                                     </div>
                                 </form>
                                 <hr />
-                                <ul class="media-list">
-                                    <li
-                                        class="media"
-                                        v-for="(item,index) in totalData.slice(0,a)"
-                                        :key="index"
-                                    >
+                                <!-- 留言列表 -->
+                                <ul class="media-list" id="msg_list">
+                                    <li class="media" v-for="(item,index) in totalData.slice(0,a)" :key="index" >
                                         <!-- 评论内容 -->
                                         <div class="media-body">
                                             <h4
@@ -122,12 +109,8 @@
 
                                             <div class="commentText">
                                                 <input type="checkbox" :id="'expended'+item._id" />
-                                                <p v-text="item.massage" :ref="item._id"></p>
-                                                <label
-                                                    :for="'expended'+item._id"
-                                                    role="button"
-                                                    v-showbtn
-                                                >show more</label>
+                                                <p v-html="item.massage" :ref="item._id"></p>
+                                                <label :for="'expended'+item._id" role="button" v-showbtn >show more</label>
                                             </div>
                                             <div class="ds-comment-footer">
                                                 <span
@@ -137,10 +120,7 @@
                                                 >{{item.addtime | date}}</span>&nbsp;
                                                 <!-- 先隐藏掉 后面再做这个功能 -->
                                                 <a v-if="false">
-                                                    <span
-                                                        class="glyphicon glyphicon-comment"
-                                                        aria-hidden="true"
-                                                    ></span> 回复
+                                                    <span class="glyphicon glyphicon-comment" aria-hidden="true" ></span> 回复
                                                 </a>
                                             </div>
                                             <hr />
@@ -170,8 +150,6 @@
                                     <hr />
                                 </ul>
                             </div>
-                            <!-- <div class="col-md-10  col-md-offset-1">
-                            </div>-->
                         </div>
                     </div>
                 </div>
@@ -184,18 +162,21 @@
 <script>
 import Header from '../public/Header'
 import Footer from "../public/Footer";
+import EmojiPanel from "./emoji/EmojiPanel.vue";
 export default {
     components: {
         'header-com': Header,
-        'footer-com': Footer
+        'footer-com': Footer,
+        'emoji-panel':EmojiPanel
     },
     data() {
         return {
-            viewer: '',
-            subject: '',
-            massage: '',
+            viewer: '', // 用户昵称或邮箱
+            subject: '', 
+            massage: '', // 留言内容
             a: 5, // 显示留言的数量
-            totalData: [] // 留言的列表数据
+            totalData: [], // 留言的列表数据
+            isShowEmojiPanel: false,
         }
     },
     directives: {
@@ -216,6 +197,7 @@ export default {
                 this.$message({ type: 'warning', message: this.$i18n.t('contact.warning') })
                 return;
             }
+            this.massage = this.massage.replace(/:.*?:/g, this.emoji);
             this.$axios({
                 url: '/index/massage/add',
                 method: 'post',
@@ -233,6 +215,7 @@ export default {
                 this.resetForm();
             })
         },
+        // 重置留言板
         resetForm() { this.viewer = ''; this.subject = ''; this.massage = ''; },
         getData() { // 获取留言
             this.$axios({
@@ -243,53 +226,139 @@ export default {
         },
         loadmore() { // 加载更多
             this.a += 5;
+        },
+        showEmojiPanel() { // 展示和隐藏表情面板
+            this.isShowEmojiPanel = !this.isShowEmojiPanel;
+        },
+        emoji(word) { // 生成html
+            const type = word.substring(1, word.length - 1);
+            return `<span class="emoji-item-common emoji-${type} emoji-size-small" ></span>`;
+        },
+        appendEmoji(text) { // 添加emoji到留言板中
+            const el = document.getElementById("msg_textarea");
+            this.massage = el.value + ":" + text + ":";
         }
     },
     mounted() {
         this.getData()
+    },
+    created() {
+        // 添加 click 事件句柄  判断点击事件是否发生在某元素上
+        document.addEventListener('click', event => {
+            const e = event || window.event
+            if (this.$refs.contact_emoji_btn && !this.$refs.contact_emoji_btn.contains(e.target)) {
+                this.isShowEmojiPanel = false;
+            }
+        })
     }
 }
 </script>
 
-<style lang="less" scoped>
-.commentText {
-    input {
-        opacity: 0;
-        position: absolute;
-        pointer-events: none;
-    }
-    p {
-        display: -webkit-box;
-        -webkit-line-clamp: 3;
-        -webkit-box-orient: vertical;
-        overflow: hidden;
-        margin: 0;
-        position: relative;
-    }
-    p.block::after {
-        content: "";
-        position: absolute;
-        left: 0;
-        bottom: 0;
-        width: 100%;
-        height: 15px;
-        background: linear-gradient(
-            to bottom,
-            rgba(255, 255, 255, 0.3),
-            rgba(255, 255, 255, 1)
-        );
-    }
-    input:focus ~ label {
-        outline: -webkit-focus-ring-color auto 5px;
-    }
-    input:checked + p {
-        -webkit-line-clamp: unset;
-    }
-    input:checked + p::after {
-        opacity: 0;
-    }
-    input:checked ~ label {
-        display: none;
+<style lang="less">
+#msg_list{
+    // 用来隐藏长文本
+    .commentText {
+        input {
+            opacity: 0;
+            position: absolute;
+            pointer-events: none;
+        }
+        p {
+            display: -webkit-box;
+            -webkit-line-clamp: 3;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+            margin: 0;
+            position: relative;
+            .emoji-item-common {
+                background: url("../../../assets/images/emoji_sprite.png");
+                display: inline-block;
+                &:hover {
+                    cursor: default;
+                }
+            }
+            .emoji-size-small {
+                // 表情大小
+                zoom: 0.3;
+            }
+            .emoji-size-large {
+                zoom: 0.5; // emojipanel表情大小
+                margin: 4px;
+            }
+        }
+        p.block::after {
+            content: "";
+            position: absolute;
+            left: 0;
+            bottom: 0;
+            width: 100%;
+            height: 15px;
+            background: linear-gradient(
+                to bottom,
+                rgba(255, 255, 255, 0.3),
+                rgba(255, 255, 255, 1)
+            );
+        }
+        input:focus ~ label {
+            outline: -webkit-focus-ring-color auto 5px;
+        }
+        input:checked + p {
+            -webkit-line-clamp: unset;
+        }
+        input:checked + p::after {
+            opacity: 0;
+        }
+        input:checked ~ label {
+            display: none;
+        }
     }
 }
+// emoji按钮
+.msg_textarea{
+    position: relative;
+    .emoji_btn {
+        width: 20px;
+        height: 20px;
+        position: absolute;
+        bottom: 3px;
+        left: 3px;
+        border-radius: 50%;
+        z-index: 99;
+        cursor: pointer;
+    }
+    .emoji_btn::after {
+        content: "";
+        width: 20px;
+        height: 20px;
+        background-image: url("../../../assets/images/face_logo.png");
+        background-size: contain;
+        position: absolute;
+        left: 0;
+        top: 0;
+        z-index: -1;
+        opacity: 0.5;
+        transition: opacity 0.2s;
+    }
+    .emoji_btn:hover::after {
+        opacity: 0.8;
+    }
+    // ------------------------------
+    .emoji-item-common {
+        background: url("../../../assets/images/emoji_sprite.png");
+        display: inline-block;
+        &:hover {
+            cursor: pointer;
+        }
+    }
+    .emoji-size-small {
+        // 表情大小
+        zoom: 0.3;
+    }
+    .emoji-size-large {
+        zoom: 0.5; // emojipanel表情大小
+        margin: 4px;
+    }
+}
+// *****************************************************
+@import url("../../../assets/css/emoji.css");
 </style>
