@@ -27,16 +27,26 @@
                                 <router-link :to="{name:'log'}" v-text="'02 : '+$t('navbar.Logs')"></router-link>
                             </li>
                             <li>
-                                <!-- <router-link :to="{name:'about'}">03 : About me</router-link> -->
-                                <router-link :to="{name:'about'}" v-text="'03 : '+$t('navbar.About')" ></router-link>
+                                <!-- <router-link :to="{name:'works'}">04 : Works</router-link> -->
+                                <router-link
+                                    :to="{name:'works'}"
+                                    v-text="'03 : '+$t('navbar.Works')"
+                                ></router-link>
+                                <!-- **************** -->
                             </li>
                             <li>
-                                <!-- <router-link :to="{name:'works'}">04 : Works</router-link> -->
-                                <router-link :to="{name:'works'}" v-text="'04 : '+$t('navbar.Works')" ></router-link>
+                                <!-- <router-link :to="{name:'about'}">03 : About me</router-link> -->
+                                <router-link
+                                    :to="{name:'about'}"
+                                    v-text="'04 : '+$t('navbar.About')"
+                                ></router-link>
                             </li>
                             <li>
                                 <!-- <router-link :to="{name:'contact'}">05 : Contact</router-link> -->
-                                <router-link :to="{name:'contact'}" v-text="'05 : '+$t('navbar.Contact')" ></router-link>
+                                <router-link
+                                    :to="{name:'contact'}"
+                                    v-text="'05 : '+$t('navbar.Contact')"
+                                ></router-link>
                             </li>
                             <li v-if="false">
                                 <a href="javascript:;">
@@ -63,11 +73,8 @@
                             </li>
                         </ul>
                         <!-- 文章导航 -->
-                            <!-- v-if="this.$route.name=='logcontent'" -->
-                        <ul
-                        v-if="false"
-                            class="nav navbar-nav navbar-right navbar-small visible-md visible-lg"
-                        >
+                        <!-- v-if="this.$route.name=='logcontent'" -->
+                        <ul v-if="false" class="nav navbar-nav navbar-right navbar-small visible-md visible-lg" >
                             <li v-for="(item,index) in currentArticles" :key="index">
                                 <a
                                     href="javascript:;"
