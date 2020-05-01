@@ -21,7 +21,7 @@ function getClientIp(req) {
 /* 统计访问者IP和时间 */
 router.post('/visit', function (req, res, next) {
     var newvisitor = new Visitor({
-        ip: getClientIp(req).replace(/::ffff:/,''),
+        ip: getClientIp(req).replace(/::ffff:/, ''),
         time: new Date()
     });
     newvisitor.save()
@@ -37,8 +37,23 @@ router.get('/getpage', function (req, res, next) {
     //     "age": 18
     //   }
     Content.find({ isShow: { $eq: 1 } }).populate('category').sort({ addtime: -1 })/* .limit(6) */.then(contents => {
-        res.json(contents)
-    })
+        res.json(contents.filter(v=>{
+            return v.category.name != 'Video';
+        }));
+    });
+});
+
+/* 获取视频类型的页面 */
+router.get('/getvideolist', function (req,res,next) {
+    Content.find({isShow:{$eq:1}}).populate({
+        path:'category',
+        select:'name',
+        match:{name:{$eq:'Video'}}
+    }).where().sort({ addtime: -1 }).then(contents=>{
+        res.json(contents.filter(v=>{
+            return v.category != null
+        }));
+    });
 });
 
 /* 获取文章详情 */
