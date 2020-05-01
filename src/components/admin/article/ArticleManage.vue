@@ -5,8 +5,8 @@
             <el-table-column prop="_id" label="文章ID"></el-table-column>
             <el-table-column prop="title" label="文章标题"></el-table-column>
             <el-table-column prop="category" label="文章分类"></el-table-column>
-            <el-table-column prop="user" label="作者"></el-table-column>
-            <el-table-column label="添加时间" width="180">
+            <!-- <el-table-column prop="user" label="作者"></el-table-column> -->
+            <el-table-column label="添加时间" width="190">
                 <template slot-scope="scope">
                     <p>{{scope.row.addtime|date}}</p>
                 </template>
@@ -38,7 +38,7 @@
         </el-table>
 
         <!-- 评论列表弹窗 -->
-        <el-dialog :title="'文章【'+curChosenArcData.title+'】的评论'" :visible.sync="commentModel" width="80%" center :close-on-click-modal="false">
+        <el-dialog :title="'文章【'+curChosenArcData.title+'】的评论'" :visible.sync="commentModel" :modal-append-to-body="true" width="80%" center :close-on-click-modal="false">
             <CommentCom :curChosenArcComment="curChosenArcData" :upDateArc="getArticles"></CommentCom>
             <span slot="footer" class="dialog-footer">
                 <el-button @click="commentModel = false">取 消</el-button>
@@ -74,7 +74,8 @@
             direction="btt"
             custom-class="demo-drawer"
             ref="drawer"
-            size="80%"
+            size="85%"
+            :modal-append-to-body="true"
         >
             <div class="demo-drawer__content" style="padding:0 15px 10px 15px;">
                 <el-form :model="form" ref="form" :rules="rules">
@@ -176,7 +177,7 @@
                                     :style="{width:reuploadWidth+'px',height:reuploadWidth+'px','line-height':reuploadWidth+'px','font-size':reuploadWidth/5+'px'}"
                                 >上传失败</div>
                             </el-upload>
-                            <el-dialog :visible.sync="dialogVisible">
+                            <el-dialog :visible.sync="dialogVisible" :modal-append-to-body="true">
                                 <img width="100%" :src="dialogImageUrl" alt />
                             </el-dialog>
                             <!-- 剪裁组件弹窗 -->
@@ -184,6 +185,7 @@
                                 :visible.sync="cropperModel"
                                 width="800px"
                                 :before-close="beforeClose"
+                                :modal-append-to-body="true"
                             >
                                 <Cropper
                                     :img-file="file"
@@ -633,7 +635,9 @@ export default {
 
         /* ************* cropper截图上传 ************** */
         handlePreviewSingle(file) {//点击进行图片展示
-            this.dialogImageUrl = this.file.url
+            console.log('aaaaa',this.dialogImageUrl);
+            console.log(this.imageUrl);
+            this.dialogImageUrl = this.imageUrl
             this.dialogVisible = true
         },
         mouseEnter() {//鼠标划入显示“重新上传”
@@ -660,6 +664,10 @@ export default {
             let imgData = new FormData();
             imgData.append('file', data);
             imgData.image = data;
+            console.log(data);
+            console.log('---------------------------');
+            console.log(ImageData);
+            return;
             this.$axios.post(this.targetUrl, imgData).then(res => {
                 // 上传完成后隐藏正在上传
                 this.$refs.uploading.style.display = 'none'
@@ -669,11 +677,11 @@ export default {
                     this.$emit('imgupload', currentPic)
                     this.imageUrl = currentPic
                     this.form.minpic_url = currentPic
+                    console.log('上传成功,url为 ', this.imageUrl)
                 } else {
                     // 上传失败则显示上传失败，如多图则从图片列表删除图片
                     this.$refs.failUpload.style.display = 'block'
                 }
-                console.log('上传成功,url为 ', this.imageUrl)
             })
             this.cropperModel = false
         },

@@ -7,10 +7,11 @@
     },
     "navbar": {
         "Home": "首页",
-        "Logs": "日志",
+        "Blogs": "博文",
+        "Vlogs": "Vlog",
         "About": "关于我",
-        "Works": "作品",
-        "Contact": "联系"
+        "Works": "交互设计",
+        "Contact": "联系我"
     },
     "logContent":{
         "author":"作者",
@@ -28,11 +29,12 @@
     },
     "message": {
         "hello": "你好世界",
-        "logs": "喜欢用自己的方式记录生活😎"
+        "slogan": "用自己的方式记录生活😎",
+        "blogIntro":"<p>有些视频并不是全在这里发布</p> <p>但是以上的所有视频内容和源文件</p> <p>都可以在其他媒体平台上看到和下载</p> <p>我所活跃的媒体平台有以下几个：</p> <p><a href=\"https://space.bilibili.com/334163601\" target=\"_blank\">👉Bilibili</a></p> <p><a href=\"http://i.youku.com/i/UMTQ1MTk3NjQw\" target=\"_blank\">👉YouKu</a></p> <p><a href=\"https://www.youtube.com/channel/UCq3JnM6ThmZO_0tSUNBngvQ\">👉YouTube</a></p>"
     },
     "about": {
         "part1": {
-            "title": "关于前端工程师",
+            "title": "关于前端",
             "content": "作为一个两年工作经验的前端开发工程师, 约莫在2013年开始接触这个新鲜事物, 当时大学里开设了一门《HTML+CSS网页设计》课程让我印象颇深. 令人不得不惊叹这些网页特效居然都是用代码写出来的, 特么我以后真的要搞这些东西?? - - ||... 那不得眼瞎而且寡佬好久好久 还会肾不好..结果emmmm 真香"
         },
         "part2": {

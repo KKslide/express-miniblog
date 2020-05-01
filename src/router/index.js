@@ -13,17 +13,19 @@ import LoginComponent from '@/components/admin/login/Login'
 
 
 /* ********* 前端 ********** */
-import HomeComponent from '../components/client/Home'
-import LogComponent from '../components/client/LogsComponent/Log.vue'
-import LogContentComponent from '../components/client/LogsComponent/LogContent.vue'
-import AboutComponent from '../components/client/AboutMeComponent/About.vue'
-import WorksComponent from '../components/client/WorksComponent/Works.vue'
-import ContactComponent from '../components/client/ContactComponent/Contact.vue'
+import HomeComponent from '../components/client/Home' // 首页
+import BlogComponent from '../components/client/BlogListComponent/BlogList.vue' // 博客列表页面
+import VideoListComponent from '../components/client/VideoListComponent/VideoList.vue' // vlog列表页
+import ContentComponent from '../components/client/ContentComponent/BlogContent.vue' // 内容详情页
+import AboutComponent from '../components/client/AboutMeComponent/About.vue' // '关于我'页面
+import WorksComponent from '../components/client/WorksComponent/Works.vue' // 代码列表页面
+import ContactComponent from '../components/client/ContactComponent/Contact.vue' // '联系我'页面
 /* ********* 前端 ********** */
 
 // import CameraComponent from '../components/other/Camera.vue' // 测试单图上传组件
 
-// Vue.use(Router)
+// import test from '../test/test2.vue'
+
 
 // export default new Router({
 export default new VueRouter({
@@ -35,19 +37,24 @@ export default new VueRouter({
             component: HomeComponent,
         },
         // {
-        //     path: '/camera',
-        //     name: 'camera',
-        //     component: CameraComponent
+        //     path: '/test',
+        //     name: 'test',
+        //     component: test
         // },
         {
-            path: '/log',
-            name: 'log',
-            component: LogComponent
+            path: '/blog',
+            name: 'blog',
+            component: BlogComponent
+        },
+        {
+            path: '/vlog',
+            name: 'vlog',
+            component: VideoListComponent
         },
         {
             path: '/logcontent/:contentid',
             name: 'logcontent',
-            component: LogContentComponent
+            component: ContentComponent
         },
         {
             path: '/about',
@@ -103,6 +110,12 @@ export default new VueRouter({
                 },
             ]
         }
-    ]
-})
+    ],
+    scrollBehavior(to, from, savedPosition) {
+        return {
+            x: 0,
+            y: 0
+        }
+    }
+});
 

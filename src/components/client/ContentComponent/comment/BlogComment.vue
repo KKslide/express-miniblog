@@ -59,7 +59,7 @@
                 <div class="media-body">
                     <h4 class="media-heading" v-if="item.user" style="font-size:18px;">
                         {{item.user}}
-                        <span class="ip">|{{item.ip}}|</span> 🎈
+                        <span class="ip">|{{item.ip}}|🎈</span> 
                     </h4>
                     <h4 class="media-heading" v-else style="font-size:18px;">somebody</h4>
 
@@ -135,7 +135,6 @@
                     </ul>
                 </div>
             </li>
-            <hr />
         </ul>
         <!-- 评论列表 -->
     </div>

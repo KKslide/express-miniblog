@@ -15,7 +15,7 @@
         .item {
             .card-container {
                 background: linear-gradient(rgba(255, 255, 255, 0.75) 0%, rgb(255, 255, 255) 55%);
-                border-radius: 3%;
+                // border-radius: 3%;
             }
         }
     }
@@ -28,6 +28,28 @@
     }
 }
 
+// 视频列表也的底部文字样式
+.other_link{
+    p{
+        text-align: center;
+        font-size: 18px;
+        margin: 0px 5px;
+        a{
+            text-decoration: none;
+        }
+    }
+}
+
+// videojs的封面铺满
+.vjs-poster{
+    background-size: cover;
+}
+
+/* nav去掉底部白色边框 */
+.el-menu.el-menu--horizontal{
+    border-bottom: none !important;
+}
+
 // 抽屉组件滚动样式
 .demo-drawer{
     .el-drawer__body {
@@ -37,8 +59,8 @@
 
 // 全局设置elementUI滚动样式
 .el-scrollbar__wrap{
-    overflow-y: scroll;
-    overflow-x: hidden;
+    overflow-y: scroll !important;
+    overflow-x: hidden !important;
 }
 
 

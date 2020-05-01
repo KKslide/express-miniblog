@@ -6,7 +6,7 @@
     <div id="site-border-bottom"></div>
     <!-- 翻译悬浮按钮 -->
     <lang-com v-show="isShow"></lang-com>
-    <el-scrollbar style="height:100%">
+    <el-scrollbar style="height:100%" ref="elScrollBar">
         <router-view></router-view>
     </el-scrollbar>
   </div>

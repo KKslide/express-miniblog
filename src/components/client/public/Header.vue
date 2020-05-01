@@ -23,14 +23,17 @@
                                 <router-link :to="{name:'home'}" v-text="'01 : '+$t('navbar.Home')"></router-link>
                             </li>
                             <li>
-                                <!-- <router-link :to="{name:'log'}">02 : Logs</router-link> -->
-                                <router-link :to="{name:'log'}" v-text="'02 : '+$t('navbar.Logs')"></router-link>
+                                <router-link :to="{name:'blog'}" v-text="'02 : '+$t('navbar.Blogs')"></router-link>
+                            </li>
+                            <li>
+                                <!-- <router-link :to="{name:'log'}">02 : Blogs</router-link> -->
+                                <router-link :to="{name:'vlog'}" v-text="'03 : '+$t('navbar.Vlogs')"></router-link>
                             </li>
                             <li>
                                 <!-- <router-link :to="{name:'works'}">04 : Works</router-link> -->
                                 <router-link
                                     :to="{name:'works'}"
-                                    v-text="'03 : '+$t('navbar.Works')"
+                                    v-text="'04 : '+$t('navbar.Works')"
                                 ></router-link>
                                 <!-- **************** -->
                             </li>
@@ -38,7 +41,7 @@
                                 <!-- <router-link :to="{name:'about'}">03 : About me</router-link> -->
                                 <router-link
                                     :to="{name:'about'}"
-                                    v-text="'04 : '+$t('navbar.About')"
+                                    v-text="'05 : '+$t('navbar.About')"
                                 ></router-link>
                             </li>
                             <li>

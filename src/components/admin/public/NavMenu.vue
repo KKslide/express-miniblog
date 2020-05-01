@@ -68,6 +68,7 @@ export default {
 
 <style lang="less" scoped>
 #nav {
+    margin-top: 10px;
     position: relative;
     .admin_tip {
         position: absolute;

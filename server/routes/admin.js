@@ -17,7 +17,7 @@ router.get('/isadmin', (req, res, next) => {
     } else {
         res.json({ code: 1, islogin: 'logined', msg: "登陆成功" })
     }
-})
+});
 
 // 登陆接口
 router.post('/login', (req, res, next) => {
@@ -189,7 +189,7 @@ router.post("/categories/add", (req, res, next) => {
 
     });
     // }
-})
+});
 
 // 删除文章分类
 router.post('/categories/del', (req, res, next) => {

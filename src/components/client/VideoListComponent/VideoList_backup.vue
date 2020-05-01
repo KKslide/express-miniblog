@@ -6,10 +6,10 @@
                 <div class="row">
                     <div class="col-sm-8 col-sm-offset-2 section-container-spacer">
                         <div class="text-center">
-                            <!-- <h1 class="h2">Logs</h1> -->
-                            <h1 class="h2" v-text="$t('navbar.Logs')"></h1>
+                            <!-- <h1 class="h2">Blogs</h1> -->
+                            <h1 class="h2" v-text="$t('navbar.Vlogs')"></h1>
                             <!-- <p>So many ways to record life, I prefer to do it in my own way, Welcome to my life😎</p> -->
-                            <p v-text="$t('message.logs')"></p>
+                            <p v-text="$t('message.slogan')"></p>
                         </div>
                     </div>
                     <div class="col-md-12">
@@ -20,18 +20,12 @@
                                     <div class="row">
                                         <div class="col-sm-4" v-for="(sub_item,sub_index) in item" :key="sub_index" >
                                             <span style="display:none;">{{sub_item.category.name}}</span>
-                                            <a href="javascript:;" :title="sub_item.title" class="black-image-project-hover tag" :tag="sub_item.category.name">
-                                                <!-- <img
-                                                    src="../../../static/img/loading.png"
-                                                    class="img-responsive img-responsive-auto-width"
-                                                    :data-index="index==0?(sub_index+1):(sub_index+1+item.length)"
-                                                    @load="showImg(sub_item.minpic_url,$event)"
-                                                    @click="goto(sub_item,$event)"
-                                                /> -->
+                                            <a href="javascript:;" @click="goto(sub_item,$event)" :title="sub_item.title" class="black-image-project-hover tag" :tag="sub_item.category.name">
                                                 <lazy-img 
                                                     :src="sub_item.minpic_url" 
                                                     :dataIndex="index==0?(sub_index+1):(sub_index+1+item.length)"
                                                     imgClass="img-responsive img-responsive-auto-width"
+                                                    :size="{'width':'100%'}"
                                                 ></lazy-img>
                                             </a>
                                             <div class="card-container card-container-lg">
@@ -76,8 +70,6 @@ export default {
     },
     data() {
         return {
-            loadingUrl:"../../../../static/img/loading.png",
-            defaultImg: '../../../assets/images/space.jpg',
             origenArticles: [],
             articles: []
         }
@@ -96,9 +88,6 @@ export default {
         }
     },
     methods: {
-        showImg(url,event){
-            console.log(event);
-        },
         goto(sub_item, event) {
             this.$router.push({ name: 'logcontent', params: { contentid: sub_item._id } })
         },

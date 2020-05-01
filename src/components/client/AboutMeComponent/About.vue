@@ -28,13 +28,13 @@
                       So I started to try something else to see if I could get a little bit taller,
                       and I bought myself a pair of skating shoes, and that changed my whole life..
                     </p> -->
-                    <!-- <h3 v-text="$t('about.part3.title')">Next Movement</h3>
-                    <p v-html="$t('about.part3.content')"> -->
-                    <h3>Next Goal</h3>
+                    <h3 v-text="$t('about.part3.title')">Next Movement</h3>
+                    <p v-html="$t('about.part3.content')"></p>
+                    <!-- <h3>Next Goal</h3>
                     <p>
                       Keep trying and learing new things
                       <br />Keep challenge my limits and striving for excellence
-                    </p>
+                    </p> -->
                   </div>
                   <div class="col-xs-12 col-md-6">
                     <img src="../../../assets/images/profil.jpg" class="img-responsive" alt />

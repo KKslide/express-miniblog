@@ -7,7 +7,8 @@
     },
     "navbar": {
         "Home": "Home",
-        "Logs": "Logs",
+        "Blogs": "Blogs",
+        "Vlogs": "Vlog",
         "About": "About Me",
         "Works": "Works",
         "Contact": "Contact me"
@@ -28,7 +29,8 @@
     },
     "message": {
         "hello": "hello world",
-        "logs": "So many ways to record life, I prefer to do it in my own way, Welcome to my life😎"
+        "slogan": "So many ways to record life, I prefer to do it in my own way, Welcome to my life😎",
+        "blogIntro":"<p>Not all of my Vlogs are published here</p> <p>But you can view and download all of the Vlogs</p> <p>and origin AE & Pr project files from:</p> <p><a href=\"https://space.bilibili.com/334163601\" target=\"_blank\">👉Bilibili</a></p> <p><a href=\"http://i.youku.com/i/UMTQ1MTk3NjQw\" target=\"_blank\">👉YouKu</a></p> <p><a href=\"https://www.youtube.com/channel/UCq3JnM6ThmZO_0tSUNBngvQ\">👉YouTube</a></p>"
     },
     "about": {
         "part1": {

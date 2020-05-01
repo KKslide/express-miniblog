@@ -31,47 +31,48 @@
         </el-table>
         <el-button type="text" @click="dialogVisible = true">新增分类</el-button>
         <!-- 改用dialog组件 -->
-        <el-dialog title="提示aaa" :visible.sync="dialogVisible" width="50%" :before-close="handleClose">
+        <el-dialog title="提示" :visible.sync="dialogVisible" width="30%" :before-close="handleClose">
             <!-- <span>这是一段信息</span> -->
             <el-form v-model="categoryDetail" ref="categoryDetail" label-width="120px">
-                <el-form-item label="分类名称" prop="name" required>
+                <el-form-item label="分类名称" prop="name">
                     <el-input v-model="categoryDetail.name" autocomplete="off"></el-input>
                 </el-form-item>
-                <el-form-item label="分类缩略图" prop="banner" required>
-                    <span>(banner长宽要求：2278x516)</span>
-                    <form id="minPicForm" method="post" enctype="multipart/form-data">
-                        <!-- 单图片上传 -->
-                        <el-upload
-                            class="avatar-uploader"
-                            v-model="categoryDetail.banner"
-                            action="'string'"
-                            list-type="picture-card"
-                            :auto-upload="false"
-                            :show-file-list="false"
-                            :on-change="handleCrop"
-                        >
-                            <!-- :http-request="upload" -->
-                            <img 
-                                v-if="categoryDetail.banner" 
-                                :src="categoryDetail.banner" 
-                                class="avatar" 
-                                ref="singleImg" 
-                                @mouseenter="mouseEnter" 
-                                @mouseleave="mouseLeave" 
-                                :style="{width:bannerWidth+'px',height:bannerHeight+'px'}" 
-                            />
-                            <i v-else class="el-icon-plus avatar-uploader-icon" :style="{width:bannerWidth+'px',height:bannerHeight+'px','line-height':bannerHeight+'px','font-size':bannerHeight/6+'px'}" ></i>
-                            <div id="uploadIcon" v-if="categoryDetail.banner" ref="reupload" @mouseenter="mouseEnter" @mouseleave="mouseLeave" :style="{width:'100%'}" >
-                                <i class="el-icon-zoom-in" title="查看原图" :style="{color:'#2E2E2E',fontSize:'25px',display:'inline-block',paddingRight:'15px'}" ></i>
-                                <i class="el-icon-refresh-right" title="重新上传" :style="{color:'#2E2E2E',fontSize:'25px',display:'inline-block'}" ></i>
-                            </div>
-                            <div class="reupload" ref="uploading" :style="{width:reuploadWidth+'px',height:reuploadWidth+'px','line-height':reuploadWidth+'px','font-size':reuploadWidth/5+'px'}" >上传中..</div>
-                            <div class="reupload" ref="failUpload" :style="{width:reuploadWidth+'px',height:reuploadWidth+'px','line-height':reuploadWidth+'px','font-size':reuploadWidth/5+'px'}" >上传失败</div>
-                        </el-upload>
-                        <!-- <el-dialog :visible.sync="dialogVisible">
-                            <img width="100%" :src="dialogImageUrl" alt />
-                        </el-dialog> -->
-                    </form>
+                <el-form-item label="分类缩略图" prop="banner" v-if="false">
+                    <el-form-item label="缩略图" :label-width="formLabelWidth" prop="minpic_url">
+                        <form id="minPicForm" method="post" enctype="multipart/form-data">
+                            <!-- 单图片上传 -->
+                            <el-upload
+                                class="avatar-uploader"
+                                v-model="categoryDetail.banner"
+                                action="'string'"
+                                list-type="picture-card"
+                                :auto-upload="false"
+                                :show-file-list="false"
+                                :on-change="handleCrop"
+                                :http-request="upload"
+                            >
+                                <img 
+                                    v-if="categoryDetail.banner" 
+                                    :src="categoryDetail.banner" 
+                                    class="avatar" 
+                                    ref="singleImg" 
+                                    @mouseenter="mouseEnter" 
+                                    @mouseleave="mouseLeave" 
+                                    :style="{width:bannerWidth+'px',height:bannerHeight+'px'}" 
+                                />
+                                <i v-else class="el-icon-plus avatar-uploader-icon" :style="{width:bannerWidth+'px',height:bannerHeight+'px','line-height':bannerHeight+'px','font-size':bannerHeight/6+'px'}" ></i>
+                                <div id="uploadIcon" v-if="categoryDetail.banner" ref="reupload" @mouseenter="mouseEnter" @mouseleave="mouseLeave" :style="{width:'100%'}" >
+                                    <i class="el-icon-zoom-in" title="查看原图" :style="{color:'#2E2E2E',fontSize:'25px',display:'inline-block',paddingRight:'15px'}" ></i>
+                                    <i class="el-icon-refresh-right" title="重新上传" :style="{color:'#2E2E2E',fontSize:'25px',display:'inline-block'}" ></i>
+                                </div>
+                                <div class="reupload" ref="uploading" :style="{width:reuploadWidth+'px',height:reuploadWidth+'px','line-height':reuploadWidth+'px','font-size':reuploadWidth/5+'px'}" >上传中..</div>
+                                <div class="reupload" ref="failUpload" :style="{width:reuploadWidth+'px',height:reuploadWidth+'px','line-height':reuploadWidth+'px','font-size':reuploadWidth/5+'px'}" >上传失败</div>
+                            </el-upload>
+                            <el-dialog :visible.sync="dialogVisible">
+                                <img width="100%" :src="dialogImageUrl" alt />
+                            </el-dialog>
+                        </form>
+                    </el-form-item>
                 </el-form-item>
             </el-form>
             <span slot="footer" class="dialog-footer">
@@ -87,15 +88,13 @@ export default {
     data() {
         return {
             dialogVisible: false,
-            bannerWidth:150,
-            bannerHeight:34,
-            file:'',
+            bannerWidth:2278,
+            bannerHeight:516,
             reupload: true, // 控制"重新上传"开关
             categoryData: [],
             categoryDetail: {
                 addtime: "2020-01-09T09:39:52.435Z",
-                // banner: "http://example.kkslide.fun/banner.jpg",
-                banner: "",
+                banner: "http://example.kkslide.fun/banner.jpg",
                 edittime: "2020-01-13T03:17:15.151Z",
                 name: "Fun"
             }
@@ -108,7 +107,8 @@ export default {
                     this.categoryData = res.data.categories
                 })
         },
-        open() { // 添加按钮
+        // 添加按钮
+        open() {
             this.$prompt('请分类名称', '提示', {
                 closeOnClickModal: false,
                 confirmButtonText: '确定',
@@ -142,7 +142,8 @@ export default {
                 });
             });
         },
-        del(index, row) { // 删除按钮
+        // 删除按钮
+        del(index, row) {
             this.$confirm('永久删除分类"' + row.name + '", 是否继续?', '提示', {
                 confirmButtonText: '确定',
                 cancelButtonText: '取消',
@@ -191,7 +192,8 @@ export default {
             //     }
             //   })
         },
-        edit(index, row) { // 编辑按钮
+        // 编辑按钮
+        edit(index, row) {
             this.$prompt('修改分类名称', '提示', {
                 closeOnClickModal: false,
                 confirmButtonText: '确定',
@@ -249,21 +251,6 @@ export default {
             this.$refs.reupload.style.display = 'none'
             this.$refs.singleImg.style.opacity = '1'
         },
-        handleCrop(files, fileList) { // 点击弹出剪裁框
-            let tempForm = new FormData();
-            tempForm.append('file',files.raw);
-            this.$refs.uploading.style.display = 'block';
-            this.$axios.post('/pic/upload',tempForm).then(res=>{
-                this.$refs.uploading.style.display = 'none';
-                if(res.status==200){
-                    console.log(res);
-                    this.categoryDetail.banner = res.data.imageUrl;
-                }else {
-                    // 上传失败则显示上传失败，如多图则从图片列表删除图片
-                    this.$refs.failUpload.style.display = 'block'
-                }
-            })
-        },
     },
     created() {
         this.getData()
@@ -275,76 +262,4 @@ export default {
 #category {
     padding: 15px;
 }
-.avatar {
-    background-size: cover;
-    background-position: center center;
-    background-repeat: no-repeat;
-    width: 150px;
-    height: 34px;
-    max-height: 34px;
-    display: block;
-    margin: 0 auto;
-}
-.avatar-uploader .el-upload {
-    border: 1px dashed #d9d9d9;
-    border-radius: 6px;
-    cursor: pointer;
-    position: relative;
-    overflow: hidden;
-}
-
-.avatar-uploader .el-upload:hover {
-    border-color: #409eff;
-}
-.avatar-uploader-icon {
-    font-size: 28px;
-    color: #8c939d;
-    width: 150px;
-    height: 34px;
-    line-height: 34px;
-    text-align: center;
-}
-
-// 新增的上传组件样式
-.avatar-uploader .el-upload {
-    border: 1px dashed #d9d9d9;
-    border-radius: 6px;
-    cursor: pointer;
-    position: relative;
-    overflow: hidden;
-}
-.avatar-uploader .el-upload:hover {
-    border-color: #409eff;
-}
-.avatar-uploader-icon {
-    color: #8c939d;
-    text-align: center;
-}
-.avatar {
-    display: block;
-}
-.reupload {
-    border-radius: 50%;
-    position: absolute;
-    color: #fff;
-    background-color: #000000;
-    opacity: 0.6;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    display: none;
-}
-#uploadIcon {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    display: none;
-}
-
-.avatar-uploader .el-upload.el-upload--picture-card {
-    width: unset !important;
-    height: unset !important;
-}
-
 </style>
