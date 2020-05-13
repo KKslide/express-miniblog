@@ -168,25 +168,21 @@ router.get("/categories", (req, res, next) => {
 // 新增文章分类
 router.post("/categories/add", (req, res, next) => {
     var name = req.body.name || "";
-    //console.log(name);
-    // if (name == "") {
-    //     res.render("admin/error", { userInfo: req.userInfo });
-    // }
-    // else {
+    var banner = req.body.banner || "";
     Category.findOne({ name: name }, function (err, info) {
-        if (err) {
-            console.log(err);
-        }
+        if (err) console.log(err);
         if (info) {
             res.json({ code: 0, msg: "出错了！请联系我！" });
             return false;
         }
         var newcate = new Category({
-            name: name
+            name: name,
+            addtime: new Date(),
+            edittime: new Date(),
+            banner: banner
         });
         newcate.save();
         res.json({ code: 1, msg: "新增成功！" });
-
     });
     // }
 });
@@ -208,6 +204,7 @@ router.post('/categories/del', (req, res, next) => {
 router.post('/categories/edit', (req, res, next) => {
     var name = req.body.name || "";
     var id = req.body.id || "";
+    var banner = req.body.banner || "";
     // console.log(req.query);
     // console.log(req.body);
     Category.findOne({ _id: id }, function (err, info) {
@@ -218,6 +215,8 @@ router.post('/categories/edit', (req, res, next) => {
         if (info) {
             // console.log(info);
             info.name = name;
+            info.banner = banner;
+            info.edittime = new Date();
             info.save();
             res.json({ code: 1, msg: "更新成功，哥要睡觉了！" })
         }

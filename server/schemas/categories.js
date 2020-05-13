@@ -10,5 +10,8 @@ module.exports = new mongoose.Schema({
         type: Date,
         default: new Date()
     },
-    banner: ""
+    banner: {
+        type: String,
+        default: ""
+    }
 });

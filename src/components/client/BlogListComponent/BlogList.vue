@@ -6,7 +6,7 @@
                 <div class="row">
                     <div class="col-xs-12">
                         <div class="section-container-spacer text-center">
-                            <h1 class="h2">博客</h1>
+                            <h1 class="h2">{{$t('navbar.Blogs')}}</h1>
                         </div>
                         <div class="blog_list row">
                             <div class="blog_list_item col-xs-12 col-md-6 col-md-offset-3" v-for="(item,index) in blogList" :key="index" >

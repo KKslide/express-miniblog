@@ -68,6 +68,7 @@
     display: none !important;
 }
 
+// 文章编辑模块 上传组件样式
 .avatar-uploader .el-upload.el-upload--picture-card {
     width: 148px;
     height: 96px;
@@ -91,6 +92,19 @@
     cursor: pointer; */
     position: relative;
     /* overflow: hidden; */
+}
+
+// 分类管理模块 上传组件样式
+#category {
+    .avatar-uploader .el-upload.el-upload--picture-card {
+        width: 400px;
+        height: 90.6px;
+        line-height: 90.6px;
+        .reupload.icon{
+            width: 80px !important;
+            width: 80px !important;
+        }
+    }
 }
 
 /* table 单元格样式重写 - 超出设置省略号 */

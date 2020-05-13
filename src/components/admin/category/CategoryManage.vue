@@ -14,12 +14,13 @@
                 </template>
             </el-table-column>
             <el-table-column prop="banner" label="分类缩略图">
-                <!-- <template></template> -->
-                <el-image
-                    style="width: 150px; height: 34px"
-                    :src="categoryDetail.banner"
-                    fit="cover"
-                ></el-image>
+                <template slot-scope="scope">
+                    <el-image
+                        style="width: 150px; height: 34px"
+                        :src="scope.row.banner"
+                        fit="cover"
+                    ></el-image>
+                </template>
             </el-table-column>
             <el-table-column label="操作">
                 <!-- <span>123</span> -->
@@ -29,15 +30,15 @@
                 </template>
             </el-table-column>
         </el-table>
-        <el-button type="text" @click="dialogVisible = true">新增分类</el-button>
+        <el-button type="text" @click='open'>新增分类</el-button>
         <!-- 改用dialog组件 -->
-        <el-dialog title="提示aaa" :visible.sync="dialogVisible" width="50%" :before-close="handleClose">
+        <el-dialog :title="handleType=='add'?'添加分类':'编辑分类'" :visible.sync="dialogVisible" width="50%" :before-close="handleClose">
             <!-- <span>这是一段信息</span> -->
-            <el-form v-model="categoryDetail" ref="categoryDetail" label-width="120px">
-                <el-form-item label="分类名称" prop="name" required>
+            <el-form :model="categoryDetail" ref="categoryDetail" label-width="120px" :rules="rules" @submit.native.prevent="">
+                <el-form-item label="分类名称" prop="name">
                     <el-input v-model="categoryDetail.name" autocomplete="off"></el-input>
                 </el-form-item>
-                <el-form-item label="分类缩略图" prop="banner" required>
+                <el-form-item label="分类缩略图" prop="banner">
                     <span>(banner长宽要求：2278x516)</span>
                     <form id="minPicForm" method="post" enctype="multipart/form-data">
                         <!-- 单图片上传 -->
@@ -65,8 +66,8 @@
                                 <i class="el-icon-zoom-in" title="查看原图" :style="{color:'#2E2E2E',fontSize:'25px',display:'inline-block',paddingRight:'15px'}" ></i>
                                 <i class="el-icon-refresh-right" title="重新上传" :style="{color:'#2E2E2E',fontSize:'25px',display:'inline-block'}" ></i>
                             </div>
-                            <div class="reupload" ref="uploading" :style="{width:reuploadWidth+'px',height:reuploadWidth+'px','line-height':reuploadWidth+'px','font-size':reuploadWidth/5+'px'}" >上传中..</div>
-                            <div class="reupload" ref="failUpload" :style="{width:reuploadWidth+'px',height:reuploadWidth+'px','line-height':reuploadWidth+'px','font-size':reuploadWidth/5+'px'}" >上传失败</div>
+                            <div class="reupload icon" ref="uploading" :style="{width:reuploadWidth+'px',height:reuploadWidth+'px','line-height':reuploadWidth+'px','font-size':reuploadWidth/5+'px'}" >上传中..</div>
+                            <div class="reupload icon" ref="failUpload" :style="{width:reuploadWidth+'px',height:reuploadWidth+'px','line-height':reuploadWidth+'px','font-size':reuploadWidth/5+'px'}" >上传失败</div>
                         </el-upload>
                         <!-- <el-dialog :visible.sync="dialogVisible">
                             <img width="100%" :src="dialogImageUrl" alt />
@@ -76,7 +77,7 @@
             </el-form>
             <span slot="footer" class="dialog-footer">
                 <el-button @click="dialogVisible = false">取 消</el-button>
-                <el-button type="primary" @click="dialogVisible = false">确 定</el-button>
+                <el-button type="primary" @click="commitHandle(handleType)">确 定</el-button>
             </span>
         </el-dialog>
     </div>
@@ -86,18 +87,23 @@
 export default {
     data() {
         return {
+            handleType:"add",
             dialogVisible: false,
-            bannerWidth:150,
-            bannerHeight:34,
+            bannerWidth:396,
+            bannerHeight:88,
             file:'',
             reupload: true, // 控制"重新上传"开关
             categoryData: [],
             categoryDetail: {
-                addtime: "2020-01-09T09:39:52.435Z",
-                // banner: "http://example.kkslide.fun/banner.jpg",
+                _id: "",
+                name: "",
                 banner: "",
-                edittime: "2020-01-13T03:17:15.151Z",
-                name: "Fun"
+                // addtime: "",
+                // edittime: "",
+            },
+            rules:{
+                name:[{ required: true, message: '内容不能为空', trigger: 'blur' }],
+                banner:[{required:true,message:'请上传分类图banner',trigger:'blur'}]
             }
         }
     },
@@ -108,39 +114,57 @@ export default {
                     this.categoryData = res.data.categories
                 })
         },
-        open() { // 添加按钮
-            this.$prompt('请分类名称', '提示', {
-                closeOnClickModal: false,
-                confirmButtonText: '确定',
-                cancelButtonText: '取消',
-                // inputPattern: /[\w!#$%&'*+/=?^_`{|}~-]+(?:\.[\w!#$%&'*+/=?^_`{|}~-]+)*@(?:[\w](?:[\w-]*[\w])?\.)+[\w](?:[\w-]*[\w])?/,
-                // inputErrorMessage: '邮箱格式不正确'
-            }).then(({ value }) => {
+        commitHandle(type){ // 添加分类操作
+            if(this.categoryDetail.banner==''){
+                this.$message({ type: 'info', message: '请添加封面图banner' });
+                return false;
+            }
+            if(type=="add"){
                 this.$axios({
-                    url: '/admin/categories/add',
-                    data: { "name": value },
-                    method: 'post'
+                    url:"/admin/categories/add",
+                    data:{
+                        'name':this.categoryDetail.name,
+                        'banner':this.categoryDetail.banner
+                    },
+                    method:'post'
+                }).then(res=>{
+                    console.log(res);
+                    this.getData();
+                    this.dialogVisible = false;
+                });
+            }
+            else if(type=="edit"){
+                this.$axios({
+                    url: "/admin/categories/edit",
+                    method: "post",
+                    data: {
+                        "id": this.categoryDetail._id,
+                        "name": this.categoryDetail.name,
+                        "banner": this.categoryDetail.banner,
+                    }
                 }).then(res => {
-                    if (res.data.msg == 1) {
+                    if (res.data.code == 1) {
                         this.$message({
                             type: 'success',
-                            message: res.data.msg
+                            message: '更新成功!'
                         });
                     } else {
                         this.$message({
-                            type: 'danger',
-                            message: res.data.msg
+                            type: 'info',
+                            message: '更新失败!!'
                         });
                     }
                 }).then(() => {
-                    this.getData()
+                    this.getData();
+                    this.dialogVisible=false;
                 })
-            }).catch(() => {
-                this.$message({
-                    type: 'info',
-                    message: '取消输入'
-                });
-            });
+            }
+        },
+        open(){
+            this.dialogVisible=true;
+            this.categoryDetail.name="";
+            this.categoryDetail.banner="";
+            this.handleType="add";
         },
         del(index, row) { // 删除按钮
             this.$confirm('永久删除分类"' + row.name + '", 是否继续?', '提示', {
@@ -192,39 +216,11 @@ export default {
             //   })
         },
         edit(index, row) { // 编辑按钮
-            this.$prompt('修改分类名称', '提示', {
-                closeOnClickModal: false,
-                confirmButtonText: '确定',
-                cancelButtonText: '取消',
-                inputValue: row.name
-            }).then(({ value }) => {
-                console.log({
-                    "id": row._id,
-                    "name": value
-                });
-                this.$axios({
-                    url: "/admin/categories/edit",
-                    method: "post",
-                    data: {
-                        "id": row._id,
-                        "name": value
-                    }
-                }).then(res => {
-                    if (res.data.code == 1) {
-                        this.$message({
-                            type: 'success',
-                            message: '更新成功!'
-                        });
-                    } else {
-                        this.$message({
-                            type: 'info',
-                            message: '更新失败!!'
-                        });
-                    }
-                }).then(() => {
-                    this.getData();
-                })
-            })
+            this.handleType="edit";
+            this.dialogVisible=true;
+            this.categoryDetail._id=row._id;
+            this.categoryDetail.name=row.name;
+            this.categoryDetail.banner=row.banner;
         },
         setIdColumn({ row, column, rowIndex }) { // 设置栏目样式
             if (column.property == '_id') {
@@ -274,77 +270,75 @@ export default {
 <style lang="less" scoped>
 #category {
     padding: 15px;
-}
-.avatar {
-    background-size: cover;
-    background-position: center center;
-    background-repeat: no-repeat;
-    width: 150px;
-    height: 34px;
-    max-height: 34px;
-    display: block;
-    margin: 0 auto;
-}
-.avatar-uploader .el-upload {
-    border: 1px dashed #d9d9d9;
-    border-radius: 6px;
-    cursor: pointer;
-    position: relative;
-    overflow: hidden;
-}
+    .avatar {
+        background-size: cover;
+        background-position: center center;
+        background-repeat: no-repeat;
+        width: 150px;
+        height: 34px;
+        // max-height: 34px;
+        display: block;
+        margin: 0 auto;
+    }
+    .avatar-uploader .el-upload {
+        border: 1px dashed #d9d9d9;
+        border-radius: 6px;
+        cursor: pointer;
+        position: relative;
+        overflow: hidden;
+    }
 
-.avatar-uploader .el-upload:hover {
-    border-color: #409eff;
-}
-.avatar-uploader-icon {
-    font-size: 28px;
-    color: #8c939d;
-    width: 150px;
-    height: 34px;
-    line-height: 34px;
-    text-align: center;
-}
-
-// 新增的上传组件样式
-.avatar-uploader .el-upload {
-    border: 1px dashed #d9d9d9;
-    border-radius: 6px;
-    cursor: pointer;
-    position: relative;
-    overflow: hidden;
-}
-.avatar-uploader .el-upload:hover {
-    border-color: #409eff;
-}
-.avatar-uploader-icon {
-    color: #8c939d;
-    text-align: center;
-}
-.avatar {
-    display: block;
-}
-.reupload {
-    border-radius: 50%;
-    position: absolute;
-    color: #fff;
-    background-color: #000000;
-    opacity: 0.6;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    display: none;
-}
-#uploadIcon {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    display: none;
-}
-
-.avatar-uploader .el-upload.el-upload--picture-card {
-    width: unset !important;
-    height: unset !important;
+    .avatar-uploader .el-upload:hover {
+        border-color: #409eff;
+    }
+    .avatar-uploader-icon {
+        font-size: 28px;
+        color: #8c939d;
+        width: 150px;
+        height: 34px;
+        line-height: 34px;
+        text-align: center;
+    }
+    // 新增的上传组件样式
+    .avatar-uploader .el-upload {
+        border: 1px dashed #d9d9d9;
+        border-radius: 6px;
+        cursor: pointer;
+        position: relative;
+        overflow: hidden;
+    }
+    .avatar-uploader .el-upload:hover {
+        border-color: #409eff;
+    }
+    .avatar-uploader-icon {
+        color: #8c939d;
+        text-align: center;
+    }
+    .avatar {
+        display: block;
+    }
+    .reupload {
+        border-radius: 50%;
+        position: absolute;
+        color: #fff;
+        background-color: #000000;
+        opacity: 0.6;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        display: none;
+    }
+    #uploadIcon {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        display: none;
+    }
+    .avatar-uploader .el-upload.el-upload--picture-card {
+        width: unset !important;
+        height: unset !important;
+    }
 }
 
 </style>
