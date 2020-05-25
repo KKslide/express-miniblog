@@ -24,7 +24,7 @@
                     <i class="el-icon-setting el-icon--right"></i>
                 </span>
                 <el-dropdown-menu slot="dropdown">
-                    <el-dropdown-item>个人资料</el-dropdown-item>
+                    <el-dropdown-item @click.native="openPage">去到主页</el-dropdown-item>
                     <el-dropdown-item @click.native="logout">退出登陆</el-dropdown-item>
                 </el-dropdown-menu>
             </el-dropdown>
@@ -45,6 +45,9 @@ export default {
     methods: {
         handleSelect(key, keyPath) {
             this.$router.push({ name: key })
+        },
+        openPage(){
+            window.open(window.location.origin)
         },
         logout() {
             this.$axios.get('/admin/logout').then(res => {
