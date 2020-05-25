@@ -664,10 +664,6 @@ export default {
             let imgData = new FormData();
             imgData.append('file', data);
             imgData.image = data;
-            console.log(data);
-            console.log('---------------------------');
-            console.log(ImageData);
-            return;
             this.$axios.post(this.targetUrl, imgData).then(res => {
                 // 上传完成后隐藏正在上传
                 this.$refs.uploading.style.display = 'none'

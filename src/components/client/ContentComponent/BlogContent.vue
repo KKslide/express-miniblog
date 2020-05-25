@@ -5,8 +5,7 @@
             <div class="container">
                 <div class="row">
                     <div class="col-xs-12">
-                        <img v-if="category=='Life'" src="../../../assets/images/banner_bullshit.jpg" class="img-responsive" alt />
-                        <img v-else src="http://example.kkslide.fun/banner.jpg" class="img-responsive" alt />
+                        <img :src="category.banner" class="img-responsive" alt />
                         <div class="card-container">
                             <div class="text-center">
                                 <h1 class="h2" v-html="content.title"></h1>
@@ -20,8 +19,10 @@
                                 {{content.num}} |
                                 <i class="fa fa-comment-o"></i>
                                 {{content.comment.length}} |
+                                <i class="fa fa-tag"></i>
+                                {{category.name}} |
                                 <i class="fa fa-clock-o"></i>
-                                {{content.addtime | date}}
+                                {{content.addtime | date}} 
                             </p>
                             <blockquote v-if="content.description_sub">
                                 <p v-html="content.description_sub"></p>
@@ -37,7 +38,7 @@
                         </article>-->
                         <!-- 视频播放 -->
                         <video-com
-                            v-if="category=='Video'"
+                            v-if="category.name=='Video'"
                             :videoSrc="videoSrc"
                             :posterSrc="posterSrc"
                         ></video-com>
@@ -79,7 +80,7 @@ export default {
     },
     data() {
         return {
-            category: '',
+            category: {},
             content: { user: { username: "" }, comment: [] }, // 文章内容
             // commentData: { // 评论列表
             //     comment: '',
@@ -131,7 +132,7 @@ export default {
             }).then(res => {
                 if (res.status == 200) {
                     this.content = res.data; this.content.comment.reverse()
-                    this.category = res.data.category.name
+                    this.category = res.data.category
                     this.videoSrc = res.data.video_src
                     this.posterSrc = res.data.minpic_url
                 }
