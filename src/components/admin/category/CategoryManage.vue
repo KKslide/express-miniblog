@@ -1,7 +1,7 @@
 <template>
     <div id="category">
         <el-table :data="categoryData" border style="width: 100%" :cell-class-name="setIdColumn">
-            <el-table-column prop="_id" label="分类ID"></el-table-column>
+            <el-table-column prop="id" label="分类ID"></el-table-column>
             <el-table-column prop="name" label="分类名称"></el-table-column>
             <el-table-column prop="addtime" label="新增时间">
                 <template slot-scope="scope">
@@ -95,9 +95,9 @@ export default {
             reupload: true, // 控制"重新上传"开关
             categoryData: [],
             categoryDetail: {
-                _id: "",
+                id: "",
                 name: "",
-                banner: "",
+                banner: "http://example.kkslide.fun/banner.jpg",
                 // addtime: "",
                 // edittime: "",
             },
@@ -111,7 +111,7 @@ export default {
         getData() {
             this.$axios({ url: '/admin/categories' })
                 .then(res => {
-                    this.categoryData = res.data.categories
+                    this.categoryData = res.data.data
                 })
         },
         commitHandle(type){ // 添加分类操作
@@ -128,7 +128,6 @@ export default {
                     },
                     method:'post'
                 }).then(res=>{
-                    console.log(res);
                     this.getData();
                     this.dialogVisible = false;
                 });
@@ -138,7 +137,7 @@ export default {
                     url: "/admin/categories/edit",
                     method: "post",
                     data: {
-                        "id": this.categoryDetail._id,
+                        "id": this.categoryDetail.id,
                         "name": this.categoryDetail.name,
                         "banner": this.categoryDetail.banner,
                     }
@@ -163,7 +162,7 @@ export default {
         open(){
             this.dialogVisible=true;
             this.categoryDetail.name="";
-            this.categoryDetail.banner="";
+            this.categoryDetail.banner="http://example.kkslide.fun/banner.jpg";
             this.handleType="add";
         },
         del(index, row) { // 删除按钮
@@ -176,7 +175,7 @@ export default {
                     url: '/admin/categories/del',
                     method: 'post',
                     data: {
-                        "id": row._id
+                        "id": row.id
                     }
                 }).then(res => {
                     if (res.data.code == 1) {
@@ -218,12 +217,12 @@ export default {
         edit(index, row) { // 编辑按钮
             this.handleType="edit";
             this.dialogVisible=true;
-            this.categoryDetail._id=row._id;
+            this.categoryDetail.id=row.id;
             this.categoryDetail.name=row.name;
             this.categoryDetail.banner=row.banner;
         },
         setIdColumn({ row, column, rowIndex }) { // 设置栏目样式
-            if (column.property == '_id') {
+            if (column.property == 'id') {
                 return 'cell_nowrap'
             }
         },

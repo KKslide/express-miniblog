@@ -3,8 +3,8 @@
 // see http://vuejs-templates.github.io/webpack for documentation.
 
 const path = require('path')
-// const proUrl = 'http://localhost:80' // 本地
-const proUrl = 'http://134.175.129.219' // 线上- 腾讯云
+const proUrl = 'http://localhost:80' // 本地
+// const proUrl = 'http://134.175.129.219' // 线上- 腾讯云
 
 module.exports = {
   dev: {

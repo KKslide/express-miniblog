@@ -1,29 +1,9 @@
 var createError = require('http-errors');
 var express = require('express');
-// var ejs = require("ejs");
 var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
-
-var indexRouter = require('./routes/index');
-var usersRouter = require('./routes/users');
-var adminRouter = require('./routes/admin');
-var uploadRouter = require('./routes/upload'); // 上传图片路由接口
-
-//加载mongoose数据库，这个中间件是nodejs与mongoDB数据库的桥梁
-var mongoose = require("mongoose");
-// var Cookies = require('cookies');
-
-// 连接数据库
-// mongoose.connect(‘mongodb://username:password@host:port/database?options…’);
-// mongoose.connect("mongodb://root:root@localhost:27017/myBlog");
-mongoose.connect("mongodb://kk:123456@134.175.129.219:27017/myBlog"); // 线上- 腾讯云
-
-var db = mongoose.connection;
-db.once("open", function () {
-    console.log("Mongo Connected");
-});
-db.on("error", console.error.bind(console, "Mongoose Connection Error"));
+var router = require('./lib/router');
 
 var app = express();
 
@@ -49,38 +29,24 @@ var app = express();
 // }));
 
 // view engine setup
-app.set('views', path.join(__dirname, 'work'));
-// app.engine('html', ejs.__express);
-app.set('view engine', 'html');
+app.set('view engine', 'html')
 
 app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
-// 静态资源托管(其实刚开始不是很需要啦)
-app.use(express.static(path.join(__dirname, 'public')));
-app.use(express.static(path.join(__dirname, 'upload')));
+// 静态资源托管
+// app.use(express.static(path.join(__dirname, 'public')));
+// app.use(express.static(path.join(__dirname, 'upload')));
 app.use(express.static(path.join(__dirname, 'dist')));
-// app.use(express.static(path.join(__dirname, 'work')));
-
-app.use('/index', indexRouter);
-app.use('/users', usersRouter);
-app.use('/admin', adminRouter);
-
-app.use('/pic', uploadRouter);
-
-function getClientIP(req) {
-    return req.headers['x-forwarded-for'] || // 判断是否有反向代理 IP
-        req.connection.remoteAddress || // 判断 connection 的远程 IP
-        req.socket.remoteAddress || // 判断后端的 socket 的 IP
-        req.connection.socket.remoteAddress;
-};
 
 /* GET page. */
 app.get('/', function (req, res, next) {
     res.type('html');
     res.render('index');
 });
+
+app.use(router);
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
@@ -93,7 +59,6 @@ app.use(function (err, req, res, next) {
     res.locals.message = err.message;
     res.locals.error = req.app.get('env') === 'development' ? err : {};
 
-    // render the error page
     res.status(err.status || 500);
     res.render('error');
 });

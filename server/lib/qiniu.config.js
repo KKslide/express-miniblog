@@ -1,11 +1,7 @@
-var express = require('express');
 var path = require('path');
 var fs = require('fs');
 var formidable = require("formidable");
-var router = express.Router();
-
-// 引入七牛模块  
-var qiniu = require("qiniu");
+var qiniu = require("qiniu"); // 引入七牛模块  
 var bucket = 'kkslide'; //要上传的空间名
 var imageUrl = 'http://example.kkslide.fun/'; // 域名名称
 var accessKey = 'FqmlgBwy5Y8JLxmW7ZKtVwiKPnX_piGG1fdb52Yk';
@@ -21,12 +17,11 @@ var uploadToken = putPolicy.uploadToken(mac);
 
 var config = new qiniu.conf.Config();
 config.zone = qiniu.zone.Zone_z0; // 华东地区服务器 
-console.log('***************************************************************');
-console.log(config);
-console.log('************************以上为七牛云配置************************');
-// *****以上的配置该有都有了***************************************************
-// 图片上传
-router.post('/upload', function (req, res, next) {
+// console.log('***************************************************************');
+// console.log(config);
+// console.log('************************以上为七牛云配置************************');
+
+module.exports.picUpload = function (req, res, callback) {
     var form = new formidable.IncomingForm()
     form.uploadDir = "./upload";
     form.keepExtentsions = true;
@@ -55,7 +50,4 @@ router.post('/upload', function (req, res, next) {
             fs.unlinkSync(localFile);
         });
     });
-
-});
-
-module.exports = router;
+}
