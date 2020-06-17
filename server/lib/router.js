@@ -32,10 +32,13 @@ router.post('/admin/categories/edit', handler.editCategory);
 
 /* 文章 */
 /* 文章-获取 */
+router.get('/admin/articles', handler.getArticle);
 /* 文章-新增 */
-// router.post('/admin/article/add', handler.addArticle);
+router.post('/admin/articles/add', handler.addArticle);
 /* 文章-删除 */
+router.post('/admin/articles/del', handler.delArticle);
 /* 文章-修改 */
+router.post('/admin/articles/edit', handler.editArticle)
 
 /* 评论 */
 /* 评论-获取 */
@@ -46,6 +49,6 @@ router.post('/admin/categories/edit', handler.editCategory);
 /* 留言-删除 */
 
 /* 七牛云图片上传 */
-// router.post('/upload', handler.doUpload);
+router.post('/pic/upload', handler.doUpload);
 
 module.exports = router;

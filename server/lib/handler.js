@@ -11,7 +11,12 @@ module.exports.doUpload = function (req, res) {
 /* 前端 */
 /* 获取blog列表数据 或 vlog列表数据 */
 module.exports.getIndexPage = function (req, res) {
-
+    // var opt = {
+    //     'type':req.body.type
+    // };
+    // dbMoudle.doQuery(opt,(err,data)=>{
+    //     res.json(data);
+    // })
 }
 
 /* 获取详情页 */
@@ -31,12 +36,15 @@ module.exports.doAdmin = function (req, res) {
 
 }
 /* 退出登陆 */
+
+/* *********************分类管理********************* */
 /* 分类-获取 */
 module.exports.getCategory = function (req, res) {
     var opt = {
         table: 'category',
         pageNo: req.body.pageNo || 1,
-        pageSize: req.body.pageSize || 10
+        pageSize: req.body.pageSize || 10,
+        type: req.body.serchType || null
     };
     dbMoudle.doQuery(opt, (err, data) => {
         res.json({ data })
@@ -55,7 +63,7 @@ module.exports.addCategory = function (req, res) {
             'edittime': `'${util.getNow()}'`
         }
     }
-    dbMoudle.addCategory(obj, (err, data) => {
+    dbMoudle.doAdd(obj, (err, data) => {
         res.json({ code: 1, msg: "success" });
     })
 }
@@ -65,7 +73,7 @@ module.exports.delCategory = function (req, res) {
         table: 'category',
         id: req.body.id
     };
-    dbMoudle.delCategory(opt, (err, data) => {
+    dbMoudle.doDel(opt, (err, data) => {
         res.json({ code: 1, msg: "删除成功" });
     })
 }
@@ -80,15 +88,67 @@ module.exports.editCategory = function (req, res) {
             'edittime': util.getNow()
         }
     }
-    dbMoudle.editCategory(obj, (err) => {
+    dbMoudle.doEdit(obj, (err) => {
         res.json({ code: 1, msg: "修改成功" });
     })
 }
 
+/* *********************文章管理********************* */
 /* 文章-获取 */
+module.exports.getArticle = function (req, res) {
+    var opt = {
+        table: 'article',
+        pageNo: req.body.pageNo || 1,
+        pageSize: req.body.pageSize || 10
+    };
+    dbMoudle.doQuery(opt, (err, data) => {
+        res.json({ data });
+    });
+}
 /* 文章-新增 */
 module.exports.addArticle = function (req, res) {
-
+    var obj = {
+        'table': 'article',
+        'data': {
+            'title': `'${req.body.title}'`,
+            'category': `'${req.body.category}'`,
+            'composition': `'${req.body.content}'`,
+            'description': `'${req.body.description}'`,
+            'addtime': `'${util.getNow()}'`,
+            'viewnum': 0,
+            'minpic_url': `'${req.body.minpic_url}'`,
+            'video_src': `'${req.body.video_src}'`
+        }
+    }
+    dbMoudle.doAdd(obj, (err, data) => {
+        res.json({ code: 1, msg: "success" });
+    })
 }
 /* 文章-删除 */
+module.exports.delArticle = function (req, res) {
+    var opt = {
+        'table': 'article',
+        'id': req.body.id
+    }
+    dbMoudle.doDel(opt, (err, data) => {
+        res.json({ code: 1, msg: "删除成功" });
+    });
+}
 /* 文章-修改 */
+module.exports.editArticle = function (req, res) {
+    var opt = {
+        'table': 'article',
+        'id': req.body.id,
+        'data': {
+            'title': `'${req.body.title}'`,
+            'category': `'${req.body.category}'`,
+            'composition': `'${req.body.content}'`,
+            'description': `'${req.body.description}'`,
+            'minpic_url': `'${req.body.minpic_url}'`,
+            'video_src': `'${req.body.video_src}'`
+        }
+    };
+    dbMoudle.doEdit(opt, (err) => {
+        res.json({ code: 1, msg: "修改成功" });
+    })
+}

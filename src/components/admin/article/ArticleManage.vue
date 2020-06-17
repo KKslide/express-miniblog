@@ -2,10 +2,13 @@
     <div id="article">
         <!-- 文章列表 -->
         <el-table :data="articleData" border style="width: 100%" :cell-class-name="setIdColumn">
-            <el-table-column prop="_id" label="文章ID"></el-table-column>
+            <el-table-column prop="id" label="文章ID"></el-table-column>
             <el-table-column prop="title" label="文章标题"></el-table-column>
-            <el-table-column prop="category" label="文章分类"></el-table-column>
-            <!-- <el-table-column prop="user" label="作者"></el-table-column> -->
+            <el-table-column prop="category" label="文章分类">
+                <!-- <template slot-scope="scope">
+                    <p>{{scope.row.category|getCatName}}</p>
+                </template> -->
+            </el-table-column>
             <el-table-column label="添加时间" width="190">
                 <template slot-scope="scope">
                     <p>{{scope.row.addtime|date}}</p>
@@ -50,7 +53,7 @@
         <!-- <el-button type="text" @click="table = true">打开嵌套表格的 Drawer</el-button> -->
         <el-button
             type="text"
-            @click="dialog = true;dialogType='add'; rest();drawer_title='添加文章';minpic_url_list=[];imageUrl=''"
+            @click="dialog = true;dialogType='add'; rest();drawer_title='添加文章';minpic_url_list=[];imageUrl='http://example.kkslide.fun/upload_6aa9339ff86b4ba10446744336f486ca'"
             style="float:right;margin-right:20px;"
         >添加文章</el-button>
 
@@ -100,7 +103,7 @@
                                 v-for="(v,i) in categoryData"
                                 :key="i"
                                 :label="v.name"
-                                :value="v._id"
+                                :value="v.id"
                             ></el-option>
                         </el-select>
                     </el-form-item>
@@ -261,14 +264,15 @@ const toolbarOptions = [ // 富文本编辑器配置
     [{ 'align': [] }],
     ['link', 'image', 'video'],
     ['clean']                                         // remove formatting button
-]
+];
+let that;
 export default {
     data() {
         return {
             originArticleData: null, // 接口传过来的
             articleData: [ // 转化好的文章列表格式
                 // {
-                //   _id: 'sadfsadfsdaf',
+                //   id: 'sadfsadfsdaf',
                 //   title: 'aaa',
                 //   category: 'AA',
                 //   user: 'kk',
@@ -379,7 +383,6 @@ export default {
     },
     created() {
         this.getArticles();
-        this.getCates();
     },
     mounted() {
         if (typeof this.initUrl === 'string') {
@@ -412,6 +415,8 @@ export default {
             for (var key in this.form) {
                 this.form[key] = ''
             }
+            // 暂时先写死一个
+            this.form["minpic_url"] = 'http://example.kkslide.fun/upload_6aa9339ff86b4ba10446744336f486ca';
         },
         handleClose(done) { //   在关闭窗口前的处理操作
             this.confirmClose(this.close, done)
@@ -434,7 +439,7 @@ export default {
                 .catch(_ => { });
         },
         setIdColumn({ row, column, rowIndex }) { // cell不换行
-            if (column.property == '_id') {
+            if (column.property == 'id') {
                 return 'cell_nowrap'
             }
             else if (column.label == '操作') {
@@ -442,30 +447,35 @@ export default {
             }
         },
         getArticles() {  // 获取文章列表
-            this.$axios({ url: '/admin/articles', params: { page: this.curPage }, method: 'get' })
-                .then(res => {
-                    this.total = res.data.total;
-                    this.pages = res.data.pages;
-                    // 先保存原格式的文章信息
-                    this.originArticleData = res.data;
-                    var newContents = [];
-                    res.data.contents.map(v => {
-                        // this.articleData.push({
-                        newContents.push({
-                            _id: v._id,
-                            title: v.title,
-                            category: v.category ? v.category.name : 'unknown',
-                            user: v.user.username || 'unknown',
-                            addtime: v.addtime,
-                            num: v.num,
-                            isShow: v.isShow == 1 ? '是' : '否',
-                            comment_count: v.comment.length,
-                            comment: v.comment
+            this.getCates().then(_=>{
+                this.$axios({ url: '/admin/articles', params: { page: this.curPage }, method: 'get' })
+                    .then(res => {
+                        this.total = res.data.total;
+                        this.pages = res.data.pages;
+                        // 先保存原格式的文章信息
+                        this.originArticleData = res.data.data;
+                        var newContents = [];
+                        res.data.data.forEach(v => {
+                            newContents.push({
+                                id: v.id,
+                                title: v.title,
+                                category: ( _id => {
+                                    var res = this.categoryData.filter(v=>{
+                                        return v.id==_id;
+                                    });
+                                    return res.length==0?'unknown':res[0].name;
+                                })(v.category),
+                                addtime: v.addtime,
+                                num: v.num,
+                                isShow: v.isShow == 1 ? '是' : '否',
+                                comment_count: 0,
+                                comment: v.comment
+                            })
                         })
+                        this.articleData = newContents; // 格式化后的文章信息
+                        this.isShow = newContents.isShow
                     })
-                    this.articleData = newContents; // 格式化后的文章信息
-                    this.isShow = newContents.isShow
-                })
+            })
         },
         checkComment(params) { // 查看评论模块
             this.commentModel = true;
@@ -476,10 +486,14 @@ export default {
             this.getArticles();
         },
         getCates() { // 获取文章分类
-            this.$axios({ url: '/admin/categories' })
-                .then(res => {
-                    this.categoryData = res.data.categories
-                })
+            var params = { serchType:'all'};
+            return new Promise((resolve,reject)=>{
+                this.$axios({ url: '/admin/categories',params })
+                    .then(res => {
+                        this.categoryData = res.data.data
+                        resolve()
+                    })
+            })
         },
         submit() { // 文章提交事件
             this.$refs.form.validate((valid) => {
@@ -507,7 +521,7 @@ export default {
                                     type: 'danger',
                                     message: '添加失败, 请联系管理员 !'
                                 });
-                            }
+                            }                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 
                         }).then(() => {
                             this.getArticles()
                             this.close = true;
@@ -517,7 +531,7 @@ export default {
                     if (this.dialogType == 'edit') { // 编辑文章
                         this.form.isShow = this.isShow;
                         this.$axios({
-                            url: '/admin/content/edit',
+                            url: '/admin/articles/edit',
                             method: 'post',
                             data: this.form
                         }).then(res => {
@@ -550,12 +564,11 @@ export default {
                 this.$axios({
                     url: '/admin/articles/del',
                     method: 'post',
-                    data: { id: row._id }
+                    data: { id: row.id }
                 }).then(res => {
                     if (res.data.code == 1) {
                         this.$message({
                             type: 'success',
-                            // message: res.code.msg
                             message: "删除文章成功 !"
                         });
                     } else {
@@ -577,17 +590,17 @@ export default {
         },
         handleEdit(index, row) { // 编辑文章
             this.minpic_url_list = [] // 先清空
-            let id = row._id
-            let nowForm = {}
-            this.originArticleData.contents.map(v => {
-                if (v._id == id) {
+            let id = row.id
+            let nowForm = {};
+            this.originArticleData.map(v => {
+                if (v.id == id) {
                     nowForm = v
                 }
             });
             nowForm.category = row.category
             nowForm.content = nowForm.composition
             nowForm.id = id
-            this.categoryData.map(v => { if (v.name == nowForm.category) nowForm.category = v._id })
+            this.categoryData.map(v => { if (v.name == nowForm.category) nowForm.category = v.id })
             this.form = nowForm
             this.dialogType = 'edit'
             if (nowForm.minpic_url != "") {
@@ -673,7 +686,7 @@ export default {
                     this.$emit('imgupload', currentPic)
                     this.imageUrl = currentPic
                     this.form.minpic_url = currentPic
-                    console.log('上传成功,url为 ', this.imageUrl)
+                    // console.log('上传成功,url为 ', this.imageUrl)
                 } else {
                     // 上传失败则显示上传失败，如多图则从图片列表删除图片
                     this.$refs.failUpload.style.display = 'block'
@@ -701,7 +714,7 @@ export default {
         /* ************* cropper截图上传 ************** */
         isVideo(val) {
             let temp = null;
-            this.categoryData.forEach(v => { if (v.name == val) temp = v._id; });
+            this.categoryData.forEach(v => { if (v.name == val) temp = v.id; });
             return temp;
         }
     }
