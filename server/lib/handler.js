@@ -24,7 +24,7 @@ module.exports.getIndexPage = function (req, res) {
 /* 获取详情页 */
 module.exports.getContentPage = function (req, res) {
     var opt = {
-        id : req.body.id || req.query.id
+        id : req.body.contentid || req.query.contentid
     }
     dbMoudle.getContentDetail(opt, (err, data) => {
         console.log(data);

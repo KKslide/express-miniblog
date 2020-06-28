@@ -13,10 +13,10 @@
                             <!-- <p v-html="content.description"></p> -->
                             <!-- <p class="blog_info">{{$t('logContent.author')}}: {{content.user.username}} | {{$t('logContent.view')}}: {{content.num}} | {{$t('logContent.comments')}}: {{content.comment.length}} | {{$t('logContent.time')}}: {{content.addtime | date}}</p> -->
                             <p class="blog_info">
-                                <i class="fa fa-user-o"></i>
-                                {{content.user.username}} |
+                                <!-- <i class="fa fa-user-o"></i>
+                                {{content.user.username}} | -->
                                 <i class="fa fa-eye"></i>
-                                {{content.num}} |
+                                {{content.viewnum}} |
                                 <i class="fa fa-comment-o"></i>
                                 {{content.comment.length}} |
                                 <i class="fa fa-tag"></i>
@@ -123,20 +123,20 @@ export default {
         getContent() { // 获取文章内容
             let id = this.$route.params.id,
                 contentid = this.$route.params.contentid;
-                console.log('id:',id,' ------ ','contentid: ',contentid);
-                return;
             this.$axios({
                 url: '/index/getcontent',
                 method: 'post',
                 data: {
-                    contentid: contentid
+                    contentid: contentid,
+                    id: id
                 }
             }).then(res => {
                 if (res.status == 200) {
-                    this.content = res.data; this.content.comment.reverse()
-                    this.category = res.data.category
-                    this.videoSrc = res.data.video_src
-                    this.posterSrc = res.data.minpic_url
+                    this.content = res.data[0];
+                    this.content.comment.reverse();
+                    this.category = res.data[0].category
+                    this.videoSrc = res.data[0].video_src
+                    this.posterSrc = res.data[0].minpic_url
                 }
             })
         },

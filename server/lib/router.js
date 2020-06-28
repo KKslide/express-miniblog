@@ -6,7 +6,7 @@ var handler = require('./handler.js');
 /* 获取blog列表数据 或 vlog列表数据 */
 router.get('/index/getpage', handler.getIndexPage);
 /* 获取详情页 */
-router.get('/index/getcontent', handler.getContentPage);
+router.post('/index/getcontent', handler.getContentPage);
 /* 评论文章 */
 router.post('/index/comment', handler.Comment);
 

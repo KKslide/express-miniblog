@@ -85,11 +85,11 @@ module.exports.doEdit = function (options, callback) {
 module.exports.getIndexPageData = function (options, callback) {
     var table = options.table || 'article';
     var isVlog = options.listType == 'vlog' ? 'Vlog' : ''; // 查询列表是否为vlog类型
-    var sql = `
-        SELECT
+    var sql =
+        `SELECT
             a.id,
             a.title,
-            c.name as 'category',
+            c1.name AS 'category',
             a.composition,
             a.description,
             a.addtime,
@@ -97,14 +97,19 @@ module.exports.getIndexPageData = function (options, callback) {
             a.minpic_url,
             a.video_src,
             a.is_show,
-            a.is_del
-        FROM ${table} a
-        LEFT JOIN category c ON a.category = c.id
-        WHERE a.is_del = '0'` ;
+            a.is_del,
+            cc.comment_num 
+        FROM article a,
+            category c1,
+            ( SELECT c.id, count( * ) AS comment_num 
+            FROM COMMENT c 
+            GROUP BY c.id ) AS cc 
+        WHERE a.category = c1.id 
+        AND a.id = cc.id `;
     sql += isVlog == 'Vlog'
-        ? `and c.name = '${isVlog}'`
-        : `and c.name != 'Vlog'`;
-    sql += `ORDER BY a.addtime `;
+        ? `and c1.name = '${isVlog}'`
+        : `and c1.name != 'Vlog'`;
+    sql += `GROUP BY a.id ORDER BY a.addtime `;
     console.log(sql);
     connection.query(sql, (err, data) => {
         if (err) {
@@ -121,17 +126,26 @@ module.exports.getIndexPageData = function (options, callback) {
  */
 module.exports.getContentDetail = function (options, callback) {
     var id = options.id;
-    console.log(id);
     var contentSql = `select * from article where id = ${id}`;
     var commentSql = `select * from comment where id = ${id}`;
+    var contentList, newViewNum;
     connection.query(contentSql, (err, data) => {
-        // 1.查询当前文章
-        var contentList = data;
-        connection.query(commentSql, (err, data) => {
-            var commentList = data; // 评论列表
-            // 过滤数据
-            contentList[0].comment = commentList;
-            callback(null, contentList);
+        new Promise((resolve, reject) => {
+            // 1.查询当前文章
+            contentList = data;
+            newViewNum = Number(contentList[0].viewnum) + 1;
+            resolve(newViewNum);
+        }).then((newViewNum) => {
+            // 2.文章访问量++
+            connection.query(`update article set viewnum=${newViewNum} where id=${id}`, (err, data) => {
+                // 3.匹配评论
+                connection.query(commentSql, (err, data) => {
+                    var commentList = data; // 评论列表
+                    contentList[0].comment = commentList;
+                    contentList[0].viewnum = newViewNum;
+                    callback(null, contentList);
+                })
+            })
         })
     })
 }
