@@ -11,17 +11,25 @@ module.exports.doUpload = function (req, res) {
 /* 前端 */
 /* 获取blog列表数据 或 vlog列表数据 */
 module.exports.getIndexPage = function (req, res) {
-    // var opt = {
-    //     'type':req.body.type
-    // };
-    // dbMoudle.doQuery(opt,(err,data)=>{
-    //     res.json(data);
-    // })
+    var opt = {
+        'table': 'article',
+        'listType': req.body.list_type || req.query.list_type || '' // 查询列表是否为vlog类型
+    };
+    dbMoudle.getIndexPageData(opt, (err, data) => {
+        console.log(data);
+        res.json(data);
+    })
 }
 
 /* 获取详情页 */
 module.exports.getContentPage = function (req, res) {
-
+    var opt = {
+        id : req.body.id || req.query.id
+    }
+    dbMoudle.getContentDetail(opt, (err, data) => {
+        console.log(data);
+        res.json(data);
+    })
 }
 
 /* 评论文章 */

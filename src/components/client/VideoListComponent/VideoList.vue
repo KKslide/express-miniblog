@@ -8,7 +8,7 @@
                         <div class="text-center">
                             <!-- <h1 class="h2">Blogs</h1> -->
                             <h1 class="h2" v-text="$t('navbar.Vlogs')"></h1>
-                            <!-- <p>So many ways to record life, I prefer to do it in my own way, Welcome to my lifeðŸ˜Ž</p> -->
+                            <!-- <p>So many ways to record life, I prefer to do it in my own way, Welcome to my lifeĂ°Ĺ¸ËśĹ˝</p> -->
                             <p v-text="$t('message.slogan')"></p>
                         </div>
                     </div>
@@ -19,7 +19,8 @@
                                 <div v-for="(item,index) in articles" :key="index" :class="{'item':true,'active':index==0?true:false}" >
                                     <div class="row">
                                         <div class="col-sm-4" v-for="(sub_item,sub_index) in item" :key="sub_index" >
-                                            <a href="javascript:;" @click="goto(sub_item,$event)" :title="sub_item.title" class="black-image-project-hover tag" :tag="sub_item.category.name">
+                                            <!-- <a href="javascript:;" @click="goto(sub_item,$event)" :title="sub_item.title" class="black-image-project-hover tag" :tag="sub_item.category.name"> -->
+                                            <a href="javascript:;" :title="sub_item.title" class="black-image-project-hover tag">
                                                 <i class="fa fa-play-circle-o"></i>
                                                 <lazy-img 
                                                     :src="sub_item.minpic_url" 
@@ -97,14 +98,18 @@ export default {
             this.$router.push({ name: 'logcontent', params: { contentid: sub_item._id } })
         },
         getArticles() {
-            this.$axios({
-                url: '/index/getvideolist',
-                method: 'get'
+            this.$axios.get('/index/getpage', {
+                params: {
+                    'table':'article',
+                    'list_type':'vlog'
+                }
             }).then(res => {
+                // 等下再调查为什么会请求两次
                 if (res.status == 200) {
                     this.origenArticles = res.data;
                     sessionStorage.setItem('allArticles', JSON.stringify(res.data));
                     let splitArticleArr = [];
+                    // 因为bootstrap的轮播图形式 是每三个元素为一组 所以要分割对应的数组
                     for (var i = 0; i < res.data.length; i += 3) {
                         splitArticleArr.push(res.data.slice(i, i + 3));
                     }

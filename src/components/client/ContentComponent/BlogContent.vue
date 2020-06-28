@@ -47,8 +47,8 @@
                     <!-- 这里是正文了 -->
                     <!-- 上一篇和下一篇 -->
                     <div class="col-xs-12 content_nav">
-                        <router-link :to="{name:'logcontent',params:{contentid:changePage('prev')._id}}" @click.native="handleClick" class="pull-left" > <i class="el-icon-back"></i>&nbsp;{{$t('logContent.prev')}}: [{{changePage('prev').title}}] </router-link>
-                        <router-link :to="{name:'logcontent',params:{contentid:changePage('next')._id}}" @click.native="handleClick" class="pull-right" > {{$t('logContent.next')}}: [{{changePage('next').title}}]  <i class="el-icon-right"></i> </router-link>
+                        <router-link :to="{name:'logcontent',params:{contentid:changePage('prev').id}}" @click.native="handleClick" class="pull-left" > <i class="el-icon-back"></i>&nbsp;{{$t('logContent.prev')}}: [{{changePage('prev').title}}] </router-link>
+                        <router-link :to="{name:'logcontent',params:{contentid:changePage('next').id}}" @click.native="handleClick" class="pull-right" > {{$t('logContent.next')}}: [{{changePage('next').title}}]  <i class="el-icon-right"></i> </router-link>
                     </div>
                     <!-- 分割线 -->
                     <div class="col-xs-12">
@@ -96,7 +96,7 @@ export default {
             let allArticles = JSON.parse(sessionStorage.getItem('allArticles')),
                 curArticle = this.$route.params.contentid, prevArc;
             allArticles.forEach((v, i) => {
-                if (v._id == curArticle) {
+                if (v.id == curArticle) {
                     prevArc = (i - 1) < 0 ? allArticles[allArticles.length - 1] : allArticles[i - 1]
                 }
             });
@@ -106,7 +106,7 @@ export default {
             let allArticles = JSON.parse(sessionStorage.getItem('allArticles')),
                 curArticle = this.$route.params.contentid, nextArc;
             allArticles.forEach((v, i) => {
-                if (v._id == curArticle) {
+                if (v.id == curArticle) {
                     nextArc = (i + 1) >= allArticles.length ? allArticles[0] : allArticles[i + 1]
                 }
             });
@@ -123,6 +123,8 @@ export default {
         getContent() { // 获取文章内容
             let id = this.$route.params.id,
                 contentid = this.$route.params.contentid;
+                console.log('id:',id,' ------ ','contentid: ',contentid);
+                return;
             this.$axios({
                 url: '/index/getcontent',
                 method: 'post',
@@ -148,7 +150,7 @@ export default {
         //         this.$message({ type: "warning", message: this.$t('logContent.emptyVisitor') })
         //         return false;
         //     }
-        //     this.commentData.contentid = this.content._id;
+        //     this.commentData.contentid = this.content.id;
         //     this.$axios({
         //         url: '/index/comment',
         //         method: "post",
@@ -166,7 +168,7 @@ export default {
             let allArticles = JSON.parse(sessionStorage.getItem('allArticles')),
                     curArticle = this.$route.params.contentid, prevOrNextPage;
                 allArticles.forEach((v, i) => {
-                    if (v._id == curArticle) {
+                    if (v.id == curArticle) {
                         if (params == 'prev') {
                             prevOrNextPage = (i - 1) < 0 ? allArticles[allArticles.length - 1] : allArticles[i - 1]
                         }

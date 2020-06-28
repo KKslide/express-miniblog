@@ -76,19 +76,23 @@ export default {
         getArticles() {
             this.$axios({
                 url: '/index/getpage',
-                method: 'get'
+                method: 'get',
+                data:{
+                    list_type:'blog'
+                }
             }).then(res => {
                 if (res.status == 200) {
                     sessionStorage.setItem('allArticles', JSON.stringify(res.data));
                     res.data.forEach(v=>{
                         this.blogList.push({
-                            "id" : v._id,
+                            "id" : v.id,
                             "blogTitle" : v.title,
-                            "blogViewNum" : v.num,
-                            "blogComment" : v.comment.length,
+                            "blogViewNum" : v.viewnum,
+                            // "blogComment" : v.comment.length,
+                            "blogComment" : 99,
                             "blogAddTime" : v.addtime,
                             "blogIntro" : v.description||'',
-                            "blogCategory" : v.category.name,
+                            "blogCategory" : v.category,
                             "blogPic" : v.minpic_url
                         });
                     })
@@ -107,8 +111,8 @@ export default {
     .shadow_outfit{
         box-shadow: 0 5px 10px rgba(0,0,0,.5);
         >.blog_list_item{
-            h3.blog_title{}
-            p.blog_info{}
+            // h3.blog_title{}
+            // p.blog_info{}
             h4.blog_intro{
                 margin: 15px 0;
             }
