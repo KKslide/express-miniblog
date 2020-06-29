@@ -9,6 +9,8 @@ router.get('/index/getpage', handler.getIndexPage);
 router.post('/index/getcontent', handler.getContentPage);
 /* 评论文章 */
 router.post('/index/comment', handler.Comment);
+/* 留言 */
+router.post('/index/message/add', handler.leaveMessage);
 
 
 /* 管理端 */
@@ -45,7 +47,8 @@ router.post('/admin/articles/edit', handler.editArticle)
 /* 评论-删除 */
 
 /* 留言 */
-/* 留言-获取 */
+/* 留言-获取-和前端同个接口 */
+router.get('/index/message/get',handler.getMessages);
 /* 留言-删除 */
 
 /* 七牛云图片上传 */

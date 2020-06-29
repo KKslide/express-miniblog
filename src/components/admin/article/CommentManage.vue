@@ -99,6 +99,14 @@ export default {
         }
     },
     props: ['curChosenArcComment', 'upDateArc'],
+    mounted(){
+        console.log(this.curChosenArcComment.id);
+    },
+    watch:{
+        'this.curChosenArcComment':(ov,nv)=>{
+            console.log(nv);
+        }
+    }
 };
 </script>
 

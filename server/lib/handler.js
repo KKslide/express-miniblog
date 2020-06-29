@@ -8,7 +8,7 @@ module.exports.doUpload = function (req, res) {
     qiniuUpload.picUpload(req, res);
 }
 
-/* 前端 */
+/* --------------------------前端------------------------- */
 /* 获取blog列表数据 或 vlog列表数据 */
 module.exports.getIndexPage = function (req, res) {
     var opt = {
@@ -24,7 +24,7 @@ module.exports.getIndexPage = function (req, res) {
 /* 获取详情页 */
 module.exports.getContentPage = function (req, res) {
     var opt = {
-        id : req.body.contentid || req.query.contentid
+        id: req.body.contentid || req.query.contentid
     }
     dbMoudle.getContentDetail(opt, (err, data) => {
         console.log(data);
@@ -34,7 +34,44 @@ module.exports.getContentPage = function (req, res) {
 
 /* 评论文章 */
 module.exports.Comment = function (req, res) {
+    var opt = {
+        'table': 'comment',
+        'id': `'${req.body.contentid || req.query.contentid}'`,
+        'data': {
+            'id': `${req.body.contentid || req.query.contentid}`,
+            'user': `'${req.body.visitor || req.query.visitor}'`,
+            'comment': `'${req.body.comment || req.query.body.comment}'`,
+            'ip': `'${util.getClientIp(req).match(/(25[0-5]|2[0-4]\d|[0-1]\d{2}|[1-9]?\d)\.(25[0-5]|2[0-4]\d|[0-1]\d{2}|[1-9]?\d)\.(25[0-5]|2[0-4]\d|[0-1]\d{2}|[1-9]?\d)\.(25[0-5]|2[0-4]\d|[0-1]\d{2}|[1-9]?\d)/)[0]}'`,
+            'time': `'${util.getNow()}'`
+        }
+    }
+    dbMoudle.doAdd(opt, (err, data) => {
+        if (err) {
+            res.json(err)
+        } else {
+            res.json({ code: "1", msg: "ok" })
+        }
+    })
+}
 
+/* 用户留言 */
+module.exports.leaveMessage = function (req, res) {
+    var opt = {
+        'table': 'messages',
+        'data': {
+            'addtime': `'${util.getNow()}'`,
+            'viewer': `'${req.query.viewer || req.body.viewer}'`,
+            'message': `'${req.query.message || req.body.message}'`,
+            'ip': `'${util.getClientIp(req).match(/(25[0-5]|2[0-4]\d|[0-1]\d{2}|[1-9]?\d)\.(25[0-5]|2[0-4]\d|[0-1]\d{2}|[1-9]?\d)\.(25[0-5]|2[0-4]\d|[0-1]\d{2}|[1-9]?\d)\.(25[0-5]|2[0-4]\d|[0-1]\d{2}|[1-9]?\d)/)[0]}'`
+        }
+    }
+    dbMoudle.doAdd(opt, (err, data) => {
+        if (err) {
+            res.json(err)
+        } else {
+            res.json({ code: "1", msg: "ok" })
+        }
+    })
 }
 
 
@@ -106,8 +143,9 @@ module.exports.editCategory = function (req, res) {
 module.exports.getArticle = function (req, res) {
     var opt = {
         table: 'article',
-        pageNo: req.body.pageNo || 1,
-        pageSize: req.body.pageSize || 10
+        type: 'articles',
+        pageNo: req.body.pageNo || req.query.pageNo || 1,
+        pageSize: req.body.pageSize || req.query.pageSize || 10
     };
     dbMoudle.doQuery(opt, (err, data) => {
         res.json({ data });
@@ -160,3 +198,16 @@ module.exports.editArticle = function (req, res) {
         res.json({ code: 1, msg: "修改成功" });
     })
 }
+
+/* *********************留言管理********************* */
+/* 留言-获取 */
+module.exports.getMessages = function (req, res) {
+    var opt = {
+        table: 'messages',
+        type: 'all'
+    }
+    dbMoudle.doQuery(opt, (err, data) => {
+        res.json(data);
+    });
+}
+/* 留言删除 */

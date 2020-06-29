@@ -20,7 +20,7 @@
                                 <i class="fa fa-comment-o"></i>
                                 {{content.comment.length}} |
                                 <i class="fa fa-tag"></i>
-                                {{category.name}} |
+                                {{content.category}} |
                                 <i class="fa fa-clock-o"></i>
                                 {{content.addtime | date}} 
                             </p>
@@ -38,7 +38,7 @@
                         </article>-->
                         <!-- 视频播放 -->
                         <video-com
-                            v-if="category.name=='Video'"
+                            v-if="content.category=='Vlog'"
                             :videoSrc="videoSrc"
                             :posterSrc="posterSrc"
                         ></video-com>
@@ -140,30 +140,6 @@ export default {
                 }
             })
         },
-        // submitComment() { // 提交评论
-        //     if (!this.commentData.comment) { // 评论内容为空
-        //         // this.$message({ type: "warning", message: "The comment can`t be blank" })
-        //         this.$message({ type: "warning", message: this.$t('logContent.emptyCommentTip') })
-        //         return false;
-        //     }
-        //     if (!this.commentData.visitor) { // 不留名
-        //         this.$message({ type: "warning", message: this.$t('logContent.emptyVisitor') })
-        //         return false;
-        //     }
-        //     this.commentData.contentid = this.content.id;
-        //     this.$axios({
-        //         url: '/index/comment',
-        //         method: "post",
-        //         data: this.commentData
-        //     }).then(res => {
-        //         if (res.data.code == 1) { // 评论成功提示
-        //             this.$message({ type: "success", message: res.data.msg });
-        //             this.commentData.comment = '';
-        //             this.commentData.visitor = '';
-        //         }
-        //         this.getContent()
-        //     })
-        // },
         changePage(params) { // 后期再解决执行N次的问题
             let allArticles = JSON.parse(sessionStorage.getItem('allArticles')),
                     curArticle = this.$route.params.contentid, prevOrNextPage;

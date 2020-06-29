@@ -163,7 +163,6 @@ export default {
         dontSubmit() { return false },
         submitComment() { // 提交评论
             if (!this.commentData.comment) { // 评论内容为空
-                // this.$message({ type: "warning", message: "The comment can`t be blank" })
                 this.$message({ type: "warning", message: this.$t('logContent.emptyCommentTip') })
                 return false;
             }

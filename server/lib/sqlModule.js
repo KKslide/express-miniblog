@@ -6,14 +6,31 @@ var connection = require("../db/index"); // 数据库连接配置
 /* 查询 */
 module.exports.doQuery = function (options, callback) {
     var table = options.table; // 要查询的表格
-    var pageNo = options.pageNo || 0; // 页码
-    var pageSize = options.pageSize || 0; // 页容量
-    var serchType = options.type; // 条件- 是否全量查询
-    var indexType = options.indexType;
+    var pageNo = options.pageNo; // 页码
+    var pageSize = options.pageSize; // 页容量
+    var searchType = options.type; // 条件- 是否全量查询
     // select * from table limit (pageNo-1)*pageSize,pageSize;
-    var sql = serchType == 'all'
-        ? `SELECT * FROM ${table} where is_del='0'`
-        : `SELECT * FROM ${table} where is_del='0' limit ${pageNo - 1},${pageSize}`;
+    var sql = ``;
+    switch (searchType) {
+        case 'all':
+            sql += `SELECT * FROM ${table} where is_del='0'`;
+            break;
+        case 'articles':
+            // sql += `SELECT aaa.total, a.* FROM ${table} a,(select count(*) total from ${table}) aaa limit ${(pageNo - 1)*pageSize},${pageSize}`;
+            sql += `
+                select 
+                (select count(*) from article) total,
+                count(a.id) comment_num,
+                a.* 
+                from article a 
+                left join comment cm on a.id=cm.id 
+                group by a.id 
+                limit ${(pageNo - 1)*pageSize},${pageSize}`;
+            break;
+        default:
+            sql += `SELECT * FROM ${table} where is_del='0' limit ${(pageNo - 1)*pageSize},${pageSize}`
+            break;
+    }
     connection.query(sql, (err, data) => {
         if (err) {
             console.log(err);
@@ -29,6 +46,7 @@ module.exports.doAdd = function (options, callback) {
     var keys = Object.keys(options.data);
     var values = Object.values(options.data);
     var sql = `insert into ${table} (${[...keys]}) values (${[...values]}) `;
+    console.log(sql);
     connection.query(sql, (err, res) => {
         if (res.affectedRows == 1) {
             callback();
@@ -126,7 +144,19 @@ module.exports.getIndexPageData = function (options, callback) {
  */
 module.exports.getContentDetail = function (options, callback) {
     var id = options.id;
-    var contentSql = `select * from article where id = ${id}`;
+    var contentSql = `select 
+    a.id,
+    a.title,
+    c.name AS 'category',
+    a.composition,
+    a.description,
+    a.addtime,
+    a.viewnum,
+    a.minpic_url,
+    a.video_src,
+    a.is_show,
+    a.is_del
+    from article a, category c where a.category=c.id and a.id = ${id}`;
     var commentSql = `select * from comment where id = ${id}`;
     var contentList, newViewNum;
     connection.query(contentSql, (err, data) => {

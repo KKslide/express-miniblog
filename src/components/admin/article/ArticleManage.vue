@@ -14,14 +14,14 @@
                     <p>{{scope.row.addtime|date}}</p>
                 </template>
             </el-table-column>
-            <el-table-column prop="num" label="阅读量"></el-table-column>
-            <el-table-column prop="comment_count" label="评论">
+            <el-table-column prop="viewnum" label="阅读量"></el-table-column>
+            <el-table-column prop="comment_num" label="评论">
                 <template slot-scope="scope">
                     <el-button
                         @click="checkComment(scope.row)"
                         type="text"
                         size="normal"
-                    >{{scope.row.comment_count}}</el-button>
+                    >{{scope.row.comment_num}}</el-button>
                 </template>
             </el-table-column>
             <el-table-column prop="isShow" label="是否显示"></el-table-column>
@@ -448,10 +448,10 @@ export default {
         },
         getArticles() {  // 获取文章列表
             this.getCates().then(_=>{
-                this.$axios({ url: '/admin/articles', params: { page: this.curPage }, method: 'get' })
+                this.$axios({ url: '/admin/articles', params: { pageNo: this.curPage, pageSize: 5 }, method: 'get' })
                     .then(res => {
-                        this.total = res.data.total;
-                        this.pages = res.data.pages;
+                        this.total = res.data.data[0].total; // 总共的数量
+                        this.pages = Math.ceil(this.total/5);
                         // 先保存原格式的文章信息
                         this.originArticleData = res.data.data;
                         var newContents = [];
@@ -466,10 +466,9 @@ export default {
                                     return res.length==0?'unknown':res[0].name;
                                 })(v.category),
                                 addtime: v.addtime,
-                                num: v.num,
-                                isShow: v.isShow == 1 ? '是' : '否',
-                                comment_count: 0,
-                                comment: v.comment
+                                viewnum: v.viewnum,
+                                isShow: v.is_show == 1 ? '是' : '否',
+                                comment_num: v.comment_num
                             })
                         })
                         this.articleData = newContents; // 格式化后的文章信息

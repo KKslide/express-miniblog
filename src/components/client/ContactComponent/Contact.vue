@@ -25,7 +25,7 @@
                                                     class="form-control"
                                                     rows="5"
                                                     :placeholder="$t('contact.placeholder.three')"
-                                                    v-model="massage"
+                                                    v-model="message"
                                                 ></textarea>
                                                 <!-- emoji按钮 -->
                                                 <div class="emoji_btn" ref="contact_emoji_btn" @click="showEmojiPanel">
@@ -108,9 +108,9 @@
                                             ></h4>
 
                                             <div class="commentText">
-                                                <input type="checkbox" :id="'expended'+item._id" />
-                                                <p v-html="item.massage" :ref="item._id"></p>
-                                                <label :for="'expended'+item._id" role="button" v-showbtn >show more</label>
+                                                <input type="checkbox" :id="'expended'+item.id" />
+                                                <p v-html="item.message" :ref="item.id"></p>
+                                                <label :for="'expended'+item.id" role="button" v-showbtn >show more</label>
                                             </div>
                                             <div class="ds-comment-footer">
                                                 <span
@@ -173,7 +173,7 @@ export default {
         return {
             viewer: '', // 用户昵称或邮箱
             subject: '', 
-            massage: '', // 留言内容
+            message: '', // 留言内容
             a: 5, // 显示留言的数量
             totalData: [], // 留言的列表数据
             isShowEmojiPanel: false,
@@ -193,18 +193,18 @@ export default {
     },
     methods: {
         submit() { // 留言
-            if (!this.viewer || !this.massage) {
+            if (!this.viewer || !this.message) {
                 this.$message({ type: 'warning', message: this.$i18n.t('contact.warning') })
                 return;
             }
-            this.massage = this.massage.replace(/:.*?:/g, this.emoji);
+            this.message = this.message.replace(/:.*?:/g, this.emoji);
             this.$axios({
-                url: '/index/massage/add',
+                url: '/index/message/add',
                 method: 'post',
                 data: {
                     viewer: this.viewer,
                     subject: this.subject,
-                    massage: this.massage
+                    message: this.message
                 }
             }).then(res => {
                 let msgType={type:'',message:this.$t('contact.responsemsg')};
@@ -216,12 +216,12 @@ export default {
             })
         },
         // 重置留言板
-        resetForm() { this.viewer = ''; this.subject = ''; this.massage = ''; },
+        resetForm() { this.viewer = ''; this.subject = ''; this.message = ''; },
         getData() { // 获取留言
             this.$axios({
-                url: "/index/massage"
+                url: "/index/message/get"
             }).then(res => {
-                this.totalData = res.data
+                this.totalData = res.data.reverse()
             })
         },
         loadmore() { // 加载更多
@@ -236,7 +236,7 @@ export default {
         },
         appendEmoji(text) { // 添加emoji到留言板中
             const el = document.getElementById("msg_textarea");
-            this.massage = el.value + ":" + text + ":";
+            this.message = el.value + ":" + text + ":";
         }
     },
     mounted() {

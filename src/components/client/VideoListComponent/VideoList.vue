@@ -19,8 +19,8 @@
                                 <div v-for="(item,index) in articles" :key="index" :class="{'item':true,'active':index==0?true:false}" >
                                     <div class="row">
                                         <div class="col-sm-4" v-for="(sub_item,sub_index) in item" :key="sub_index" >
-                                            <!-- <a href="javascript:;" @click="goto(sub_item,$event)" :title="sub_item.title" class="black-image-project-hover tag" :tag="sub_item.category.name"> -->
-                                            <a href="javascript:;" :title="sub_item.title" class="black-image-project-hover tag">
+                                            <a href="javascript:;" @click="goto(sub_item,$event)" :title="sub_item.title" class="black-image-project-hover tag" :tag="sub_item.category.name">
+                                            <!-- <a href="javascript:;" :title="sub_item.title" class="black-image-project-hover tag"> -->
                                                 <i class="fa fa-play-circle-o"></i>
                                                 <lazy-img 
                                                     :src="sub_item.minpic_url" 
@@ -95,7 +95,7 @@ export default {
     },
     methods: {
         goto(sub_item, event) {
-            this.$router.push({ name: 'logcontent', params: { contentid: sub_item._id } })
+            this.$router.push({ name: 'logcontent', params: { contentid: sub_item.id } })
         },
         getArticles() {
             this.$axios.get('/index/getpage', {
