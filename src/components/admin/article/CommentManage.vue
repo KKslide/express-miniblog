@@ -1,7 +1,8 @@
 <template>
     <div>
+        <h3>{{aaa}}</h3>
         <el-table
-            :data="curChosenArcComment.comment"
+            :data="curComment"
             border="true"
             style="width: 100%"
             :cell-class-name="setCell"
@@ -49,7 +50,9 @@ export default {
     data() {
         return {
             innerVisible: false,
-            commentDetail: ''
+            commentDetail: '',
+            curID: null, // 当前文章ID
+            curComment: [] // 当前文章的评论列表
         };
     },
     methods: {
@@ -59,18 +62,18 @@ export default {
                 cancelButtonText: '取消',
                 type: 'warning'
             }).then(_ => {
-                this.curChosenArcComment.comment.forEach((v, i) => {
-                    if (v.time == row.time) {
-                        this.curChosenArcComment.comment.splice(i, 1)
-                    }
-                })
+                // 原本是做修改，现在改为直接删除
+                // this.curChosenArcComment.comment.forEach((v, i) => {
+                //     if (v.time == row.time) {
+                //         this.curChosenArcComment.comment.splice(i, 1)
+                //     }
+                // })
                 /* 删除评论操作 */
                 this.$axios({
-                    url: '/index/comment/del',
+                    url: '/admin/comment/del',
                     method: 'post',
                     data: {
-                        contentid: this.curChosenArcComment._id,
-                        time: row.time
+                        id: this.curChosenArcComment.id
                     }
                 }).then(res => {
                     if (res.data.code == 1) {
@@ -96,15 +99,27 @@ export default {
         handleCheckComment(index, row) {
             this.innerVisible = true;
             this.commentDetail = row.comment;
+        },
+        getCommentList(id) {
+            this.$axios({
+                url: '/admin/comment',
+                params: {id:this.curID}
+            }).then(res => {
+                console.log(res);
+                this.curComment = res.data;
+            })
         }
     },
     props: ['curChosenArcComment', 'upDateArc'],
-    mounted(){
+    mounted() {
         console.log(this.curChosenArcComment.id);
+        this.curID = this.curChosenArcComment.id;
+        this.getCommentList(this.curID);
     },
-    watch:{
-        'this.curChosenArcComment':(ov,nv)=>{
-            console.log(nv);
+    watch: {
+        curChosenArcComment(nv, ov) {
+            this.curID = nv.id; // 更新id
+            this.getCommentList(this.curID); // 重新获取列表
         }
     }
 };

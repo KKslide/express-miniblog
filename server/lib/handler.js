@@ -199,6 +199,28 @@ module.exports.editArticle = function (req, res) {
     })
 }
 
+/* *********************评论管理********************* */
+/* 文章评论-获取 */
+module.exports.getComment = function (req, res) {
+    var opt = {
+        id: req.body.id || req.query.id
+    }
+    dbMoudle.queryCommentList(opt, (err, data) => {
+        res.json(data);
+    })
+}
+/* 文章评论-删除 */
+module.exports.delComment = function (req, res) {
+    var opt = {
+        id: req.body.id || req.query.id,
+        table: 'comment'
+    }
+    console.log('------------opt: ',opt);
+    dbMoudle.doDel(opt, (err, data) => {
+        res.json({ code: 1, msg: "删除成功" });
+    })
+}
+
 /* *********************留言管理********************* */
 /* 留言-获取 */
 module.exports.getMessages = function (req, res) {

@@ -12,10 +12,10 @@ module.exports.doQuery = function (options, callback) {
     // select * from table limit (pageNo-1)*pageSize,pageSize;
     var sql = ``;
     switch (searchType) {
-        case 'all':
+        case 'all': // 0- 普通全量查询(多用于前端)
             sql += `SELECT * FROM ${table} where is_del='0'`;
             break;
-        case 'articles':
+        case 'articles': // 1- 文章管理端的查询
             // sql += `SELECT aaa.total, a.* FROM ${table} a,(select count(*) total from ${table}) aaa limit ${(pageNo - 1)*pageSize},${pageSize}`;
             sql += `
                 select 
@@ -25,10 +25,10 @@ module.exports.doQuery = function (options, callback) {
                 from article a 
                 left join comment cm on a.id=cm.id 
                 group by a.id 
-                limit ${(pageNo - 1)*pageSize},${pageSize}`;
+                limit ${(pageNo - 1) * pageSize},${pageSize}`;
             break;
-        default:
-            sql += `SELECT * FROM ${table} where is_del='0' limit ${(pageNo - 1)*pageSize},${pageSize}`
+        default: // 2- 常规查询
+            sql += `SELECT * FROM ${table} where is_del='0' limit ${(pageNo - 1) * pageSize},${pageSize}`
             break;
     }
     connection.query(sql, (err, data) => {
@@ -92,6 +92,23 @@ module.exports.doEdit = function (options, callback) {
         }
         if (res.affectedRows == 1) {
             callback();
+        }
+    })
+}
+
+/**
+ * 后台管理页一些恶心查询↓
+ */
+/* 文章评论管理查询 */
+module.exports.queryCommentList = function (options, callback) {
+    var id = options.id;
+    var sql = `select * from comment where id=${id}`;
+    connection.query(sql, (err, data) => {
+        if (err) {
+            console.log(err);
+            callback(null, err);
+        } else {
+            callback(null, data);
         }
     })
 }

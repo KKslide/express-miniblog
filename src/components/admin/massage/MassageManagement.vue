@@ -107,7 +107,7 @@ export default {
         },
         getMassageList() {
             this.$axios({
-                url: "/admin/massage",
+                url: "/index/massage/get",
                 method: "get",
                 params: { page: this.curPage }
             }).then(res => {

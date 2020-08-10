@@ -44,11 +44,13 @@ router.post('/admin/articles/edit', handler.editArticle)
 
 /* 评论 */
 /* 评论-获取 */
+router.get('/admin/comment', handler.getComment);
 /* 评论-删除 */
+router.post('/admin/comment/del', handler.delComment);
 
 /* 留言 */
 /* 留言-获取-和前端同个接口 */
-router.get('/index/message/get',handler.getMessages);
+router.get('/index/message/get', handler.getMessages);
 /* 留言-删除 */
 
 /* 七牛云图片上传 */
