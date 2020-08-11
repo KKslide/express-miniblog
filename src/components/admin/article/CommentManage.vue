@@ -62,12 +62,10 @@ export default {
                 cancelButtonText: '取消',
                 type: 'warning'
             }).then(_ => {
-                // 原本是做修改，现在改为直接删除
-                // this.curChosenArcComment.comment.forEach((v, i) => {
-                //     if (v.time == row.time) {
-                //         this.curChosenArcComment.comment.splice(i, 1)
-                //     }
-                // })
+                if(!this.curChosenArcComment.id){
+                    console.log('搞错了, 再来..');
+                    return false;
+                }
                 /* 删除评论操作 */
                 this.$axios({
                     url: '/admin/comment/del',

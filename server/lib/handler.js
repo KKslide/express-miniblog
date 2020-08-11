@@ -215,7 +215,7 @@ module.exports.delComment = function (req, res) {
         id: req.body.id || req.query.id,
         table: 'comment'
     }
-    console.log('------------opt: ',opt);
+    console.log('------------opt: ',opt); // success 
     dbMoudle.doDel(opt, (err, data) => {
         res.json({ code: 1, msg: "删除成功" });
     })

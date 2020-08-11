@@ -20,10 +20,11 @@ module.exports.doQuery = function (options, callback) {
             sql += `
                 select 
                 (select count(*) from article) total,
-                count(a.id) comment_num,
+                count(cm.id) comment_num,
                 a.* 
                 from article a 
                 left join comment cm on a.id=cm.id 
+                and cm.is_del='0'
                 group by a.id 
                 limit ${(pageNo - 1) * pageSize},${pageSize}`;
             break;
@@ -31,6 +32,7 @@ module.exports.doQuery = function (options, callback) {
             sql += `SELECT * FROM ${table} where is_del='0' limit ${(pageNo - 1) * pageSize},${pageSize}`
             break;
     }
+    console.log(sql);
     connection.query(sql, (err, data) => {
         if (err) {
             console.log(err);
@@ -102,7 +104,7 @@ module.exports.doEdit = function (options, callback) {
 /* 文章评论管理查询 */
 module.exports.queryCommentList = function (options, callback) {
     var id = options.id;
-    var sql = `select * from comment where id=${id}`;
+    var sql = ` select * from comment where id=${id} and is_del='0' `;
     connection.query(sql, (err, data) => {
         if (err) {
             console.log(err);
@@ -122,29 +124,28 @@ module.exports.getIndexPageData = function (options, callback) {
     var isVlog = options.listType == 'vlog' ? 'Vlog' : ''; // 查询列表是否为vlog类型
     var sql =
         `SELECT
-            a.id,
-            a.title,
-            c1.name AS 'category',
-            a.composition,
-            a.description,
-            a.addtime,
-            a.viewnum,
-            a.minpic_url,
-            a.video_src,
-            a.is_show,
-            a.is_del,
-            cc.comment_num 
-        FROM article a,
-            category c1,
-            ( SELECT c.id, count( * ) AS comment_num 
-            FROM COMMENT c 
-            GROUP BY c.id ) AS cc 
-        WHERE a.category = c1.id 
-        AND a.id = cc.id `;
+                a.id,
+                a.title,
+                cat.name AS 'category',
+                a.composition,
+                a.description,
+                a.addtime,
+                a.viewnum,
+                a.minpic_url,
+                a.video_src,
+                a.is_show,
+                a.is_del,
+                IFNULL( temp.comment_num, 0 ) AS 'comment_num'
+            FROM
+                article a
+                LEFT JOIN category cat ON a.category = cat.id
+                LEFT JOIN ( SELECT id, count( id ) comment_num FROM COMMENT c where c.is_del='0' GROUP BY c.id ) temp ON a.id = temp.id 
+            WHERE 1=1 `;
     sql += isVlog == 'Vlog'
-        ? `and c1.name = '${isVlog}'`
-        : `and c1.name != 'Vlog'`;
-    sql += `GROUP BY a.id ORDER BY a.addtime `;
+        ? `and cat.name = '${isVlog}'`
+        : `and cat.name != 'Vlog'`;
+    sql += `and a.is_del='0'
+            GROUP BY a.id ORDER BY a.addtime `;
     console.log(sql);
     connection.query(sql, (err, data) => {
         if (err) {
