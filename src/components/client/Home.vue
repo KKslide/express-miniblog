@@ -33,7 +33,6 @@
 </template>
 
 <script>
-// import Typed from 'typed.js'
 import Header from './public/Header'
 export default {
     components: {
@@ -69,13 +68,13 @@ export default {
     mounted() {
         this.type() // 打字动画
         this.movingBackgroundImage() // 背景图动画
-        // this.$axios({
-        //     url: '/index/visit',
-        //     method: 'post',
-        //     data: {}
-        // }).then(res => {
-        //     // console.log(res); // 这里打个彩蛋
-        // })
+        this.$axios({
+            url: '/index/visit',
+            method: 'post',
+            data: {}
+        }).then(res => {
+            // console.log(res); // 这里打个彩蛋
+        })
     }
 }
 </script>

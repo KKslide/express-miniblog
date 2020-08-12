@@ -4,6 +4,7 @@ var dbMoudle = require('./sqlModule');
 
 /* 七牛云图片上传 */
 var qiniuUpload = require('./qiniu.config');
+const { getClientIp, dateFormat } = require('../util/util');
 module.exports.doUpload = function (req, res) {
     qiniuUpload.picUpload(req, res);
 }
@@ -74,6 +75,24 @@ module.exports.leaveMessage = function (req, res) {
     })
 }
 
+/* 访问统计 */
+module.exports.visitRecord = function (req, res) {
+    var opt = {
+        'table': 'visitors',
+        'data': {
+            'ip': `'${util.getClientIp(req).match(/(25[0-5]|2[0-4]\d|[0-1]\d{2}|[1-9]?\d)\.(25[0-5]|2[0-4]\d|[0-1]\d{2}|[1-9]?\d)\.(25[0-5]|2[0-4]\d|[0-1]\d{2}|[1-9]?\d)\.(25[0-5]|2[0-4]\d|[0-1]\d{2}|[1-9]?\d)/)[0]}'`,
+            'time': `'${util.getNow()}'`,
+        }
+    }
+    dbMoudle.doAdd(opt, (err, data) => {
+        if (err) {
+            res.json(err);
+        } else {
+            res.json({ code: "1", msg: "ok" });
+        }
+    })
+}
+
 
 /* --------------------------管理页------------------------- */
 /* 登陆 */
@@ -81,6 +100,17 @@ module.exports.doAdmin = function (req, res) {
 
 }
 /* 退出登陆 */
+
+/* *********************管理页首页********************* */
+module.exports.getDashboard = function (req, res) {
+    dbMoudle.getDashboardData((err, data) => {
+        if (err) {
+            res.json(err)
+        } else {
+            res.json(data)
+        }
+    })
+}
 
 /* *********************分类管理********************* */
 /* 分类-获取 */
@@ -215,7 +245,6 @@ module.exports.delComment = function (req, res) {
         id: req.body.id || req.query.id,
         table: 'comment'
     }
-    console.log('------------opt: ',opt); // success 
     dbMoudle.doDel(opt, (err, data) => {
         res.json({ code: 1, msg: "删除成功" });
     })
@@ -232,4 +261,23 @@ module.exports.getMessages = function (req, res) {
         res.json(data);
     });
 }
+module.exports.adminGetMessages = function (req, res) {
+    var opt = {
+        table: 'messages',
+        pageNo: req.body.pageNo || req.query.pageNo || 1,
+        pageSize: req.body.pageSize || req.query.pageSize || 10
+    }
+    dbMoudle.doQuery(opt, (err, data) => {
+        res.json(data);
+    });
+}
 /* 留言删除 */
+module.exports.delMessage = function (req, res) {
+    var opt = {
+        table: 'messages',
+        id: req.body.id || req.query.id
+    }
+    dbMoudle.doDel(opt, (err, data) => {
+        res.json({ code: 1, msg: "删除成功" });
+    });
+}

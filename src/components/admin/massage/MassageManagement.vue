@@ -7,7 +7,7 @@
                 </template>
             </el-table-column>
             <el-table-column prop="viewer" label="用户/邮箱"></el-table-column>
-            <el-table-column prop="massage" label="内容"></el-table-column>
+            <el-table-column prop="message" label="内容"></el-table-column>
             <el-table-column label="操作">
                 <template slot-scope="scope">
                     <el-button size="mini" @click="dialog=true; handleCheck(scope.$index, scope.row)" >查看</el-button>
@@ -24,11 +24,8 @@
                 <el-form-item label="用户/邮箱">
                     <el-input v-model="chosen.viewer" disabled class="disabled"></el-input>
                 </el-form-item>
-                <el-form-item label="主题">
-                    <el-input v-model="chosen.subject" disabled class="disabled"></el-input>
-                </el-form-item>
                 <el-form-item label="内容">
-                    <div v-html="chosen.content" class="chosen_content"></div>
+                    <div v-html="chosen.message" class="chosen_content"></div>
                 </el-form-item>
             </el-form>
             <span slot="footer" class="dialog-footer">
@@ -63,8 +60,7 @@ export default {
             chosen: {
                 viewer: '',
                 addtime: '',
-                subject: '',
-                content: ''
+                message: ''
             }
         }
     },
@@ -72,16 +68,13 @@ export default {
         this.getMassageList()
     },
     methods: {
-        handleCheck(index, row) {
+        handleCheck(index, row) { // 点击查看评论
             this.chosen.addtime = row.addtime;
             this.chosen.viewer = row.viewer;
-            this.chosen.subject = row.subject;
-            this.chosen.content = row.massage;
+            this.chosen.message = row.message;
             this.dialogTableVisible = true;
         },
-        handleDelete(index, row) {
-            let ids = [];
-            ids.push(row._id);
+        handleDelete(index, row) { // 删除评论操作
             this.$confirm('永久删除该条留言吗, 是否继续?', '提示', {
                 confirmButtonText: '确定',
                 cancelButtonText: '取消',
@@ -89,7 +82,7 @@ export default {
             }).then(() => {
                 this.$axios({
                     url: "/admin/massage/del",
-                    data: { ids: ids },
+                    data: { id: row.id },
                     method: "post"
                 }).then(res => {
                     if (res.data.code == 1) {
@@ -107,11 +100,11 @@ export default {
         },
         getMassageList() {
             this.$axios({
-                url: "/index/massage/get",
+                url: "/admin/message/get",
                 method: "get",
-                params: { page: this.curPage }
+                params: { pageNo: this.curPage, pageSize: 10 }
             }).then(res => {
-                this.tableData = res.data.massages;
+                this.tableData = res.data;
                 this.total = res.data.total;
                 this.pages = res.data.pages;
             })

@@ -62,16 +62,12 @@ export default {
                 cancelButtonText: '取消',
                 type: 'warning'
             }).then(_ => {
-                if(!this.curChosenArcComment.id){
-                    console.log('搞错了, 再来..');
-                    return false;
-                }
                 /* 删除评论操作 */
                 this.$axios({
                     url: '/admin/comment/del',
                     method: 'post',
                     data: {
-                        id: this.curChosenArcComment.id
+                        id: row.t_id
                     }
                 }).then(res => {
                     if (res.data.code == 1) {
@@ -79,6 +75,7 @@ export default {
                             type: 'success',
                             message: "成功删除评论 !"
                         });
+                        this.getCommentList(this.curID)
                         this.upDateArc()
                     } else {
                         this.$message({
@@ -103,14 +100,12 @@ export default {
                 url: '/admin/comment',
                 params: {id:this.curID}
             }).then(res => {
-                console.log(res);
                 this.curComment = res.data;
             })
         }
     },
     props: ['curChosenArcComment', 'upDateArc'],
     mounted() {
-        console.log(this.curChosenArcComment.id);
         this.curID = this.curChosenArcComment.id;
         this.getCommentList(this.curID);
     },

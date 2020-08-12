@@ -11,8 +11,8 @@
             active-text-color="#ffd04b"
         >
             <el-menu-item index="admhome">首页</el-menu-item>
-            <el-menu-item index="user" data-url="user">用户管理</el-menu-item>
-            <el-menu-item index="category">分类管理</el-menu-item>
+            <!-- <el-menu-item index="user" data-url="user">用户管理</el-menu-item> -->
+            <el-menu-item index="category" data-url="category">分类管理</el-menu-item>
             <el-menu-item index="article">文章管理</el-menu-item>
             <el-menu-item index="massage">留言管理</el-menu-item>
         </el-menu>
