@@ -147,70 +147,53 @@ module.exports.getDashboardData = function (callback) {
             }
             resolve(data)
         })
-    }).then(resData => {
-        // console.log(resData);
-        var sql2 = `
-                SET @hour_0 := date_format(now() - interval 0 hour,'%H:00');
-                SET @hour_1 := date_format(now() - interval 1 hour,'%H:00');
-                SET @hour_2 := date_format(now() - interval 2 hour,'%H:00');
-                SET @hour_3 := date_format(now() - interval 3 hour,'%H:00');
-                SET @hour_4 := date_format(now() - interval 4 hour,'%H:00');
-                SET @hour_5 := date_format(now() - interval 5 hour,'%H:00');
-                SET @hour_6 := date_format(now() - interval 6 hour,'%H:00');
-                SET @hour_7 := date_format(now() - interval 7 hour,'%H:00');
-                SET @hour_8 := date_format(now() - interval 8 hour,'%H:00');
-                SET @hour_9 := date_format(now() - interval 9 hour,'%H:00');
-                SET @hour_10 := date_format(now() - interval 10 hour,'%H:00');
-                SET @hour_11 := date_format(now() - interval 11 hour,'%H:00');
-                SET @hour_12 := date_format(now() - interval 12 hour,'%H:00');
-                SET @hour_13 := date_format(now() - interval 13 hour,'%H:00');
-                SET @hour_14 := date_format(now() - interval 14 hour,'%H:00');
-                SET @hour_15 := date_format(now() - interval 15 hour,'%H:00');
-                SET @hour_16 := date_format(now() - interval 16 hour,'%H:00');
-                SET @hour_17 := date_format(now() - interval 17 hour,'%H:00');
-                SET @hour_18 := date_format(now() - interval 18 hour,'%H:00');
-                SET @hour_19 := date_format(now() - interval 19 hour,'%H:00');
-                SET @hour_20 := date_format(now() - interval 20 hour,'%H:00');
-                SET @hour_21 := date_format(now() - interval 21 hour,'%H:00');
-                SET @hour_22 := date_format(now() - interval 22 hour,'%H:00');
-                SET @hour_23 := date_format(now() - interval 23 hour,'%H:00');
-
-                SET @query := CONCAT('select ', 
-                '(select count(*) from visitors where  time >=(NOW() - interval 1 hour) and time < (NOW() - interval 0 hour) ) as "', @hour_0 ,'",',
-                '(select count(*) from visitors where  time >=(NOW() - interval 2 hour) and time < (NOW() - interval 1 hour) ) as "', @hour_1, '",',
-                '(select count(*) from visitors where  time >=(NOW() - interval 3 hour) and time < (NOW() - interval 2 hour)) as "', @hour_2, '",',
-                '(select count(*) from visitors where  time >=(NOW() - interval 4 hour) and time < (NOW() - interval 3 hour)) as "', @hour_3, '",',
-                '(select count(*) from visitors where  time >=(NOW() - interval 5 hour) and time < (NOW() - interval 4 hour)) as "', @hour_4, '",',
-                '(select count(*) from visitors where  time >=(NOW() - interval 6 hour) and time < (NOW() - interval 5 hour)) as "', @hour_5, '",',
-                '(select count(*) from visitors where  time >=(NOW() - interval 7 hour) and time < (NOW() - interval 6 hour)) as "', @hour_6, '",',
-                '(select count(*) from visitors where  time >=(NOW() - interval 8 hour) and time < (NOW() - interval 7 hour)) as "', @hour_7, '",',
-                '(select count(*) from visitors where  time >=(NOW() - interval 9 hour) and time < (NOW() - interval 8 hour)) as "', @hour_8, '",',
-                '(select count(*) from visitors where  time >=(NOW() - interval 10 hour) and time < (NOW() - interval 9 hour)) as "', @hour_9, '",',
-                '(select count(*) from visitors where  time >=(NOW() - interval 11 hour) and time < (NOW() - interval 10 hour)) as "', @hour_10, '",',
-                '(select count(*) from visitors where  time >=(NOW() - interval 12 hour) and time < (NOW() - interval 11 hour)) as "', @hour_11, '",',
-                '(select count(*) from visitors where  time >=(NOW() - interval 13 hour) and time < (NOW() - interval 12 hour)) as "', @hour_12, '",',
-                '(select count(*) from visitors where  time >=(NOW() - interval 14 hour) and time < (NOW() - interval 13 hour)) as "', @hour_13, '",',
-                '(select count(*) from visitors where  time >=(NOW() - interval 15 hour) and time < (NOW() - interval 14 hour)) as "', @hour_14, '",',
-                '(select count(*) from visitors where  time >=(NOW() - interval 16 hour) and time < (NOW() - interval 15 hour)) as "', @hour_15, '",',
-                '(select count(*) from visitors where  time >=(NOW() - interval 17 hour) and time < (NOW() - interval 16 hour)) as "', @hour_16, '",',
-                '(select count(*) from visitors where  time >=(NOW() - interval 18 hour) and time < (NOW() - interval 17 hour)) as "', @hour_17, '",',
-                '(select count(*) from visitors where  time >=(NOW() - interval 19 hour) and time < (NOW() - interval 18 hour)) as "', @hour_18, '",',
-                '(select count(*) from visitors where  time >=(NOW() - interval 20 hour) and time < (NOW() - interval 19 hour)) as "', @hour_19, '",',
-                '(select count(*) from visitors where  time >=(NOW() - interval 21 hour) and time < (NOW() - interval 20 hour)) as "', @hour_20, '",',
-                '(select count(*) from visitors where  time >=(NOW() - interval 22 hour) and time < (NOW() - interval 21 hour)) as "', @hour_21, '",',
-                '(select count(*) from visitors where  time >=(NOW() - interval 23 hour) and time < (NOW() - interval 22 hour)) as "', @hour_22, '",',
-                '(select count(*) from visitors where  time >=(NOW() - interval 24 hour) and time < (NOW() - interval 23 hour)) as "', @hour_23, '"'
-                );
-                -- PREPARE dynamic_statement FROM @query;
-                -- EXECUTE dynamic_statement; 
-                select @query as 'aaa';
+    }).then(_ => {
+        let curHour = new Date().getHours();
+        let sql2 = `
+                select 
+                (select count(*) from visitors where  time >=(NOW() - interval 1 hour) and time < (NOW() - interval 0 hour) ) as "from now: ${curHour - 0}", 
+                (select count(*) from visitors where  time >=(NOW() - interval 2 hour) and time < (NOW() - interval 1 hour) ) as "from now: ${curHour - 1}", 
+                (select count(*) from visitors where  time >=(NOW() - interval 3 hour) and time < (NOW() - interval 2 hour)) as "from now: ${curHour - 2}", 
+                (select count(*) from visitors where  time >=(NOW() - interval 4 hour) and time < (NOW() - interval 3 hour)) as "from now: ${curHour - 3}", 
+                (select count(*) from visitors where  time >=(NOW() - interval 5 hour) and time < (NOW() - interval 4 hour)) as "from now: ${curHour - 4}", 
+                (select count(*) from visitors where  time >=(NOW() - interval 6 hour) and time < (NOW() - interval 5 hour)) as "from now: ${curHour - 5}", 
+                (select count(*) from visitors where  time >=(NOW() - interval 7 hour) and time < (NOW() - interval 6 hour)) as "from now: ${curHour - 6}", 
+                (select count(*) from visitors where  time >=(NOW() - interval 8 hour) and time < (NOW() - interval 7 hour)) as "from now: ${curHour - 7}", 
+                (select count(*) from visitors where  time >=(NOW() - interval 9 hour) and time < (NOW() - interval 8 hour)) as "from now: ${curHour - 8}", 
+                (select count(*) from visitors where  time >=(NOW() - interval 10 hour) and time < (NOW() - interval 9 hour)) as "from now: ${curHour - 9}", 
+                (select count(*) from visitors where  time >=(NOW() - interval 11 hour) and time < (NOW() - interval 10 hour)) as "from now: ${curHour - 10}", 
+                (select count(*) from visitors where  time >=(NOW() - interval 12 hour) and time < (NOW() - interval 11 hour)) as "from now: ${curHour - 11}", 
+                (select count(*) from visitors where  time >=(NOW() - interval 13 hour) and time < (NOW() - interval 12 hour)) as "from now: ${curHour - 12}", 
+                (select count(*) from visitors where  time >=(NOW() - interval 14 hour) and time < (NOW() - interval 13 hour)) as "from now: ${curHour - 13}", 
+                (select count(*) from visitors where  time >=(NOW() - interval 15 hour) and time < (NOW() - interval 14 hour)) as "from now: ${curHour - 14}", 
+                (select count(*) from visitors where  time >=(NOW() - interval 16 hour) and time < (NOW() - interval 15 hour)) as "from now: ${curHour - 15}", 
+                (select count(*) from visitors where  time >=(NOW() - interval 17 hour) and time < (NOW() - interval 16 hour)) as "from now: ${curHour - 16}", 
+                (select count(*) from visitors where  time >=(NOW() - interval 18 hour) and time < (NOW() - interval 17 hour)) as "from now: ${curHour - 17}", 
+                (select count(*) from visitors where  time >=(NOW() - interval 19 hour) and time < (NOW() - interval 18 hour)) as "from now: ${curHour - 18}", 
+                (select count(*) from visitors where  time >=(NOW() - interval 20 hour) and time < (NOW() - interval 19 hour)) as "from now: ${curHour - 19}", 
+                (select count(*) from visitors where  time >=(NOW() - interval 21 hour) and time < (NOW() - interval 20 hour)) as "from now: ${curHour - 20}", 
+                (select count(*) from visitors where  time >=(NOW() - interval 22 hour) and time < (NOW() - interval 21 hour)) as "from now: ${curHour - 21}", 
+                (select count(*) from visitors where  time >=(NOW() - interval 23 hour) and time < (NOW() - interval 22 hour)) as "from now: ${curHour - 22}", 
+                (select count(*) from visitors where  time >=(NOW() - interval 24 hour) and time < (NOW() - interval 23 hour)) as "from now: ${curHour}"
                 `;
-
-        connection.query(sql2,(err,data)=>{
-            if(err){
+        connection.query(sql2, (err, data2) => {
+            if (err) {
                 console.log(err);
+                res.json({ code: 0, msg: '出错了' });
             }
-            console.log('AAAAAAAA',data[0]);
+            let timeLine = data2[0];
+            let keyNames = Object.keys(timeLine).map(v => {
+                return v.replace('from now: ', '');
+            });
+            let values = Object.values(timeLine);
+            let tempArr = keyNames.map((v, i) => {
+                return {
+                    'time': v,
+                    'value': values[i]
+                }
+            });
+            resData['line_chart_data'] = tempArr;
+            callback(resData);
         })
     })
 }
