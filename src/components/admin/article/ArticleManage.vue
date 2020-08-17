@@ -89,7 +89,7 @@
                     <!-- 是否显示 -->
                     <el-form-item label="是否显示" :label-width="formLabelWidth" prop="isShow">
                         <el-switch
-                            v-model="isShow"
+                            v-model="is_show"
                             active-color="#13ce66"
                             inactive-color="#ff4949"
                             active-value="1"
@@ -467,12 +467,11 @@ export default {
                                 })(v.category),
                                 addtime: v.addtime,
                                 viewnum: v.viewnum,
-                                isShow: v.is_show == 1 ? '是' : '否',
+                                isShow: v.is_show == '0' ? '是' : '否',
                                 comment_num: v.comment_num
                             })
                         })
                         this.articleData = newContents; // 格式化后的文章信息
-                        this.isShow = newContents.isShow
                     })
             })
         },
@@ -528,7 +527,9 @@ export default {
                         })
                     }
                     if (this.dialogType == 'edit') { // 编辑文章
-                        this.form.isShow = this.isShow;
+                        this.form.is_show = this.isShow;
+                        console.log(this.form.is_show);
+                        return;
                         this.$axios({
                             url: '/admin/articles/edit',
                             method: 'post',
@@ -609,7 +610,8 @@ export default {
             } else {
                 this.hideUpload = false
             }
-            this.isShow = nowForm.isShow + "" || "0"
+            this.isShow = row.is_show == '是' ? '1' : '0';
+            console.log(this.form);
         },
         /* ********* 富文本编辑器图片上传操作 *********** */
         selectImg() {  //选择图片

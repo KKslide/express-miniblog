@@ -19,7 +19,7 @@ router.post('/admin', handler.doAdmin);
 /* 退出登陆 */
 
 /* 后台-首页数据 */
-router.post("/admin/getgeneral", handler.getDashboard);
+router.get("/admin/getgeneral", handler.getDashboard);
 
 /* 用户管理 */
 

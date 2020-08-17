@@ -1,28 +1,17 @@
-var connection = require("../db/index"); // 数据库连接配置
-
-function queryPromise(sql) {
-    return new Promise((resolve, reject) => {
-        connection.query(sql, (err, data) => {
-            if (err) {
-                reject(err)
-            } else {
-                resolve(data)
-            }
-        })
-    })
-}
+const connection = require("../db/index"); // 数据库连接配置
+const { data } = require("jquery");
 
 /**
  * CRUD
  */
 /* 查询 */
 module.exports.doQuery = function (options, callback) {
-    var table = options.table; // 要查询的表格
-    var pageNo = options.pageNo; // 页码
-    var pageSize = options.pageSize; // 页容量
-    var searchType = options.type; // 条件- 是否全量查询
+    let table = options.table; // 要查询的表格
+    let pageNo = options.pageNo; // 页码
+    let pageSize = options.pageSize; // 页容量
+    let searchType = options.type; // 条件- 是否全量查询
     // select * from table limit (pageNo-1)*pageSize,pageSize;
-    var sql = ``;
+    let sql = ``;
     switch (searchType) {
         case 'all': // 0- 普通全量查询(多用于前端)
             sql += `SELECT * FROM ${table} where is_del='0'`;
@@ -56,10 +45,10 @@ module.exports.doQuery = function (options, callback) {
 }
 /* 新增 */
 module.exports.doAdd = function (options, callback) {
-    var table = options.table;
-    var keys = Object.keys(options.data);
-    var values = Object.values(options.data);
-    var sql = `insert into ${table} (${[...keys]}) values (${[...values]}) `;
+    let table = options.table;
+    let keys = Object.keys(options.data);
+    let values = Object.values(options.data);
+    let sql = `insert into ${table} (${[...keys]}) values (${[...values]}) `;
     console.log(sql);
     connection.query(sql, (err, res) => {
         if (res.affectedRows == 1) {
@@ -71,9 +60,9 @@ module.exports.doAdd = function (options, callback) {
 }
 /* 删除 */
 module.exports.doDel = function (options, callback) {
-    var id = options.id;
-    var table = options.table;
-    var sql = `update ${table} set is_del='1' where ${table == 'comment' ? 't_id' : 'id'} = ${id}`;
+    let id = options.id;
+    let table = options.table;
+    let sql = `update ${table} set is_del='1' where ${table == 'comment' ? 't_id' : 'id'} = ${id}`;
     connection.query(sql, (err, res) => {
         if (res.affectedRows == 1) {
             callback();
@@ -84,21 +73,22 @@ module.exports.doDel = function (options, callback) {
 }
 /* 修改 */
 module.exports.doEdit = function (options, callback) {
-    var table = options.table,
+    let table = options.table,
         id = options.id,
         keys = Object.keys(options.data),
         values = Object.values(options.data),
         queryStr = (function (key, value) {
-            var str = "";
+            let str = "";
             key.forEach((v, i) => {
                 str += v + "=" + value[i] + ","
             });
             return str.substr(0, str.length - 1);
         })(keys, values);
 
-    var sql = `update ${table} set 
+    let sql = `update ${table} set 
                         ${queryStr}
                     where id = ${id} `;
+    console.log(sql);
     connection.query(sql, (err, res) => {
         if (err) {
             console.log(err);
@@ -115,24 +105,28 @@ module.exports.doEdit = function (options, callback) {
  */
 /* 管理页首页数据 */
 module.exports.getDashboardData = function (callback) {
-    var sql = `
+    let dateStr = new Date().getFullYear() + '-'
+        + (new Date().getMonth() + 1 >= 10 ? new Date().getMonth() + 1 : '0' + (new Date().getMonth() + 1))
+        + '-' + new Date().getDate();
+    let sql = `
         SELECT
         ( SELECT count( * ) FROM visitors ) AS 'visitTotal', /*总访问量*/
-        ( SELECT count( * ) FROM visitors WHERE time >= NOW( ) - INTERVAL 1 HOUR ) AS 'visitToday', /*今日访问量*/
+        ( SELECT count( * ) FROM visitors WHERE time like '${dateStr}%' ) AS 'visitToday', /*今日访问量*/
         ( SELECT count( * ) FROM users ) AS 'userNum', /*用户数*/
         ( SELECT count( * ) FROM article ) AS 'arcticleNum', /*文章数*/
-        ( SELECT count( * ) FROM category WHERE name = 'Fun' ) AS 'Fun',
-        ( SELECT count( * ) FROM category WHERE name = 'Blog' ) AS 'Blog',
-        ( SELECT count( * ) FROM category WHERE name = 'Vlog' ) AS 'Vlog',
-        ( SELECT count( * ) FROM category WHERE name = 'Code' ) AS 'Code',
-        ( SELECT count( * ) FROM category WHERE name != 'Fun' AND name != 'Blog' and name!='Vlog' AND name != 'Code' ) AS 'Other' 
+        ( SELECT count( * ) FROM article a left join category c on a.category = c.id  WHERE c.name = 'Fun' ) AS 'Fun',
+        ( SELECT count( * ) FROM article a left join category c on a.category = c.id  WHERE c.name = 'Blog' ) AS 'Blog',
+        ( SELECT count( * ) FROM article a left join category c on a.category = c.id  WHERE c.name = 'Vlog' ) AS 'Vlog',
+        ( SELECT count( * ) FROM article a left join category c on a.category = c.id  WHERE c.name = 'Code' ) AS 'Code',
+        ( SELECT count( * ) FROM article a left join category c on a.category = c.id  WHERE c.name = 'Other' ) AS 'Other' 
     `;
-    var resData;
+    console.log(sql);
+    let resData;
     new Promise((resolve, reject) => {
         connection.query(sql, (err, data) => {
             resData = {
                 "tag_list": [
-                    { "tag": "总访问量", "value": data[0]['visitNum'] },
+                    { "tag": "总访问量", "value": data[0]['visitTotal'] },
                     { "tag": "今日访问量", "value": data[0]['visitToday'] },
                     { "tag": "用户", "value": data[0]['userNum'] },
                     { "tag": "文章数", "value": data[0]['arcticleNum'] }
@@ -174,17 +168,23 @@ module.exports.getDashboardData = function (callback) {
                 (select count(*) from visitors where  time >=(NOW() - interval 21 hour) and time < (NOW() - interval 20 hour)) as "from now: ${curHour - 20}", 
                 (select count(*) from visitors where  time >=(NOW() - interval 22 hour) and time < (NOW() - interval 21 hour)) as "from now: ${curHour - 21}", 
                 (select count(*) from visitors where  time >=(NOW() - interval 23 hour) and time < (NOW() - interval 22 hour)) as "from now: ${curHour - 22}", 
-                (select count(*) from visitors where  time >=(NOW() - interval 24 hour) and time < (NOW() - interval 23 hour)) as "from now: ${curHour}"
+                (select count(*) from visitors where  time >=(NOW() - interval 24 hour) and time < (NOW() - interval 23 hour)) as "from now: ${curHour - 23}"
                 `;
+        console.log(sql2);
         connection.query(sql2, (err, data2) => {
             if (err) {
                 console.log(err);
                 res.json({ code: 0, msg: '出错了' });
             }
             let timeLine = data2[0];
-            let keyNames = Object.keys(timeLine).map(v => {
-                return v.replace('from now: ', '');
-            });
+            let keyNames = Object.keys(timeLine).map((v, i) => {
+                let _v = Number(v.replace('from now: ', ''));
+                return _v >= 10
+                    ? _v
+                    : _v >= 0
+                        ? '0' + _v
+                        : 24 + _v
+            })
             let values = Object.values(timeLine);
             let tempArr = keyNames.map((v, i) => {
                 return {
@@ -192,15 +192,15 @@ module.exports.getDashboardData = function (callback) {
                     'value': values[i]
                 }
             });
-            resData['line_chart_data'] = tempArr;
+            resData['line_chart_data'] = tempArr.reverse();
             callback(resData);
         })
     })
 }
 /* 文章评论管理查询 */
 module.exports.queryCommentList = function (options, callback) {
-    var id = options.id;
-    var sql = ` select * from comment where a_id=${id} and is_del='0' `;
+    let id = options.id;
+    let sql = ` select * from comment where a_id=${id} and is_del='0' `;
     connection.query(sql, (err, data) => {
         if (err) {
             console.log(err);
@@ -210,15 +210,29 @@ module.exports.queryCommentList = function (options, callback) {
         }
     })
 }
+/* 留言管理- 留言数量总数-做成promise的形式 */
+module.exports.queryMessageList = function () {
+    return new Promise((resolve, reject) => {
+        let sql = `select count(*) as 'count' from messages where is_del='0';`
+        connection.query(sql, (err, data) => {
+            if (err) {
+                console.log(err);
+                reject(err);
+            } else {
+                resolve(data[0]['count'])
+            }
+        })
+    })
+}
 
 /* ***************************************************** */
 /**
  * 前端页面
  */
 module.exports.getIndexPageData = function (options, callback) {
-    var table = options.table || 'article';
-    var isVlog = options.listType == 'vlog' ? 'Vlog' : ''; // 查询列表是否为vlog类型
-    var sql =
+    let table = options.table || 'article';
+    let isVlog = options.listType == 'vlog' ? 'Vlog' : ''; // 查询列表是否为vlog类型
+    let sql =
         `SELECT
                 a.id,
                 a.title,
@@ -257,8 +271,8 @@ module.exports.getIndexPageData = function (options, callback) {
  * 获取文章详情, 包括评论部分
  */
 module.exports.getContentDetail = function (options, callback) {
-    var id = options.id;
-    var contentSql = `select 
+    let id = options.id;
+    let contentSql = `select 
     a.id,
     a.title,
     c.name AS 'category',
@@ -271,8 +285,8 @@ module.exports.getContentDetail = function (options, callback) {
     a.is_show,
     a.is_del
     from article a, category c where a.category=c.id and a.id = ${id}`;
-    var commentSql = `select * from comment where a_id = ${id}`;
-    var contentList, newViewNum;
+    let commentSql = `select * from comment where a_id = ${id}`;
+    let contentList, newViewNum;
     connection.query(contentSql, (err, data) => {
         new Promise((resolve, reject) => {
             // 1.查询当前文章
@@ -284,7 +298,7 @@ module.exports.getContentDetail = function (options, callback) {
             connection.query(`update article set viewnum=${newViewNum} where id=${id}`, (err, data) => {
                 // 3.匹配评论
                 connection.query(commentSql, (err, data) => {
-                    var commentList = data; // 评论列表
+                    let commentList = data; // 评论列表
                     contentList[0].comment = commentList;
                     contentList[0].viewnum = newViewNum;
                     callback(null, contentList);

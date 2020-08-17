@@ -42,7 +42,7 @@ export default {
             tag_data: [
                 { icon: 'el-icon-document' },
                 { icon: 'el-icon-data-line' },
-                { icon: 'el-icon-user', href: 'user' },
+                { icon: 'el-icon-user' },
                 { icon: 'el-icon-notebook-1', href: 'article' },
             ],
             line_chart_data: [],
@@ -63,20 +63,10 @@ export default {
             }
         },
         getData() {
-            // this.$axios({
-                // url: './static/json/api.json',
-            // }).then(res => {
-                // this.tag_data = this.tag_data.map((v, i) => {
-                //     return v = Object.assign(res.data.tag_list[i], v)
-                // })
-                // this.line_chart_data = this.fixedObj(res.data.line_chart_data)
-                // this.pie_chart_data = res.data.pie_chart_data
-            // });
             this.$axios({
                 url: '/admin/getgeneral',
                 method: 'get'
             }).then(res => {
-                // console.log(res);
                 this.tag_data = this.tag_data.map((v, i) => {
                     return v = Object.assign(res.data.tag_list[i], v)
                 })
@@ -96,7 +86,7 @@ export default {
     mounted() {
         document.querySelector("body").style.background = "#131417";
         this.getData();
-        window.onresize=_ => {
+        window.onresize = _ => {
             this.$refs.lineChart.chartResize();
             this.$refs.pieChart.chartResize();
         }

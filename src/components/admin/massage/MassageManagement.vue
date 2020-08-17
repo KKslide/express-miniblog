@@ -104,7 +104,7 @@ export default {
                 method: "get",
                 params: { pageNo: this.curPage, pageSize: 10 }
             }).then(res => {
-                this.tableData = res.data;
+                this.tableData = res.data.messages;
                 this.total = res.data.total;
                 this.pages = res.data.pages;
             })

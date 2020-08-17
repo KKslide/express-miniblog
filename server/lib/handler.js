@@ -221,7 +221,8 @@ module.exports.editArticle = function (req, res) {
             'composition': `'${req.body.content}'`,
             'description': `'${req.body.description}'`,
             'minpic_url': `'${req.body.minpic_url}'`,
-            'video_src': `'${req.body.video_src}'`
+            'video_src': `'${req.body.video_src}'`,
+            'is_show': `'${req.body.is_show}'`
         }
     };
     dbMoudle.doEdit(opt, (err) => {
@@ -267,9 +268,17 @@ module.exports.adminGetMessages = function (req, res) {
         pageNo: req.body.pageNo || req.query.pageNo || 1,
         pageSize: req.body.pageSize || req.query.pageSize || 10
     }
-    dbMoudle.doQuery(opt, (err, data) => {
-        res.json(data);
-    });
+    dbMoudle.queryMessageList().then(messageCount => {
+        dbMoudle.doQuery(opt, (err, data) => {
+            console.log('pages: ', Math.ceil(messageCount / opt.pageSize));
+            console.log('total: ', messageCount);
+            res.json({
+                'messages': data,
+                'pages': Math.ceil(messageCount / opt.pageSize), // 页数长度
+                'total': messageCount
+            });
+        });
+    })
 }
 /* 留言删除 */
 module.exports.delMessage = function (req, res) {
