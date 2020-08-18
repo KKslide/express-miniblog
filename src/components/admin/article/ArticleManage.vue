@@ -87,13 +87,13 @@
                         <el-input v-model="form.title" autocomplete="off"></el-input>
                     </el-form-item>
                     <!-- 是否显示 -->
-                    <el-form-item label="是否显示" :label-width="formLabelWidth" prop="isShow">
+                    <el-form-item label="是否显示" :label-width="formLabelWidth" prop="is_show">
                         <el-switch
-                            v-model="is_show"
+                            v-model="form.is_show"
                             active-color="#13ce66"
                             inactive-color="#ff4949"
-                            active-value="1"
-                            inactive-value="0"
+                            active-value="0"
+                            inactive-value="1"
                         ></el-switch>(绿色为开启显示,选择关闭则不会在页面中显示)
                     </el-form-item>
                     <!-- 文章分类 -->
@@ -527,9 +527,9 @@ export default {
                         })
                     }
                     if (this.dialogType == 'edit') { // 编辑文章
-                        this.form.is_show = this.isShow;
-                        console.log(this.form.is_show);
-                        return;
+                        // this.form.is_show = this.isShow;
+                        // console.log(this.form.is_show);
+                        // return;
                         this.$axios({
                             url: '/admin/articles/edit',
                             method: 'post',
@@ -611,7 +611,6 @@ export default {
                 this.hideUpload = false
             }
             this.isShow = row.is_show == '是' ? '1' : '0';
-            console.log(this.form);
         },
         /* ********* 富文本编辑器图片上传操作 *********** */
         selectImg() {  //选择图片

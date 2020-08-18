@@ -110,7 +110,9 @@ export default {
     .shadow_outfit{
         box-shadow: 0 5px 10px rgba(0,0,0,.5);
         >.blog_list_item{
-            // h3.blog_title{}
+            h3.blog_title{
+                white-space: nowrap;
+            }
             // p.blog_info{}
             h4.blog_intro{
                 margin: 15px 0;
