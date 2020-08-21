@@ -5,7 +5,11 @@ var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 var router = require('./lib/router');
 
+var history = require('connect-history-api-fallback');
+
 var app = express();
+
+app.use(history());
 
 // 跨域
 // app.all('*', function (req, res, next) {

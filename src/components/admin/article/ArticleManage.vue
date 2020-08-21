@@ -112,7 +112,7 @@
                     </el-form-item>
                     <!-- 视频链接 -->
                     <el-form-item
-                        v-if="form.category==isVideo('Video')"
+                        v-if="form.category==isVideo('Vlog')"
                         label="视频链接"
                         :label-width="formLabelWidth"
                     >
@@ -526,9 +526,6 @@ export default {
                         })
                     }
                     if (this.dialogType == 'edit') { // 编辑文章
-                        // this.form.is_show = this.isShow;
-                        // console.log(this.form.is_show);
-                        // return;
                         this.$axios({
                             url: '/admin/articles/edit',
                             method: 'post',

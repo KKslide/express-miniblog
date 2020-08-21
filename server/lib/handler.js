@@ -226,7 +226,11 @@ module.exports.editArticle = function (req, res) {
         }
     };
     dbMoudle.doEdit(opt, (err) => {
-        res.json({ code: 1, msg: "修改成功" });
+        if (err) {
+            res.json({ code: 0, err: err })
+        } else {
+            res.json({ code: 1, msg: "修改成功" });
+        }
     })
 }
 

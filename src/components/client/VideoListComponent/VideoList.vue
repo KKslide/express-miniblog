@@ -85,7 +85,7 @@ export default {
             return function (params) {
                 let tempIndex;
                 this.origenArticles.forEach((v, i) => {
-                    if (params._id == v._id) {
+                    if (params.id == v.id) {
                         tempIndex = i + 1
                     }
                 })
