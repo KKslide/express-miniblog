@@ -18,6 +18,15 @@ router.post('/index/message/add', handler.leaveMessage);
 router.post('/admin/login', handler.doAdmin);
 /* 退出登陆 */
 
+/* 检测是否登陆 */
+router.get('/isadmin', (req, res, next) => {
+    if (JSON.stringify(req.cookies) == "{}") {
+        res.json({ code: 0, msg: "请先登录啦" })
+    } else {
+        res.json({ code: 1, islogin: 'logined', msg: "登陆成功" })
+    }
+});
+
 /* 后台-首页数据 */
 router.get("/admin/getgeneral", handler.getDashboard);
 

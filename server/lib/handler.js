@@ -97,7 +97,11 @@ module.exports.visitRecord = function (req, res) {
 /* --------------------------管理页------------------------- */
 /* 登陆 */
 module.exports.doAdmin = function (req, res) {
-
+    var username = req.body.username || req.query.username || "";
+    var password = req.body.password || req.query.password || "";
+    console.log('username', username);
+    console.log('password', password);
+    
 }
 /* 退出登陆 */
 
