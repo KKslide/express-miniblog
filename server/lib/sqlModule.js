@@ -1,5 +1,5 @@
 const connection = require("../db/index"); // 数据库连接配置
-const { data } = require("jquery");
+// const { data } = require("jquery");
 
 /**
  * CRUD
@@ -80,6 +80,10 @@ module.exports.doEdit = function (options, callback) {
         queryStr = (function (key, value) {
             let str = "";
             key.forEach((v, i) => {
+                // if (v == 'composition') {
+                //     // 这一段正则表达式 需要改进为获取pre标签中(或者全局内容)中的单引号和双引号字符进行转义
+                //     console.log(value[i].match(/<pre(([\s\S])*?)<\/pre>/ ));
+                // }
                 str += v + "=" + value[i] + ","
             });
             return str.substr(0, str.length - 1);
@@ -88,7 +92,7 @@ module.exports.doEdit = function (options, callback) {
     let sql = `update ${table} set 
                         ${queryStr}
                     where id = ${id} `;
-    console.log(sql);
+    console.log('---- 修改语句 ---- \n', sql, '\n-------------');
     connection.query(sql, (err, res) => {
         if (err) {
             console.log(err);

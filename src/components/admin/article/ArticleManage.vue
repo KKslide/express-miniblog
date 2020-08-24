@@ -429,11 +429,6 @@ export default {
             this.$confirm('保存草稿功能未开放, 确定要关闭吗 ?')
                 .then(_ => {
                     done();
-                    //   this.loading = true;
-                    //   setTimeout(() => {
-                    //     this.loading = false;
-                    //     done();
-                    //   }, 100);
                 })
                 .catch(_ => { });
         },
@@ -526,6 +521,8 @@ export default {
                         })
                     }
                     if (this.dialogType == 'edit') { // 编辑文章
+                        // 需要对content内容进行字符转义, 否则会出事, 主要可能是pre标签的内容出现引号会出事
+                        this.form.content = this.form.content.replace(/'/g,"\\'").replace(/"/g,'\\"');
                         this.$axios({
                             url: '/admin/articles/edit',
                             method: 'post',

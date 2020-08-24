@@ -15,7 +15,7 @@ router.post('/index/message/add', handler.leaveMessage);
 
 /* ********* 管理端 ******** */
 /* 登陆 */
-router.post('/admin', handler.doAdmin);
+router.post('/admin/login', handler.doAdmin);
 /* 退出登陆 */
 
 /* 后台-首页数据 */
