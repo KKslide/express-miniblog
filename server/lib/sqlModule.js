@@ -1,5 +1,4 @@
 const connection = require("../db/index"); // 数据库连接配置
-// const { data } = require("jquery");
 
 /**
  * CRUD
@@ -27,6 +26,7 @@ module.exports.doQuery = function (options, callback) {
                 left join comment cm on a.id=cm.a_id 
                 and cm.is_del='0'
                 group by a.id 
+                order by a.addtime desc 
                 limit ${(pageNo - 1) * pageSize},${pageSize}`;
             break;
         default: // 2- 常规查询
@@ -100,6 +100,18 @@ module.exports.doEdit = function (options, callback) {
         }
         if (res.affectedRows == 1) {
             callback();
+        }
+    })
+}
+/* 登陆查询 */
+module.exports.loginQuery = function (options, callback) {
+    let sql = `select id,username from users where username='${options.username}' and password='${options.password}'`;
+    connection.query(sql, (err, data) => {
+        if (err) {
+            console.log(err);
+            callback(err);
+        } else {
+            callback(null, data);
         }
     })
 }

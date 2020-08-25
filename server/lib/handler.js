@@ -4,7 +4,6 @@ var dbMoudle = require('./sqlModule');
 
 /* 七牛云图片上传 */
 var qiniuUpload = require('./qiniu.config');
-const { getClientIp, dateFormat } = require('../util/util');
 module.exports.doUpload = function (req, res) {
     qiniuUpload.picUpload(req, res);
 }
@@ -96,14 +95,38 @@ module.exports.visitRecord = function (req, res) {
 
 /* --------------------------管理页------------------------- */
 /* 登陆 */
-module.exports.doAdmin = function (req, res) {
-    var username = req.body.username || req.query.username || "";
-    var password = req.body.password || req.query.password || "";
-    console.log('username', username);
-    console.log('password', password);
-    
+module.exports.doLogin = function (req, res) {
+    let opt = {
+        username: req.body.username || req.query.username || "",
+        password: req.body.password || req.query.password || ""
+    }
+    console.log('username', opt.username);
+    console.log('password', opt.password);
+    dbMoudle.loginQuery(opt, (err, data) => {
+        if (err) {
+            res.json({ code: 0, msg: '', err: err });
+        }
+        let userInfo = data;
+        if (data.length == 0) {
+            res.json({ code: 0, msg: "用户名或密码错误！" });
+            return false;
+        } else {
+            res.cookie("userInfo", JSON.stringify({
+                "id": userInfo[0].id,
+                "username": userInfo[0].username
+            }), { maxAge: 1000 * 60 * 60, httpOnly: true }) // cookie存储一个小时
+
+            res.json({
+                code: 1,
+                msg: '登陆成功! ',
+                userInfo: {
+                    id: userInfo[0].id,
+                    username: userInfo[0].username
+                }
+            });
+        }
+    });
 }
-/* 退出登陆 */
 
 /* *********************管理页首页********************* */
 module.exports.getDashboard = function (req, res) {

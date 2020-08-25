@@ -14,23 +14,24 @@ router.post('/index/message/add', handler.leaveMessage);
 
 
 /* ********* 管理端 ******** */
-/* 登陆 */
-router.post('/admin/login', handler.doAdmin);
-/* 退出登陆 */
-
 /* 检测是否登陆 */
-router.get('/isadmin', (req, res, next) => {
+router.get('/admin/isadmin', (req, res) => {
     if (JSON.stringify(req.cookies) == "{}") {
         res.json({ code: 0, msg: "请先登录啦" })
     } else {
         res.json({ code: 1, islogin: 'logined', msg: "登陆成功" })
     }
 });
+/* 登陆 */
+router.post('/admin/login', handler.doLogin);
+/* 退出登陆 */
+router.get("/admin/logout", (req, res) => {
+    res.cookie('userInfo', null, { expires: new Date(0) });
+    res.json({ code: 1, msg: "退出成功" });
+});
 
 /* 后台-首页数据 */
 router.get("/admin/getgeneral", handler.getDashboard);
-
-/* 用户管理 */
 
 /* 分类 */
 /* 分类-获取 */

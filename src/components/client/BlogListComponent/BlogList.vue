@@ -9,8 +9,8 @@
                             <h1 class="h2">{{$t('navbar.Blogs')}}</h1>
                         </div>
                         <div class="blog_list row">
-                            <div class="shadow_outfit clearfix">
-                                <div class="blog_list_item col-xs-12 col-md-6 col-md-offset-3" v-for="(item,index) in blogList" :key="index" >
+                            <div class="shadow_outfit clearfix col-md-9">
+                                <div class="blog_list_item col-xs-12 col-md-7 col-md-offset-2" v-for="(item,index) in blogList" :key="index" >
                                     <h3 class="blog_title" v-text="item.blogTitle"></h3>
                                     <p class="blog_info">
                                         <i class="fa fa-eye" ></i>
@@ -34,6 +34,21 @@
                                     <a href="javascript:;" @click="goto(item.id)" class="blog_read_btn">阅读全文>></a>
                                     <el-divider></el-divider>
                                 </div>
+                            </div>
+                            <div class="col-xs-3 col-xs-offset-1" role="complementary">
+                                <nav class="bs-docs-sidebar hidden-print hidden-xs hidden-sm affix">
+                                    <ul class="nav bs-docs-sidenav">
+                                        <li>分类1</li>
+                                        <li>分类2</li>
+                                        <li>分类3</li>
+                                        <li>分类4</li>
+                                        <li>分类5</li>
+                                        <li>分类6</li>
+                                        <li>分类7</li>
+                                        <li>分类8</li>
+                                        <li>分类9</li>
+                                    </ul>
+                                </nav>
                             </div>
                         </div>
                     </div>

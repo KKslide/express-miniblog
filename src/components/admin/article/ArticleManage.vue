@@ -9,7 +9,7 @@
                     <p>{{scope.row.category|getCatName}}</p>
                 </template> -->
             </el-table-column>
-            <el-table-column label="添加时间" width="190">
+            <el-table-column label="添加时间">
                 <template slot-scope="scope">
                     <p>{{scope.row.addtime|date}}</p>
                 </template>
