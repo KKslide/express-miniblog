@@ -301,7 +301,7 @@ module.exports.getContentDetail = function (options, callback) {
     a.is_show,
     a.is_del
     from article a, category c where a.category=c.id and a.id = ${id}`;
-    let commentSql = `select * from comment where a_id = ${id}`;
+    let commentSql = `select * from comment where a_id = ${id} and is_del='0'`;
     let contentList, newViewNum;
     connection.query(contentSql, (err, data) => {
         new Promise((resolve, reject) => {
