@@ -49,7 +49,7 @@ module.exports.doAdd = function (options, callback) {
     let keys = Object.keys(options.data);
     let values = Object.values(options.data);
     let sql = `insert into ${table} (${[...keys]}) values (${[...values]}) `;
-    console.log(sql);
+    console.log('-----新增sql语句-----\n', sql, '\n----------');
     connection.query(sql, (err, res) => {
         if (res.affectedRows == 1) {
             callback();
@@ -265,7 +265,7 @@ module.exports.getIndexPageData = function (options, callback) {
             FROM
                 article a
                 LEFT JOIN category cat ON a.category = cat.id
-                LEFT JOIN ( SELECT a_id, count( a_id ) comment_num FROM COMMENT c where c.is_del='0' GROUP BY c.a_id ) temp ON a.id = temp.a_id 
+                LEFT JOIN ( SELECT a_id, count( a_id ) comment_num FROM comment c where c.is_del='0' GROUP BY c.a_id ) temp ON a.id = temp.a_id 
             WHERE 1=1 `;
     sql += isVlog == 'Vlog'
         ? `and cat.name = '${isVlog}'`
@@ -292,11 +292,11 @@ module.exports.getContentDetail = function (options, callback) {
     a.id,
     a.title,
     c.name AS 'category',
+    c.banner AS 'banner',
     a.composition,
     a.description,
     a.addtime,
     a.viewnum,
-    a.minpic_url,
     a.video_src,
     a.is_show,
     a.is_del

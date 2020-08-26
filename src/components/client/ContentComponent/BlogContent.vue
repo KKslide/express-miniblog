@@ -5,7 +5,7 @@
             <div class="container">
                 <div class="row">
                     <div class="col-xs-12">
-                        <img :src="category.banner" class="img-responsive" alt />
+                        <img :src="banner" class="img-responsive" alt />
                         <div class="card-container">
                             <div class="text-center">
                                 <h1 class="h2" v-html="content.title"></h1>
@@ -80,7 +80,8 @@ export default {
     },
     data() {
         return {
-            category: {},
+            category: '', // 分类名称
+            banner: '', // 分类banner
             content: { user: { username: "" }, comment: [] }, // 文章内容
             // commentData: { // 评论列表
             //     comment: '',
@@ -137,6 +138,7 @@ export default {
                     this.category = res.data[0].category
                     this.videoSrc = res.data[0].video_src
                     this.posterSrc = res.data[0].minpic_url
+                    this.banner = res.data[0].banner
                 }
             })
         },

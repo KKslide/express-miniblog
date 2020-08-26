@@ -38,7 +38,7 @@ module.exports.Comment = function (req, res) {
         'table': 'comment',
         'id': `'${req.body.contentid || req.query.contentid}'`,
         'data': {
-            'id': `${req.body.contentid || req.query.contentid}`,
+            'a_id': `${req.body.contentid || req.query.contentid}`,
             'user': `'${req.body.visitor || req.query.visitor}'`,
             'comment': `'${req.body.comment || req.query.body.comment}'`,
             'ip': `'${util.getClientIp(req).match(/(25[0-5]|2[0-4]\d|[0-1]\d{2}|[1-9]?\d)\.(25[0-5]|2[0-4]\d|[0-1]\d{2}|[1-9]?\d)\.(25[0-5]|2[0-4]\d|[0-1]\d{2}|[1-9]?\d)\.(25[0-5]|2[0-4]\d|[0-1]\d{2}|[1-9]?\d)/)[0]}'`,
