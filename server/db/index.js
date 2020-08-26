@@ -1,8 +1,11 @@
 var mysql = require("mysql");
-var connection = mysql.createConnection({// 在家
-    host: "localhost",
+var connection = mysql.createConnection({
+    host: "134.175.129.219",
+    // host: "localhost", // 在家
     user: "root",
-    password: "root",
+    password: "Lyk1105*",
+    // password: "rootroot", // 在家
+    port:'3306',
     database: "myblog",
 });
 
