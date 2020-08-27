@@ -10,7 +10,7 @@
                         </div>
                         <div class="blog_list row">
                             <div class="shadow_outfit clearfix col-md-9">
-                                <div class="blog_list_item col-xs-12 col-md-7 col-md-offset-2" v-for="(item,index) in blogList" :key="index" >
+                                <div class="blog_list_item col-xs-12 col-md-7 col-md-offset-2" v-for="(item,index) in sortList" :key="index" >
                                     <h3 class="blog_title" v-text="item.blogTitle"></h3>
                                     <p class="blog_info">
                                         <i class="fa fa-eye" ></i>
@@ -39,11 +39,9 @@
                                 <nav class="bs-docs-sidebar hidden-print hidden-xs hidden-sm affix">
                                     <ul class="nav bs-docs-sidenav">
                                         <div class="nav_title">分类</div>
-                                        <li class="active nav_li"><div data-catID="all" @click="listSortBy('all')"><span>ALL</span></div></li>
-                                        <li v-for="(item,index) in catList" :key="index" class="nav_li">
-                                            <div :data-catID="item.id" @click="listSortBy(item.id,$event)">
-                                                <span v-html="item.name"></span>
-                                            </div>
+                                        <li class="active nav_li" data-catID="all" @click="listSortBy('all',$event)"><div>ALL</div></li>
+                                        <li v-for="(item,index) in catList" :key="index" class="nav_li" @click="listSortBy(item.name,$event)">
+                                            <div :data-catID="item.id" v-html="item.name"></div>
                                         </li>
                                     </ul>
                                 </nav>
@@ -75,6 +73,7 @@ export default {
                 //     blogPic:"http://example.kkslide.fun/upload_74dee262abdfd681d81c5e5d9b3b2439"
                 // }
             ],
+            sortList:[], // 经过筛选的文章
             catList: [], // 分类列表
         }
     },
@@ -87,6 +86,19 @@ export default {
         goto(id) {
             this.$router.push({ name: 'logcontent', params: { contentid: id } })
         },
+        deepClone(obj) {
+            var target = {};
+            for(var key in obj) {
+                if (Object.prototype.hasOwnProperty.call(obj, key)) {
+                    if (typeof obj[key] === 'object') {
+                        target[key] = this.deepClone(obj[key]); 
+                    } else {
+                        target[key] = obj[key];
+                    }
+                }
+            }
+            return target;
+        },
         getArticles() {
             this.$axios({
                 url: '/index/getpage',
@@ -96,7 +108,7 @@ export default {
                 }
             }).then(res => {
                 if (res.status == 200) {
-                    sessionStorage.setItem('allArticles', JSON.stringify(res.data));
+                    sessionStorage.setItem('allArticles', JSON.stringify(res.data.blogList));
                     res.data.blogList.forEach(v => {
                         this.blogList.push({
                             "id" : v.id,
@@ -109,16 +121,27 @@ export default {
                             "blogPic" : v.minpic_url
                         });
                     });
-                    this.catList = res.data.catList;
+                    this.sortList = this.deepClone(this.blogList);
+                    this.catList = res.data.catList.filter(v=>{return v.name!='Vlog'});
                 }
             })
         },
         listSortBy(catID,e){
-            console.log(catID);
-            // $("li.nav_li").forEach(v=>{
-            //     v.removeClass("active")
-            // })
-            $(e.srcElement).parent().addClass('active')
+            this.sortList=[]; // 清空
+            Array.from($("li.nav_li")).forEach(v=>{
+                v.classList.remove("active")
+            });
+            $(e.srcElement).parent().addClass('active');
+            
+            if(catID == "all"){
+                this.sortList = this.blogList;
+            }
+            else{
+                this.sortList = this.blogList.filter(v=>{
+                    return v.blogCategory==catID;
+                });
+            }
+            console.log(this.sortList);
         }
     },
     beforeMount(){
@@ -181,8 +204,9 @@ export default {
                     padding: 0 0 10px 15px;
                 }
                 li.nav_li{
-                    cursor: pointer;
-                    div{
+                    margin-bottom: 5px;
+                    >div{
+                        cursor: pointer;
                         display: block;
                         padding: 4px 20px;
                         font-size: 13px;
@@ -190,10 +214,9 @@ export default {
                         color: #767676;
                         transition: all .3s;
                     }
-                    span{}
                 }
                 li.nav_li.active,li.nav_li:hover{
-                    div{
+                    >div{
                         padding-left: 18px;
                         font-weight: 700;
                         color: #17141b;

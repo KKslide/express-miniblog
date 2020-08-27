@@ -106,12 +106,12 @@ export default {
             }).then(res => {
                 // 等下再调查为什么会请求两次
                 if (res.status == 200) {
-                    this.origenArticles = res.data;
-                    sessionStorage.setItem('allArticles', JSON.stringify(res.data));
+                    this.origenArticles = res.data.blogList;
+                    sessionStorage.setItem('allArticles', JSON.stringify(res.data.blogList));
                     let splitArticleArr = [];
                     // 因为bootstrap的轮播图形式 是每三个元素为一组 所以要分割对应的数组
-                    for (var i = 0; i < res.data.length; i += 3) {
-                        splitArticleArr.push(res.data.slice(i, i + 3));
+                    for (var i = 0; i < res.data.blogList.length; i += 3) {
+                        splitArticleArr.push(res.data.blogList.slice(i, i + 3));
                     }
                     this.articles = splitArticleArr;
                 }
