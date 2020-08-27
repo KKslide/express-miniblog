@@ -16,7 +16,7 @@ module.exports.getIndexPage = function (req, res) {
         'listType': req.body.list_type || req.query.list_type || '' // 查询列表是否为vlog类型
     };
     dbMoudle.getIndexPageData(opt, (err, data) => {
-        console.log(data);
+        console.log(data, "\n----- 前端页面数据 -----");
         res.json(data);
     })
 }

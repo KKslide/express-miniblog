@@ -36,4 +36,4 @@ pool.getConnection(err => {
     console.log('数据库连上啦- -。');
 })
 
-module.exports.connection = pool;
+module.exports = pool;

@@ -35,18 +35,16 @@
                                     <el-divider></el-divider>
                                 </div>
                             </div>
-                            <div class="col-xs-3 col-xs-offset-1" role="complementary">
+                            <div class="blog_nav_bar col-xs-3" role="complementary">
                                 <nav class="bs-docs-sidebar hidden-print hidden-xs hidden-sm affix">
                                     <ul class="nav bs-docs-sidenav">
-                                        <li>分类1</li>
-                                        <li>分类2</li>
-                                        <li>分类3</li>
-                                        <li>分类4</li>
-                                        <li>分类5</li>
-                                        <li>分类6</li>
-                                        <li>分类7</li>
-                                        <li>分类8</li>
-                                        <li>分类9</li>
+                                        <div class="nav_title">分类</div>
+                                        <li class="active nav_li"><div data-catID="all" @click="listSortBy('all')"><span>ALL</span></div></li>
+                                        <li v-for="(item,index) in catList" :key="index" class="nav_li">
+                                            <div :data-catID="item.id" @click="listSortBy(item.id,$event)">
+                                                <span v-html="item.name"></span>
+                                            </div>
+                                        </li>
                                     </ul>
                                 </nav>
                             </div>
@@ -76,7 +74,8 @@ export default {
                 //     blogCategory: "javascript",
                 //     blogPic:"http://example.kkslide.fun/upload_74dee262abdfd681d81c5e5d9b3b2439"
                 // }
-            ]
+            ],
+            catList: [], // 分类列表
         }
     },
     components: {
@@ -98,7 +97,7 @@ export default {
             }).then(res => {
                 if (res.status == 200) {
                     sessionStorage.setItem('allArticles', JSON.stringify(res.data));
-                    res.data.forEach(v=>{
+                    res.data.blogList.forEach(v => {
                         this.blogList.push({
                             "id" : v.id,
                             "blogTitle" : v.title,
@@ -109,10 +108,18 @@ export default {
                             "blogCategory" : v.category,
                             "blogPic" : v.minpic_url
                         });
-                    })
+                    });
+                    this.catList = res.data.catList;
                 }
             })
         },
+        listSortBy(catID,e){
+            console.log(catID);
+            // $("li.nav_li").forEach(v=>{
+            //     v.removeClass("active")
+            // })
+            $(e.srcElement).parent().addClass('active')
+        }
     },
     beforeMount(){
         this.getArticles()
@@ -162,6 +169,38 @@ export default {
             }
             a.blog_read_btn:hover::after{
                 width: 0%;
+            }
+        }
+    }
+    .blog_nav_bar{
+        nav.bs-docs-sidebar{
+            ul.nav{
+                padding-left: 15px;
+                div.nav_title{
+                    cursor: default;
+                    padding: 0 0 10px 15px;
+                }
+                li.nav_li{
+                    cursor: pointer;
+                    div{
+                        display: block;
+                        padding: 4px 20px;
+                        font-size: 13px;
+                        font-weight: 500;
+                        color: #767676;
+                        transition: all .3s;
+                    }
+                    span{}
+                }
+                li.nav_li.active,li.nav_li:hover{
+                    div{
+                        padding-left: 18px;
+                        font-weight: 700;
+                        color: #17141b;
+                        background-color: transparent;
+                        border-left: 2px solid #17141b;
+                    }
+                }
             }
         }
     }

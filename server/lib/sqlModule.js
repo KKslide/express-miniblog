@@ -273,13 +273,30 @@ module.exports.getIndexPageData = function (options, callback) {
     sql += `and a.is_del='0'
            /*  GROUP BY a.id  */
             ORDER BY a.addtime desc`;
-    connection.query(sql, (err, data) => {
-        if (err) {
-            console.log(err);
-            callback(null, err);
-        } else {
-            callback(null, data);
-        }
+    console.log(sql);
+    console.log('-***************************-');
+    new Promise((resolve, reject) => {
+        connection.query('select c.id,c.name from category c group by c.id', (err, data) => {
+            if (err) {
+                reject(err)
+            } else {
+                resolve(data)
+            }
+        })
+    }).then(catList => {
+        connection.query(sql, (err2, data2) => {
+            if (err2) {
+                console.log(err2);
+                callback(null, err2);
+            } else {
+                // data2.catList = catList;
+                var responseData = {
+                    catList: catList,
+                    blogList: data2
+                }
+                callback(null, responseData);
+            }
+        })
     })
 }
 
