@@ -52,7 +52,7 @@
 
         <!-- <el-button type="text" @click="table = true">打开嵌套表格的 Drawer</el-button> -->
         <el-button type="text"
-            @click="dialog = true;dialogType='add'; rest();drawer_title='添加文章';minpic_url_list=[];imageUrl='http://example.kkslide.fun/upload_6aa9339ff86b4ba10446744336f486ca'"
+            @click="dialog = true;dialogType='add'; rest();drawer_title='添加文章';minpic_url_list=[];imageUrl=''"
         >添加文章</el-button>
 
         <el-divider class="pager_divider"></el-divider>

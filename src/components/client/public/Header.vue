@@ -48,7 +48,7 @@
                                 <!-- <router-link :to="{name:'contact'}">05 : Contact</router-link> -->
                                 <router-link
                                     :to="{name:'contact'}"
-                                    v-text="'05 : '+$t('navbar.Contact')"
+                                    v-text="'06 : '+$t('navbar.Contact')"
                                 ></router-link>
                             </li>
                             <li v-if="false">

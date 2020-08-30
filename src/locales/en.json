@@ -13,6 +13,12 @@
         "Works": "Works",
         "Contact": "Contact me"
     },
+    "logList":{
+        "logIntro":"Here`s something about programing and life normal stuff 🤖",
+        "categoryTitle":"Category",
+        "categoryAll":"All",
+        "checkMore":"CHECK MORE ABOUT >>"
+    },
     "logContent": {
         "author":"Author",
         "view":"View",
@@ -35,7 +41,7 @@
     "about": {
         "part1": {
             "title": "Front End Engineer",
-            "content": "I`m A Two-year working experience front end engineer, I started to get into this industrial in 2013. So then we had a course - 'HTML & CSS Web Design' during college which impressed me, that was so coool and so amazing!!! It turned out I was a visual effects lover. So I tried hard to teach myself html and css and catch up with JavaScript. I want to be a UI designer and front end engineer. That`s the motivation that keeps me moving on."
+            "content": "I`m A Three-year working experience front end engineer, I started to get into this industrial in 2013. So then we had a course - 'HTML & CSS Web Design' during college which impressed me, that was so coool and so amazing!!! It turned out I was a visual effects lover. So I tried hard to teach myself html and css and catch up with JavaScript. I want to be a UI designer and front end engineer. That`s the motivation that keeps me moving on."
         },
         "part2": {
             "title": "My Hobbies",
@@ -47,7 +53,8 @@
         }
     },
     "work": {
-        "click": "👇 Chcek Here 👇",
+        "workIntro":"Here`s some cool Demo I write myself",
+        "click": "👇🏿 Chcek Here 👇🏿",
         "tit1": "scroll-behavior",
         "tit2": "css-change-color",
         "tit3": "thanos-snap-effect",
@@ -65,7 +72,7 @@
         },
         "mail": "rollercompanion@163.com",
         "addr": "GuangZhou MingPu-Garden China",
-        "social": "Follow me on social networks",
+        "social": "Follow me on social media",
         "warning": "Fullfill the form please",
         "first": "leave the first message 🤪",
         "loadmore": "loadmore🕵️‍♂️",

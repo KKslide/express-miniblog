@@ -7,11 +7,12 @@
           <div class="col-xs-12">
             <div class="section-container-spacer text-center">
               <h1 class="h2"  v-text="$t('navbar.Works')"><!-- WORKS --></h1>
+              <p>{{$t('work.workIntro')}}</p>
               <div id="content">
                 <div class="list">
                   <ul class="scroll_content">
                     <li style="border-top:none;font-weight:bold;">
-                      <a href="javascript:;" v-text="$t('work.click')"><!-- 👇 Chcek Here 👇 --></a>
+                      <a href="javascript:;" v-text="$t('work.click')"><!-- 👇🏿 Chcek Here 👇🏿 --></a>
                     </li>
                     <li>
                       <a
@@ -139,7 +140,7 @@ export default {
           display: inline-block;
           width: 100%;
           height: 100%;
-          transition: font-size 0.3s;
+          transition: font-size .3s, color .3s, font-weight .3s;
           color: #404040;
         }
       }
@@ -149,10 +150,11 @@ export default {
       }
 
       li:hover {
-        background-color: bisque;
+        background-color: rgb(8, 8, 8);
 
         a {
           font-size: 18px;
+          color:aliceblue;
         }
       }
     }

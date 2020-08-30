@@ -5,8 +5,8 @@
         <div class="row">
           <div class="col-xs-12 p_bottom">
             <p>
-              © UNTITLED | Website created with
-              <a href="http://www.kkslide.fun">KKslide.fun</a>/<a href="javascript:;">Lykang</a>
+              © Kangyouknowwho | Website created with
+              <a href="http://www.kkslide.fun">Lykang</a>
             </p>
           </div>
         </div>

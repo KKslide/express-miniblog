@@ -60,35 +60,20 @@
                                                     {{ $t('contact.addr')}}
                                                 </li>
                                             </ul>
-                                            <h3 v-text="$t('contact.social')">
-                                                <!-- Follow me on social networks -->
-                                            </h3>
-                                            <a
-                                                href="https://www.facebook.com/profile.php?id=100025250295698"
-                                                title="facebook"
-                                                class="fa-icon"
-                                            >
+                                            <h3 v-text="$t('contact.social')"></h3>
+                                            <a href="https://github.com/KKslide" title="github" class="fa-icon" target="_blank">
+                                                <i class="fa fa-github"></i>
+                                            </a>
+                                            <a href="https://www.facebook.com/profile.php?id=100025250295698" title="facebook" class="fa-icon" target="_blank">
                                                 <i class="fa fa-facebook"></i>
                                             </a>
-                                            <a
-                                                href="https://twitter.com/KK_slide"
-                                                title="twitter"
-                                                class="fa-icon"
-                                            >
+                                            <a href="https://twitter.com/KK_slide" title="twitter" class="fa-icon" target="_blank">
                                                 <i class="fa fa-twitter"></i>
                                             </a>
-                                            <a
-                                                href="https://www.instagram.com/kangkang1105_/"
-                                                title="instagram"
-                                                class="fa-icon"
-                                            >
+                                            <a href="https://www.instagram.com/kang1105_/" title="instagram" class="fa-icon" target="_blank">
                                                 <i class="fa fa-instagram"></i>
                                             </a>
-                                            <a
-                                                href="https://weibo.com/kkslide"
-                                                title="weibo"
-                                                class="fa-icon"
-                                            >
+                                            <a href="https://weibo.com/kkslide" title="weibo" class="fa-icon" target="_blank">
                                                 <i class="fa fa-weibo"></i>
                                             </a>
                                         </div>

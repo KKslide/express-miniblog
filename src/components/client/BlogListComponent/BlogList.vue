@@ -7,10 +7,27 @@
                     <div class="col-xs-12">
                         <div class="section-container-spacer text-center">
                             <h1 class="h2">{{$t('navbar.Blogs')}}</h1>
+                            <p>{{$t('logList.logIntro')}}</p>
                         </div>
                         <div class="blog_list row">
-                            <div class="shadow_outfit clearfix col-md-9">
-                                <div class="blog_list_item col-xs-12 col-md-7 col-md-offset-2" v-for="(item,index) in sortList" :key="index" >
+                            <div class="nothing col-md-9"></div>
+                            <!-- 侧边分类导航条 -->
+                            <div class="blog_nav_bar col-xs-3 col-md-3 col-md-offset-9" role="complementary">
+                                <nav class="bs-docs-sidebar hidden-print hidden-xs hidden-sm affix">
+                                    <ul class="nav bs-docs-sidenav">
+                                        <div class="nav_title">{{$t('logList.categoryTitle')}}</div>
+                                        <li class="active nav_li" data-catID="all" @click="navJump('all',$event)"><div>ALL</div></li>
+                                        <li v-for="(item,index) in catList" :key="index" class="nav_li" :ref="item.name" @click="navJump(item.name,$event)">
+                                            <div :data-catID="item.id" v-html="item.name"></div>
+                                        </li>
+                                    </ul>
+                                </nav>
+                            </div>
+                        </div>
+                        <!-- 全局分类排列 -->
+                        <div class="blog_list row" v-if="isAll">
+                            <div class="shadow_outfit clearfix col-md-9" v-for="(main_item,index) in formedBlogList" :key="index" :data-pos="index">
+                                <div class="blog_list_item col-xs-12 col-md-7 col-md-offset-2" v-for="(item,index) in main_item" :key="index" >
                                     <h3 class="blog_title" v-text="item.blogTitle"></h3>
                                     <p class="blog_info">
                                         <i class="fa fa-eye" ></i>
@@ -34,17 +51,38 @@
                                     <a href="javascript:;" @click="goto(item.id)" class="blog_read_btn">阅读全文>></a>
                                     <el-divider></el-divider>
                                 </div>
+                                <div class="blog_list_item_more col-xs-12 col-md-7 col-md-offset-2 float-right">
+                                    <span @click="getMore(index)">{{$t('logList.checkMore')}}「{{index}}」</span>
+                                </div>
                             </div>
-                            <div class="blog_nav_bar col-xs-3" role="complementary">
-                                <nav class="bs-docs-sidebar hidden-print hidden-xs hidden-sm affix">
-                                    <ul class="nav bs-docs-sidenav">
-                                        <div class="nav_title">分类</div>
-                                        <li class="active nav_li" data-catID="all" @click="listSortBy('all',$event)"><div>ALL</div></li>
-                                        <li v-for="(item,index) in catList" :key="index" class="nav_li" @click="listSortBy(item.name,$event)">
-                                            <div :data-catID="item.id" v-html="item.name"></div>
-                                        </li>
-                                    </ul>
-                                </nav>
+                        </div>
+                        <!-- 按照指定分类排列 -->
+                        <div class="blog_list row" v-else>
+                            <div class="shadow_outfit clearfix col-md-9">
+                                <div class="blog_list_item col-xs-12 col-md-7 col-md-offset-2" v-for="(item,index) in sortList" :key="index">
+                                    <h3 class="blog_title" v-text="item.blogTitle"></h3>
+                                    <p class="blog_info">
+                                        <i class="fa fa-eye" ></i>
+                                        {{item.blogViewNum}} |
+                                        <i class="fa fa-comment-o" ></i>
+                                        {{item.blogComment}} |
+                                        <i class="fa fa-clock-o" ></i>
+                                        {{item.blogAddTime.slice(0,10)}} | 
+                                        <i class="fa fa-tag"></i>
+                                        {{item.blogCategory}}
+                                    </p>
+                                    <h4 class="blog_intro" v-text="item.blogIntro"></h4>
+                                        <!-- :dataIndex="index==0?(sub_index+1):(sub_index+1+item.length)" -->
+                                    <router-link :to="{ name: 'logcontent', params: { contentid: item.id } }">
+                                        <lazy-img
+                                            :src="item.blogPic"
+                                            :size="{'width':267,'height':200}"
+                                            imgClass="img-responsive img-responsive-auto-width blog_link"
+                                        ></lazy-img>
+                                    </router-link>
+                                    <a href="javascript:;" @click="goto(item.id)" class="blog_read_btn">阅读全文>></a>
+                                    <el-divider></el-divider>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -75,6 +113,8 @@ export default {
             ],
             sortList:[], // 经过筛选的文章
             catList: [], // 分类列表
+            formedBlogList:{},
+            isAll:true
         }
     },
     components: {
@@ -123,25 +163,57 @@ export default {
                     });
                     this.sortList = this.deepClone(this.blogList);
                     this.catList = res.data.catList.filter(v=>{return v.name!='Vlog'});
+
+                    this.catList.forEach((cat_v)=>{
+                        this.formedBlogList[cat_v.name] = this.blogList.filter((blog_v)=>{
+                            return blog_v.blogCategory==cat_v.name;
+                        }).splice(0,3);
+                    });
+                    
                 }
             })
         },
-        listSortBy(catID,e){
-            this.sortList=[]; // 清空
+        navJump(catID,e){ // 点击导航栏跳转
+            this.sortList=[];
+            if(catID=='all'){
+                this.isAll=true;
+                Array.from($("li.nav_li")).forEach(v=>{
+                    v.classList.remove("active")
+                });
+                $(e.srcElement).parent().addClass('active');
+                $(".el-scrollbar__wrap").animate({scrollTop:'0px'});
+                return;
+            }else{
+                if(!this.isAll){ // 在内容列表页中
+                    $(".el-scrollbar__wrap").animate({scrollTop:'0px'},300,()=>{
+                        this.getMore(catID);
+                    });
+                    return;
+                }
+            }
             Array.from($("li.nav_li")).forEach(v=>{
                 v.classList.remove("active")
             });
             $(e.srcElement).parent().addClass('active');
-            
-            if(catID == "all"){
-                this.sortList = this.blogList;
-            }
-            else{
-                this.sortList = this.blogList.filter(v=>{
-                    return v.blogCategory==catID;
+            this.scrollTop = $(".el-scrollbar__wrap").scrollTop(); // wrap页面滚动出去的距离
+            this.ModuleTop = $("[data-pos='"+catID+"']").offset().top; // Code模块距离顶部距离
+            // console.log('---------');
+            // console.log('wrap页面滚动出去的距离: ',$(".el-scrollbar__wrap").scrollTop());
+            // console.log(catID,'模块和浏览器顶部距离',this.ModuleTop);
+            // console.log('需要滚动出去的距离: ',this.scrollTop+(this.ModuleTop-20-$("nav.navbar").height()));
+            $(".el-scrollbar__wrap").animate({scrollTop:this.scrollTop+(this.ModuleTop-20-$("nav.navbar").height())+'px'});
+        },
+        getMore(catName){ // 选择某一分类列表显示
+            $(".el-scrollbar__wrap").animate({scrollTop:'0px'},300,()=>{
+                Array.from($("li.nav_li")).forEach(v=>{
+                    v.classList.remove("active")
                 });
-            }
-            console.log(this.sortList);
+                this.$refs[catName][0].classList.add("active");
+                this.isAll=false;
+                this.sortList= this.blogList.filter(v=>{
+                    return v.blogCategory==catName;
+                });
+            });
         }
     },
     beforeMount(){
@@ -154,9 +226,12 @@ export default {
 .blog_list{
     .shadow_outfit{
         box-shadow: 0 5px 10px rgba(0,0,0,.5);
-        >.blog_list_item{
+        margin-bottom: 50px;
+        .blog_list_item{
             h3.blog_title{
                 white-space: nowrap;
+                text-overflow: ellipsis;
+                overflow: hidden;
             }
             // p.blog_info{}
             h4.blog_intro{
@@ -192,6 +267,18 @@ export default {
             }
             a.blog_read_btn:hover::after{
                 width: 0%;
+            }
+        }
+        .blog_list_item_more{
+            padding-bottom: 15px;
+            text-align: center;
+            >span{
+                padding: 10px;
+                cursor: pointer;
+                transition: font-weight .3s;
+            }
+            >span:hover{
+                font-weight: 800;
             }
         }
     }

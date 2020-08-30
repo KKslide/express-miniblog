@@ -55,7 +55,7 @@
                     </div>
                     <div class="col-md-6 col-md-offset-3 other_link">
                         <el-divider></el-divider>
-                        <div v-html="$t('message.blogIntro')"></div>
+                        <div class="blogIntro" v-html="$t('message.blogIntro')"></div>
                     </div>
                 </div>
             </div>

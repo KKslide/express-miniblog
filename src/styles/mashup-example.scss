@@ -143,3 +143,10 @@ div.cell>p {
     color:#333 !important;
     cursor: default !important;
 }
+
+/* 视频列表页 下方文字描述 样式修改 */
+div.blogIntro{
+    p:nth-child(1),p:nth-child(2),p:nth-child(3){
+        font-size: 15px;
+    }
+}
