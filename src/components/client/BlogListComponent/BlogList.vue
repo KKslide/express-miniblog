@@ -204,6 +204,14 @@ export default {
             $(".el-scrollbar__wrap").animate({scrollTop:this.scrollTop+(this.ModuleTop-20-$("nav.navbar").height())+'px'});
         },
         getMore(catName){ // 选择某一分类列表显示
+            if($(".el-scrollbar__wrap").length==0){
+                $("html,body").animate({scrollTop:0},300,()=>{
+                    this.isAll=false;
+                    this.sortList= this.blogList.filter(v=>{
+                        return v.blogCategory==catName;
+                    });
+                });
+            }
             $(".el-scrollbar__wrap").animate({scrollTop:'0px'},300,()=>{
                 Array.from($("li.nav_li")).forEach(v=>{
                     v.classList.remove("active")
