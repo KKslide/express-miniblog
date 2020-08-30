@@ -46,7 +46,7 @@
 - 进入到`/server`目录执行 `npm install` 安装服务端依赖
 
 
-- 去官网下载MongoDB [👉下载地址](http://mongodb.github.io/node-mongodb-native/)
+- 去官网下载Mysql数据库 [👉下载地址](https://dev.mysql.com/downloads/mysql/)
 
 
 ## 运行 -->
