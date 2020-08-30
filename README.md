@@ -1,13 +1,10 @@
 # ExpressBlog
 
-<!-- 🌍
-*[English](/docs/README-en.md) ∙ [简体中文](README.md)* -->
-
 *👉 link online: [http://www.kkslide.fun](http://www.kkslide.fun)*
 
 ***
 
-基于`Vue2.0`、`express`和`MongoDB`的个人网站。   
+基于`Vue2.0`、`express`和`MySQL`的个人网站。   
 
 ## 主要功能：
 - 前端首页，文章列表，详情页面，视频播放，视频弹幕和评论，留言功能
@@ -37,7 +34,8 @@
 ### 说明
 #### 环境：
 - Nodejs v10.0+
-- MongoDB v3.4.0+
+- MySQLDB v5.7+
+- Vue v2.5+
 
 #### 前端：
 刚打开项目，乍一看会是个前端的文件夹
@@ -52,16 +50,23 @@
 
 
 ## 运行 -->
-- 启动mongoDB数据库
-<div>
-<img src="./screenshot/snipaste_20200501_181017.jpg" width="600">
-</div>
+- 数据库中导入myblog.sql脚本
 
-- 修改`app.js` 修改数据库配置，如下所示：
+- 启动MySQL数据库
+<!-- <div>
+<img src="./screenshot/snipaste_20200501_181017.jpg" width="600">
+</div> -->
+
+- 修改`server/db/index.js` 修改数据库配置，如下所示：
 ```javascript
-    // 连接数据库
-    // mongoose.connect("mongodb://username:password@host:port/database");
-    mongoose.connect("mongodb://root:root@localhost:27017/myBlog");
+    const mysql = require("mysql");
+    const pool = mysql.createPool({
+        host: "localhost",
+        user: "root",
+        password: "rootroot",
+        port: '3306',
+        database: "myblog"
+    });
 ```
 
 - 在`/`根目录下 `npm run dev` 运行开发环境
