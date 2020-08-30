@@ -185,9 +185,9 @@ module.exports.editCategory = function (req, res) {
         'table': 'category',
         'id': req.body.id,
         'data': {
-            'name': req.body.name,
-            'banner': req.body.banner,
-            'edittime': util.getNow()
+            'name': `"${req.body.name}"`,
+            'banner': `"${req.body.banner}"`,
+            'edittime': `"${util.getNow()}"`
         }
     }
     dbMoudle.doEdit(obj, (err) => {

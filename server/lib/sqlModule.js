@@ -249,7 +249,7 @@ module.exports.getIndexPageData = function (options, callback) {
     let table = options.table || 'article';
     let isVlog = options.listType == 'vlog' ? 'Vlog' : ''; // 查询列表是否为vlog类型
     let sql =
-        `SELECT
+            `SELECT
                 a.id,
                 a.title,
                 cat.name AS 'category',
@@ -276,7 +276,7 @@ module.exports.getIndexPageData = function (options, callback) {
     console.log(sql);
     console.log('-***************************-');
     new Promise((resolve, reject) => {
-        connection.query('select c.id,c.name from category c group by c.id', (err, data) => {
+        connection.query("select c.id,c.name from category c where c.is_del='0' group by c.id", (err, data) => {
             if (err) {
                 reject(err)
             } else {
