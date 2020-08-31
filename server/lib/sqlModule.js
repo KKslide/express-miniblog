@@ -271,6 +271,7 @@ module.exports.getIndexPageData = function (options, callback) {
         ? `and cat.name = '${isVlog}'`
         : `and cat.name != 'Vlog'`;
     sql += `and a.is_del='0'
+                and a.is_show='0'
            /*  GROUP BY a.id  */
             ORDER BY a.addtime desc`;
     console.log(sql);
