@@ -28,10 +28,13 @@ import i18n from './locales/index' // 使用自定义语言切换插件
 
 import router from './router'
 // import axios from 'axios'
-// axios.defaults.baseURL = 'http://localhost:8080'
+console.log(process.env.NODE_ENV);
+axios.defaults.baseURL = process.env.NODE_ENV == 'development'
+    ? 'http://127.0.0.1:8080'  // 开发
+    : 'http://134.175.129.219' // 生产
 const service = axios.create({
     // baseURL: 'http://localhost:8080', // 本地开发的时候..
-    baseURL: 'http://134.175.129.219', // 线上发布的时候- 腾讯云
+    // baseURL: 'http://134.175.129.219', // 线上发布的时候- 腾讯云
     timeout: 5000
 })
 axios.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded;charset=UFT-8'
