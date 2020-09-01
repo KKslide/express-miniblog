@@ -3,10 +3,10 @@
 // see http://vuejs-templates.github.io/webpack for documentation.
 
 const path = require('path')
-const proUrl = process.env.NODE_ENV == 'development'
-    ? 'http://127.0.0.1:80'  // 开发
-    : 'http://134.175.129.219' // 生产
-
+// const proUrl = process.env.NODE_ENV == 'development' // 气死人.. 为什么不能跳转到生产环境
+//     ? 'http://127.0.0.1:80'  // 开发
+//     : 'http://134.175.129.219' // 生产
+const proUrl = 'http://127.0.0.1'  // 开发
 module.exports = {
   dev: {
 
@@ -33,7 +33,7 @@ module.exports = {
     },
 
     // Various Dev Server settings
-    host: 'localhost', // can be overwritten by process.env.HOST
+    host: '127.0.0.1', // can be overwritten by process.env.HOST
     port: 8080, // can be overwritten by process.env.PORT, if port is in use, a free one will be determined
     autoOpenBrowser: false,
     errorOverlay: true,

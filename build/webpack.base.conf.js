@@ -107,6 +107,7 @@ module.exports = {
     'vue-router': 'VueRouter',
     'VueI18n': 'vue-i18n', // 翻译插件
     'echarts': 'echarts',
+    'vuex': 'Vuex'
     // 'Rx':'rxjs'
   }
 }
