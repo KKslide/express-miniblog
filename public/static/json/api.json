@@ -1,0 +1,132 @@
+{
+    "tag_list": [
+        {
+            "tag": "总访问量",
+            "value": 8888
+        },
+        {
+            "tag": "今日访问量",
+            "value": 6666
+        },
+        {
+            "tag": "用户",
+            "value": 9999
+        },
+        {
+            "tag": "文章数",
+            "value": 9999
+        }
+    ],
+    "line_chart_data": [
+        {
+            "time": "0",
+            "value": 9
+        },
+        {
+            "time": "1",
+            "value": 2
+        },
+        {
+            "time": "2",
+            "value": 4
+        },
+        {
+            "time": "3",
+            "value": 1
+        },
+        {
+            "time": "4",
+            "value": 3
+        },
+        {
+            "time": "5",
+            "value": 6
+        },
+        {
+            "time": "6",
+            "value": 5
+        },
+        {
+            "time": "7",
+            "value": 14
+        },
+        {
+            "time": "8",
+            "value": 20
+        },
+        {
+            "time": "9",
+            "value": 8
+        },
+        {
+            "time": "10",
+            "value": 1
+        },
+        {
+            "time": "11",
+            "value": 0
+        },
+        {
+            "time": "12",
+            "value": 1
+        },
+        {
+            "time": "13",
+            "value": 5
+        },
+        {
+            "time": "14",
+            "value": 6
+        },
+        {
+            "time": "15",
+            "value": 18
+        },
+        {
+            "time": "16",
+            "value": 12
+        },
+        {
+            "time": "17",
+            "value": 4
+        },
+        {
+            "time": "18",
+            "value": 8
+        },
+        {
+            "time": "19",
+            "value": 16
+        },
+        {
+            "time": "20",
+            "value": 11
+        },
+        {
+            "time": "21",
+            "value": 19
+        },
+        {
+            "time": "22",
+            "value": 2
+        },
+        {
+            "time": "23",
+            "value": 12
+        }
+    ],
+    "pie_chart_data": [
+        {
+            "value": 10,
+            "name": "Fun"
+        },
+        {
+            "value": 5,
+            "name": "Video"
+        },
+        {
+            "value": 15,
+            "name": "Pic"
+        }
+    ]
+}

@@ -1,0 +1,38 @@
+.carousel-control {
+  top: 50%;
+  bottom: initial;
+  width: 50px;
+  height: 50px;
+  margin-top: -25px;
+  border: 1px solid $gray-base;
+  background-color:$gray-base;
+  font-size: 30px;
+  color: white;
+  line-height: 44px;
+  text-shadow: none;
+  opacity: 1;
+  
+  &:hover{
+    color: white;
+    background-color: $gray-base;
+    opacity: 0.8;
+  }
+  &.right, &.left{
+    background-image: none;
+  }
+  &.right{
+    right: -25px;
+  }
+  &.left{
+    left: -25px;
+  }
+
+  @media (max-width: $screen-md) {
+    &.right{
+      right: -12px;
+    }
+    &.left{
+      left: -12px;
+    }
+  }
+}
