@@ -22,7 +22,7 @@
                     </div>
 
                     <label for="visitorEmail">
-                        <span v-text="$t('logContent.name')"></span>
+                        <span v-text="$t('logContent.name')" class="hidden-xs"></span>
                         <input
                             type="text"
                             class="form-control"
@@ -166,10 +166,10 @@ export default {
                 this.$message({ type: "warning", message: this.$t('logContent.emptyCommentTip') })
                 return false;
             }
-            if (!this.commentData.visitor) { // 不留名
-                this.$message({ type: "warning", message: this.$t('logContent.emptyVisitor') })
-                return false;
-            }
+            // if (!this.commentData.visitor) { // 不留名
+            //     this.$message({ type: "warning", message: this.$t('logContent.emptyVisitor') })
+            //     return false;
+            // }
             this.commentData.comment = this.commentData.comment.replace(/:.*?:/g, this.emoji);
             this.commentData.contentid = this.$route.params.contentid;
             this.$axios({
@@ -408,6 +408,14 @@ export default {
                         zoom: 0.5; // emojipanel表情大小
                         margin: 4px;
                     }
+                }
+            }
+            /* BlogComment.vue中的央视覆盖 */
+            // 转移到vue-cli4后 新的样式很怪异, 补右侧边距
+            label[for='visitorEmail']{
+                margin-right: 10px;
+                span{
+                    margin-right: 10px;
                 }
             }
         }

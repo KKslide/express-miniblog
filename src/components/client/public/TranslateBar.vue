@@ -53,7 +53,7 @@ export default {
   i {
   }
   span {
-    transform: translateX(-2px);
+    transform: translateX(4px);
     font-size: 10px;
     display: inline-block;
     height: 23px;

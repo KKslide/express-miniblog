@@ -16,7 +16,8 @@ export default {
       let tempImg = new Image();
       tempImg.src = newValue ? newValue : this.src;
       tempImg.onerror = (_) => {
-        tempImg.src = "../../../assets/images/space.jpg";
+        console.log('error!!!!!'); // 需要解决这个无限请求的问题
+        // tempImg.src = ""; // ../../../assets/images/space.jpg
       };
       tempImg.onload = () => {
         this.url = tempImg.src;

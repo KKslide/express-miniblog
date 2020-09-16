@@ -32,7 +32,7 @@
                     </div>
                     <!-- 这里是正文了 -->
                     <div class="col-xs-12">
-                        <article id="article" v-html="content.composition"></article>
+                        <article id="article" class="ql-editor" v-html="content.composition"></article>
                         <!-- <article id="article">{{content.composition}}</article> -->
                         <!-- <article id="article">
                         </article>-->

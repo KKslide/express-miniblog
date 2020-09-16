@@ -39,7 +39,7 @@ module.exports.Comment = function (req, res) {
         'id': `'${req.body.contentid || req.query.contentid}'`,
         'data': {
             'a_id': `${req.body.contentid || req.query.contentid}`,
-            'user': `'${req.body.visitor || req.query.visitor}'`,
+            'user': `'${req.body.visitor || req.query.visitor || util.getClientIp(req).match(/(25[0-5]|2[0-4]\d|[0-1]\d{2}|[1-9]?\d)\.(25[0-5]|2[0-4]\d|[0-1]\d{2}|[1-9]?\d)\.(25[0-5]|2[0-4]\d|[0-1]\d{2}|[1-9]?\d)\.(25[0-5]|2[0-4]\d|[0-1]\d{2}|[1-9]?\d)/)[0]}'`,
             'comment': `'${req.body.comment || req.query.body.comment}'`,
             'ip': `'${util.getClientIp(req).match(/(25[0-5]|2[0-4]\d|[0-1]\d{2}|[1-9]?\d)\.(25[0-5]|2[0-4]\d|[0-1]\d{2}|[1-9]?\d)\.(25[0-5]|2[0-4]\d|[0-1]\d{2}|[1-9]?\d)\.(25[0-5]|2[0-4]\d|[0-1]\d{2}|[1-9]?\d)/)[0]}'`,
             'time': `'${util.getNow()}'`
