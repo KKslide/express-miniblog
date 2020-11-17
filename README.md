@@ -49,7 +49,7 @@
 - 去官网下载Mysql数据库 [👉下载地址](https://dev.mysql.com/downloads/mysql/)
 
 
-## 运行 -->
+## 运行: 
 - 数据库中导入myblog.sql脚本
 
 - 启动MySQL数据库

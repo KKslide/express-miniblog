@@ -143,3 +143,6 @@ div.cell>p {
     color:#333 !important;
     cursor: default !important;
 }
+
+/* 引入公共的emoji样式 */
+@import url("./emoji.css")

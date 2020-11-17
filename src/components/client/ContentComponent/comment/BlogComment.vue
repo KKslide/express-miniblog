@@ -44,15 +44,11 @@
         <hr />
         <!-- 评论列表 -->
         <ul class="media-list">
-            <li class="media" v-for="item in commentList" :key="item.time">
+            <li class="media" v-for="item in commentList" :key="item.t_id">
                 <div class="media-left" v-if="false">
                     <!-- 头像 - 后面再做 -->
                     <a href="javascript:;">
-                        <img
-                            class="media-object img-circle"
-                            src="../../../../../public/static/skull.png"
-                            width="50"
-                        />
+                        <img class="media-object img-circle" src="../../../../../public/static/skull.png" width="50" />
                     </a>
                 </div>
                 <!-- 评论内容 -->
@@ -141,7 +137,7 @@
 </template>
 
 <script>
-import EmojiPanel from "./children/EmojiPanel.vue";
+import EmojiPanel from "../../public/emoji/EmojiPanel";
 export default {
     props: ['commentDataProp'],
     data() {
@@ -469,7 +465,4 @@ export default {
         }
     }
 }
-
-// *****************************************************
-@import url("../../../../assets/css/emoji.css");
 </style>

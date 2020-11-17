@@ -147,7 +147,7 @@
 <script>
 import Header from '../public/Header'
 import Footer from "../public/Footer";
-import EmojiPanel from "./emoji/EmojiPanel.vue";
+import EmojiPanel from "../public/emoji/EmojiPanel";
 export default {
     components: {
         'header-com': Header,
@@ -344,6 +344,4 @@ export default {
         margin: 4px;
     }
 }
-// *****************************************************
-@import url("../../../assets/css/emoji.css");
 </style>
