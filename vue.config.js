@@ -2,12 +2,12 @@ const webpack = require('webpack')
 const path = require("path")
 
 const proxyUrl = process.env.NODE_ENV === 'production'
-    ? 'http://134.175.129.219'  // 开发
+    ? 'http://47.112.232.140'  // 开发
     : 'http://127.0.0.1:80' // 生产
 
 module.exports = {
     // publicPath: process.env.NODE_ENV === 'production'
-    //     ? 'http://134.175.129.219'  // 开发
+    //     ? 'http://47.112.232.140'  // 开发
     //     : 'http://127.0.0.1:8080', // 生产
     outputDir: './dist',
     assetsDir: './', //放置生成的静态资源 (js、css、img、fonts) 的 (相对于 outputDir 的) 目录。

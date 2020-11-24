@@ -12,10 +12,10 @@ Vue.use(Filter) // 使用路由守卫
 
 // axios.defaults.baseURL = process.env.NODE_ENV == 'development'
 //     ? 'http://127.0.0.1:8080'  // 开发
-//     : 'http://134.175.129.219' // 生产
+//     : 'http://47.112.232.140' // 生产
 const service = axios.create({
     baseURL: process.env.NODE_ENV === 'development'
-        ? 'http://134.175.129.219' // 生产- 线上发布的时候- 腾讯云
+        ? 'http://47.112.232.140' // 生产- 线上发布的时候- 腾讯云
         : 'http://127.0.0.1:8080',  // 开发- 本地开发的时候..
     timeout: 5000
 })
