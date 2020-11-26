@@ -56,7 +56,8 @@ module.exports = {
             'VueI18n': 'vue-i18n', // 翻译插件
             'echarts': 'echarts',
             'video.js': 'videojs',
-            // 'videojs-contrib-hls.js': 'videojs-contrib-hls'
+            // 'videojs-contrib-hls.js': 'videojs-contrib-hls',
+            // 'wangeditor':'wangeditor', // 卧槽牛逼... 直接script引入, 连这个都不用配置...
         }
     },
     chainWebpack: config => {

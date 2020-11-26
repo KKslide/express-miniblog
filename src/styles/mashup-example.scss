@@ -1,5 +1,7 @@
 // 这里是 覆盖elementUI或者部分样式内容
-// body{height: 100vh;}
+p {
+    line-height: 1.8;
+}
 #app {
     width: 100%;
     height: 100vh;

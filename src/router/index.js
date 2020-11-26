@@ -24,7 +24,7 @@ import ContactComponent from '../components/client/ContactComponent/Contact.vue'
 
 // import CameraComponent from '../components/other/Camera.vue' // 测试单图上传组件
 
-// import test from '../test/test2.vue'
+import test from '../components/test.vue'
 
 
 // export default new Router({
@@ -36,11 +36,11 @@ export default new VueRouter({
             name: 'home',
             component: HomeComponent,
         },
-        // {
-        //     path: '/test',
-        //     name: 'test',
-        //     component: test
-        // },
+        {
+            path: '/test',
+            name: 'test',
+            component: test
+        },
         {
             path: '/blog',
             name: 'blog',

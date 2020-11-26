@@ -69,6 +69,38 @@ router.post('/admin/massage/del', handler.delMessage);
 /* 七牛云图片上传 */
 router.post('/pic/upload', handler.doUpload);
 
+/* 本地图片上传 */
+router.post("/pic/img_upload", function (req, res) {
+    console.log("!!!!!!!!");
+    // var form = new formidable.IncomingForm()
+    // console.log(form);
+    res.json({
+        errno: 0,
+        data:[ "https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1606393575935&di=5ece7449cf481c23cb07753505f48a79&imgtype=0&src=http%3A%2F%2Fpic1.win4000.com%2Fpic%2F1%2F5d%2Fa051316271.jpg" ]
+    })
+    return
+    form.uploadDir = "./upload";
+    form.keepExtentsions = true;
+    form.parse(req, function (err, fields, files) {
+        // console.log(fields);
+        // console.log(files);
+        if (err) {
+            console.log(err);
+            res.json({ code: 0, msg: "上传失败！" })
+        } else {
+            var ip = req.headers['x-real-ip'] ? req.headers['x-real-ip'] : req.ip.replace(/::ffff:/, ''); // 有问题
+            res.json({
+                code: 1,
+                msg: "上传成功！",
+                errno: 0,
+                path: 'http://' + ip + '/' + path.basename(files.image.path),
+                // path: 'http://47.112.232.140/' + path.basename(files.image.path)
+                data:[ 'http://' + ip + '/' + path.basename(files.image.path) ]
+            })
+        }
+    })
+});
+
 /* 统计访问者IP和时间 */
 router.post('/index/visit', handler.visitRecord);
 
