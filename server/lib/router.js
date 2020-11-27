@@ -1,6 +1,8 @@
 var express = require('express');
 var router = express.Router();
 var handler = require('./handler.js');
+var path = require("path");
+var formidable = require("formidable"); // 用来处理上传图片的
 
 /* ********* 前端 ********* */
 /* 获取blog列表数据 或 vlog列表数据 */
@@ -71,19 +73,12 @@ router.post('/pic/upload', handler.doUpload);
 
 /* 本地图片上传 */
 router.post("/pic/img_upload", function (req, res) {
-    console.log("!!!!!!!!");
-    // var form = new formidable.IncomingForm()
-    // console.log(form);
-    res.json({
-        errno: 0,
-        data:[ "https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1606393575935&di=5ece7449cf481c23cb07753505f48a79&imgtype=0&src=http%3A%2F%2Fpic1.win4000.com%2Fpic%2F1%2F5d%2Fa051316271.jpg" ]
-    })
-    return
+    var form = new formidable.IncomingForm()
     form.uploadDir = "./upload";
-    form.keepExtentsions = true;
+    form.keepExtensions = true;
     form.parse(req, function (err, fields, files) {
-        // console.log(fields);
-        // console.log(files);
+        console.log(fields);
+        console.log(files);
         if (err) {
             console.log(err);
             res.json({ code: 0, msg: "上传失败！" })
@@ -93,9 +88,10 @@ router.post("/pic/img_upload", function (req, res) {
                 code: 1,
                 msg: "上传成功！",
                 errno: 0,
-                path: 'http://' + ip + '/' + path.basename(files.image.path),
-                // path: 'http://47.112.232.140/' + path.basename(files.image.path)
-                data:[ 'http://' + ip + '/' + path.basename(files.image.path) ]
+                // path: 'http://' + ip + '/' + path.basename(files.file.path),
+                // data:[ 'http://' + ip + '/' + path.basename(files.file.path) ]
+                path: 'http://' + ip + '/' + path.basename(Object.values(files)[0].path),
+                data:[ 'http://' + ip + '/' + path.basename(Object.values(files)[0].path) ]
             })
         }
     })
