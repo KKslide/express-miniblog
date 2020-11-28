@@ -50,7 +50,6 @@
         </el-dialog>
         <!-- 评论列表弹窗 -->
 
-        <!-- <el-button type="text" @click="table = true">打开嵌套表格的 Drawer</el-button> -->
         <el-button type="text"
             @click="dialog = true;dialogType='add'; rest();drawer_title='添加文章';minpic_url_list=[];imageUrl=''"
         >添加文章</el-button>
@@ -346,7 +345,7 @@ export default {
         targetUrl: {
             // 上传地址
             type: String,
-            default: '/pic/upload'
+            default: '/pic/img_upload'
         },
         multiple: {
             // 多图开关
@@ -634,8 +633,7 @@ export default {
             let form = document.getElementById('upload'),
                 formData = new FormData(form);
             formData.file = item;
-            //   return this.$axios({ url: "/admin/content/img_upload", method: "post", data: formData }) // 调用接口上传图片
-            return this.$axios({ url: "/pic/upload", method: "post", data: formData }) // 调用接口上传图片
+            return this.$axios({ url: "/pic/img_upload", method: "post", data: formData }) // 调用接口上传图片
         },
         /* ********* 富文本编辑器图片上传操作 *********** */
 

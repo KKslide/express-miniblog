@@ -28,7 +28,7 @@
 
 <script>
 import videojs from "video.js";
-import "videojs-contrib-hls";
+// import "videojs-contrib-hls"; // 视频控制组件需要自定义时引入
 export default {
     data() {
         return {
@@ -42,15 +42,15 @@ export default {
             this.player = videojs(
                 "videobox",
                 {
-                    autoplay: false,
-                    bigPlayButton: true,
-                    textTrackDisplay: true,
-                    posterImage: true,
-                    errorDisplay: false,
-                    controlBar: false,
-                    playbackRates: [0.5, 1, 1.5, 2],
+                    autoplay: false, // 自动播放
+                    bigPlayButton: true, // 是否显示暂停按钮
+                    textTrackDisplay: true, // 文本轨道显示
+                    posterImage: true, // 是否显示视频封面图
+                    errorDisplay: false, // url错误时是否显示视频组件
+                    controlBar: false, // 是否显示视频控制组件
+                    playbackRates: [0.5, 1, 1.5, 2], // 播放速率选项
                     ControlBar: {
-                        customControlSpacer: true,
+                        customControlSpacer: true, // 自定义控制间隔按钮
                     },
                 },
                 function onPlayerReady() {
@@ -58,7 +58,7 @@ export default {
                     let _this = this;
                     setTimeout(() => {
                         //延时确保能监听到视频源错误
-                        var mediaError = this.error();
+                        let mediaError = this.error();
                         if (mediaError != null && mediaError.code) {
                             _this.isError = true;
                             Dialog.alert({
@@ -87,6 +87,9 @@ export default {
     },
     props: ["videoSrc", "posterSrc"], //视频七牛云地址 and 视频封面
     watch: {
+        /**
+         * 若是路由切换或是视频url源更换时, 重新渲染video组件
+         */
         videoSrc: function (nv, ov) {
             console.log(nv);
             console.log(this.player);

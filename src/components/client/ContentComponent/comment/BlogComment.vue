@@ -22,7 +22,7 @@
                     </div>
 
                     <label for="visitorEmail">
-                        <span v-text="$t('logContent.name')"></span>
+                        <span v-text="$t('logContent.name')" class="hidden-xs"></span>
                         <input
                             type="text"
                             class="form-control"
@@ -44,15 +44,11 @@
         <hr />
         <!-- 评论列表 -->
         <ul class="media-list">
-            <li class="media" v-for="item in commentList" :key="item.time">
+            <li class="media" v-for="item in commentList" :key="item.t_id">
                 <div class="media-left" v-if="false">
                     <!-- 头像 - 后面再做 -->
                     <a href="javascript:;">
-                        <img
-                            class="media-object img-circle"
-                            src="../../../../../static/skull.png"
-                            width="50"
-                        />
+                        <img class="media-object img-circle" src="../../../../../public/static/skull.png" width="50" />
                     </a>
                 </div>
                 <!-- 评论内容 -->
@@ -141,7 +137,7 @@
 </template>
 
 <script>
-import EmojiPanel from "./children/EmojiPanel.vue";
+import EmojiPanel from "../../public/emoji/EmojiPanel";
 export default {
     props: ['commentDataProp'],
     data() {
@@ -166,10 +162,10 @@ export default {
                 this.$message({ type: "warning", message: this.$t('logContent.emptyCommentTip') })
                 return false;
             }
-            if (!this.commentData.visitor) { // 不留名
-                this.$message({ type: "warning", message: this.$t('logContent.emptyVisitor') })
-                return false;
-            }
+            // if (!this.commentData.visitor) { // 不留名
+            //     this.$message({ type: "warning", message: this.$t('logContent.emptyVisitor') })
+            //     return false;
+            // }
             this.commentData.comment = this.commentData.comment.replace(/:.*?:/g, this.emoji);
             this.commentData.contentid = this.$route.params.contentid;
             this.$axios({
@@ -410,6 +406,14 @@ export default {
                     }
                 }
             }
+            /* BlogComment.vue中的央视覆盖 */
+            // 转移到vue-cli4后 新的样式很怪异, 补右侧边距
+            label[for='visitorEmail']{
+                margin-right: 10px;
+                span{
+                    margin-right: 10px;
+                }
+            }
         }
     }
     .media-list {
@@ -461,7 +465,4 @@ export default {
         }
     }
 }
-
-// *****************************************************
-@import url("../../../../assets/css/emoji.css");
 </style>

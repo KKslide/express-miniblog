@@ -41,7 +41,7 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 // 静态资源托管
 // app.use(express.static(path.join(__dirname, 'public')));
-// app.use(express.static(path.join(__dirname, 'upload')));
+app.use(express.static(path.join(__dirname, 'upload')));
 app.use(express.static(path.join(__dirname, 'dist')));
 
 /* GET page. */

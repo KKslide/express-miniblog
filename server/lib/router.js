@@ -1,6 +1,8 @@
 var express = require('express');
 var router = express.Router();
 var handler = require('./handler.js');
+var path = require("path");
+var formidable = require("formidable"); // 用来处理上传图片的
 
 /* ********* 前端 ********* */
 /* 获取blog列表数据 或 vlog列表数据 */
@@ -68,6 +70,32 @@ router.post('/admin/massage/del', handler.delMessage);
 
 /* 七牛云图片上传 */
 router.post('/pic/upload', handler.doUpload);
+
+/* 本地图片上传 */
+router.post("/pic/img_upload", function (req, res) {
+    var form = new formidable.IncomingForm()
+    form.uploadDir = "./upload";
+    form.keepExtensions = true;
+    form.parse(req, function (err, fields, files) {
+        // console.log(fields);
+        // console.log(files);
+        if (err) {
+            console.log(err);
+            res.json({ code: 0, msg: "上传失败！" })
+        } else {
+            var ip = req.headers['x-real-ip'] ? req.headers['x-real-ip'] : req.ip.replace(/::ffff:/, ''); // 有问题
+            res.json({
+                code: 1,
+                msg: "上传成功！",
+                errno: 0,
+                // path: 'http://' + ip + '/' + path.basename(files.file.path),
+                // data:[ 'http://' + ip + '/' + path.basename(files.file.path) ]
+                path: 'http://' + ip + '/' + path.basename(Object.values(files)[0].path),
+                data:[ 'http://' + ip + '/' + path.basename(Object.values(files)[0].path) ]
+            })
+        }
+    })
+});
 
 /* 统计访问者IP和时间 */
 router.post('/index/visit', handler.visitRecord);

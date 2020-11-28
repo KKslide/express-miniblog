@@ -348,7 +348,7 @@ router.post("/content/img_upload", function (req, res) {
                 code: 1,
                 msg: "上传成功！",
                 // path: 'http://' + ip + '/' + path.basename(files.image.path)
-                path: 'http://134.175.129.219/' + path.basename(files.image.path)
+                path: 'http://47.112.232.140/' + path.basename(files.image.path)
             })
         }
     })
@@ -370,7 +370,7 @@ router.post("/content/mpic_upload", function (req, res, next) {
                 code: 1,
                 msg: "上传成功！",
                 // path: 'http://' + ip + '/' + path.basename(files.file.path)
-                path: 'http://134.175.129.219/' + path.basename(files.file.path) // 腾讯云- 现在的上传接口
+                path: 'http://47.112.232.140/' + path.basename(files.file.path) // 腾讯云- 现在的上传接口
             })
         }
 

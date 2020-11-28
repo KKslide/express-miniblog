@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <!-- 优先使用 IE 最新版本和 Chrome -->
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+    <!-- 移动端视口设置 -->
+    <meta name="viewport"
+        content="width=device-width, initial-scale=1.0,maximum-scale=1,minimum-scale=1,user-scalable=no">
+    <!-- 页面描述 -->
+    <meta content="description" name="too young to die, too old to live, kk, Vlog, kk个人网站, kk个人博客, kk空间">
+    <!-- 页面关键词 -->
+    <meta name="keywords" content="kkslide, 刘永康, 前端, 影视后期, Vue, AE, Pr, Gopro, 剪辑" />
+    <!-- 网页作者 -->
+    <meta name="author" content="刘永康, rollercompanion@163.com" />
+    <!-- 是否启用 WebApp 全屏模式，删除苹果默认的工具栏和菜单栏 -->
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <!-- 设置苹果工具栏颜色 -->
+    <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+    <!-- 忽略页面中的数字识别为电话，忽略email识别 -->
+    <meta name="format-detection" content="telphone=no, email=no" />
+    <meta name="msapplication-tap-highlight" content="no">
+    <meta name="robots" content="all">
+    <!-- 网站所有权 -->
+    <meta name="copyright" content="liuyongkang">
+    <meta name="verify" content="index,follow" />
+    <meta name="google" content="index,follow" />
+    <meta name="googlebot" content="index,follow" />
+    <!-- 指定首选URL，声明一个权威网页做为复制网页的规范版本 -->
+    <link rel="canonical" href="http://www.kkslide.fun/">
+    <link rel="apple-touch-icon" sizes="180x180" href="./static/skull.png">
+    <link href="./static/skull.ico" rel="icon">
+
+    <!-- <link href="https://cdn.bootcss.com/normalize/8.0.1/normalize.min.css" rel="stylesheet"> -->
+    <link href="https://cdn.bootcss.com/element-ui/2.12.0/theme-chalk/index.css" rel="stylesheet">
+    <!-- <link href="https://cdn.bootcss.com/twitter-bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet"> -->
+    <link href="https://cdn.bootcss.com/video.js/7.6.5/alt/video-js-cdn.min.css" rel="stylesheet">
+    <!-- <link href="https://cdn.bootcdn.net/ajax/libs/wangEditor/3.1.1/wangEditor.css" rel="stylesheet"> -->
+    <link href="https://cdn.bootcdn.net/ajax/libs/highlight.js/8.0/styles/monokai_sublime.min.css" rel="stylesheet">
+
+    <script src="https://cdn.bootcss.com/vue/2.6.10/vue.min.js"></script>
+    <script src="https://cdn.bootcss.com/vue-router/3.1.3/vue-router.min.js"></script>
+    <script src="https://cdn.bootcss.com/axios/0.19.0/axios.min.js"></script>
+    <!-- <script src="https://cdn.bootcdn.net/ajax/libs/vuex/0.4.1/vuex.min.js"></script> -->
+    <script src="https://cdn.bootcss.com/qs/6.8.0/qs.min.js"></script>
+    <script src="https://cdn.bootcss.com/element-ui/2.12.0/index.js"></script>
+
+    <script src="https://cdn.bootcss.com/jquery/3.2.1/jquery.min.js"></script>
+    <script src="https://cdn.bootcss.com/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <script src="./wangEditor.js"></script>
+    <script src="https://cdn.bootcdn.net/ajax/libs/highlight.js/8.0/highlight.min.js"></script>
+
+    <script src="https://cdn.bootcss.com/typed.js/2.0.4/typed.min.js"></script>
+
+    <script src="https://cdn.bootcss.com/video.js/7.6.5/video.min.js"></script>
+    <!-- <script src="https://cdn.bootcdn.net/ajax/libs/videojs-contrib-hls/5.15.0/videojs-contrib-hls.min.js"></script> -->
+
+    <script src="https://cdn.bootcss.com/vue-i18n/8.14.0/vue-i18n.min.js"></script>
+    <script src="https://cdn.bootcss.com/echarts/4.3.0/echarts.min.js"></script>
+    <script src="https://cdn.bootcss.com/rxjs/5.5.1/Rx.min.js"></script>
+    <script>!function (e, t) { "object" == typeof exports && "object" == typeof module ? module.exports = t(require("Rx")) : "function" == typeof define && define.amd ? define(["Rx"], t) : "object" == typeof exports ? exports.RxCSS = t(require("Rx")) : e.RxCSS = t(e.Rx) }(this, function (e) { return function (e) { function t(r) { if (n[r]) return n[r].exports; var o = n[r] = { exports: {}, id: r, loaded: !1 }; return e[r].call(o.exports, o, o.exports, t), o.loaded = !0, o.exports } var n = {}; return t.m = e, t.c = n, t.p = "", t(0) }([function (e, t, n) { n(2), e.exports = n(2) }, function (t, n) { t.exports = e }, function (e, t, n) { "use strict"; function r(e) { return e && e.__esModule ? e : { "default": e } } function o(e, t, n) { return t in e ? Object.defineProperty(e, t, { value: n, enumerable: !0, configurable: !0, writable: !0 }) : e[t] = n, e } function u(e) { if (Array.isArray(e)) { for (var t = 0, n = Array(e.length); t < e.length; t++)n[t] = e[t]; return n } return Array.from(e) } function i(e) { var t = arguments.length > 1 && void 0 !== arguments[1] ? arguments[1] : document.documentElement, n = a.Observable.merge.apply(a.Observable, u(Object.keys(e).map(function (t) { var n = e[t]; return n instanceof a.Observable || (n = a.Observable.of(n)), n.map(function (e) { return o({}, t, e) }) }))).scan(function (e, t) { return f({}, e, t) }, {}); return n.subscribe(function (e) { return j(t).set(e) }), n } var f = Object.assign || function (e) { for (var t = 1; t < arguments.length; t++) { var n = arguments[t]; for (var r in n) Object.prototype.hasOwnProperty.call(n, r) && (e[r] = n[r]) } return e }, c = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (e) { return typeof e } : function (e) { return e && "function" == typeof Symbol && e.constructor === Symbol && e !== Symbol.prototype ? "symbol" : typeof e }, a = n(1), l = n(7), s = r(l), d = n(6), p = r(d), y = n(5), b = r(y), m = n(4), v = r(m), x = function (e) { return "boolean" == typeof e ? e ? 1 : 0 : e }, j = function O() { var e = arguments.length > 0 && void 0 !== arguments[0] ? arguments[0] : document.documentElement; return { set: function (t, n) { return "object" !== ("undefined" == typeof t ? "undefined" : c(t)) || n ? "object" === ("undefined" == typeof n ? "undefined" : c(n)) ? Object.keys(n).forEach(function (r) { O(e).set(t + "-" + r, n[r]) }) : e.style.setProperty("--" + t, x(n)) : Object.keys(t).map(function (n) { return O(e).set(n, t[n]) }) }, get: function (t) { return e.style.getPropertyValue("--" + t) } } }; i.styledash = j, i.unit = s["default"], i.rect = p["default"], i.lerp = b["default"], i.animationFrame = v["default"], e.exports = i }, function (e, t) { "use strict"; function n(e, t) { var n = {}; return Object.keys(e || {}).forEach(function (r) { n[r] = t(e[r], r, e) }), n } Object.defineProperty(t, "__esModule", { value: !0 }), t["default"] = n }, function (e, t, n) { "use strict"; function r() { return o.Observable.create(function (e) { var t = !0, n = Date.now(), r = (Date.now(), function o() { var r = Date.now() - n; e.next(r), t && u(o) }); return r(), function () { return t = !1 } }) } Object.defineProperty(t, "__esModule", { value: !0 }), t.createAnimationFrameTicker = r; var o = n(1), u = window.requestAnimationFrame || window.mozRequestAnimationFrame || window.webkitRequestAnimationFrame || window.msRequestAnimationFrame; t["default"] = r() }, function (e, t, n) { "use strict"; function r(e) { return e && e.__esModule ? e : { "default": e } } Object.defineProperty(t, "__esModule", { value: !0 }); var o = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (e) { return typeof e } : function (e) { return e && "function" == typeof Symbol && e.constructor === Symbol && e !== Symbol.prototype ? "symbol" : typeof e }, u = n(3), i = r(u), f = function (e) { return function (t, n) { if (null !== t && ("object" === ("undefined" == typeof t ? "undefined" : o(t)) || "array" == typeof t)) return (0, i["default"])(t, function (t, r) { var o = (n[r] - t) * e; return t + o }); var r = (n - t) * e; return t + r } }; t["default"] = f }, function (e, t, n) { "use strict"; function r(e) { var t = arguments.length > 1 && void 0 !== arguments[1] ? arguments[1] : o.Observable.just(null); return t.map(function () { return e.getBoundingClientRect() }) } Object.defineProperty(t, "__esModule", { value: !0 }), t["default"] = r; var o = n(1) }, function (e, t, n) { "use strict"; function r(e) { return e && e.__esModule ? e : { "default": e } } Object.defineProperty(t, "__esModule", { value: !0 }); var o = n(3), u = r(o), i = { px: function (e) { return e.map(function (e) { return "number" == typeof e ? e + "px" : (0, u["default"])(e, function (e) { return e + "px" }) }) } }; t["default"] = i }]) });</script>
+
+    <style>[v-cloak] { display: none }</style>
+    <title>Too young to die, too old to live. I`m Lykang youknowwho.</title>
+</head>
+
+  <body>
+    <noscript>
+      <strong>妈蛋...出事了...</strong>
+    </noscript>
+    <div id="app"></div>
+    <!-- built files will be auto injected -->
+</body>
+
+</html>

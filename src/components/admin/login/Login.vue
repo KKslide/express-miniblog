@@ -21,25 +21,14 @@
                 <div class="form__content">
                     <h1 class="form__content_h1">Login</h1>
                     <div class="styled-input">
-                        <input
-                            type="text"
-                            class="styled-input__input"
-                            name="username"
-                            v-model="userForm.username"
-                        />
+                        <input type="text" class="styled-input__input" name="username" v-model="userForm.username" />
                         <div class="styled-input__placeholder">
                             <span class="styled-input__placeholder-text">Username</span>
                         </div>
                         <div class="styled-input__circle"></div>
                     </div>
                     <div class="styled-input">
-                        <input
-                            type="password"
-                            class="styled-input__input"
-                            name="password"
-                            v-model="userForm.password"
-                            @keydown="typing($event)"
-                        />
+                        <input type="password" class="styled-input__input" name="password" v-model="userForm.password" @keydown="typing($event)" />
                         <div class="styled-input__placeholder">
                             <span class="styled-input__placeholder-text">Password</span>
                         </div>
@@ -144,7 +133,7 @@ export default {
 
     },
     methods: {
-        submit() {
+        submit() { // 确认登陆
             if (!this.userForm.username || !this.userForm.password) {
                 this.$message({
                     type: 'warning',
@@ -175,7 +164,7 @@ export default {
                 })
             }
         },
-        typing(e) {
+        typing(e) { // 判断是否为回车键
             if (e.keyCode == 13) {
                 this.submit();
             }
@@ -188,7 +177,7 @@ export default {
 </script>
 
 <style>
-@import url("https://fonts.googleapis.com/css?family=Roboto");
+/* @import url("https://fonts.googleapis.com/css?family=Roboto"); */
 body.login {
     all: initial;
     font-family: "Roboto", sans-serif;
@@ -206,7 +195,7 @@ main {
     height: 100%;
     display: -webkit-box;
     display: -ms-flexbox;
-    display: flex;
+    display: flex !important;
     -webkit-box-pack: center;
     -ms-flex-pack: center;
     justify-content: center;
