@@ -249,8 +249,6 @@ export default {
             tempForm.append('file',files.raw);
             this.$refs.uploading.style.display = 'block';
             this.$axios.post('/pic/img_upload',tempForm).then(res=>{
-                console.log(res);
-                return
                 this.$refs.uploading.style.display = 'none';
                 if(res.status==200){
                     console.log(res);

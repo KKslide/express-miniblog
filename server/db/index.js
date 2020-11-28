@@ -3,7 +3,6 @@ const mysql = require("mysql");
 //     host: "47.112.232.140",
 //     // host: "localhost", // 在家
 //     user: "root",
-//     password: "Lyk1105*",
 //     // password: "rootroot", // 在家
 //     port: '3306',
 //     database: "myblog",
@@ -13,11 +12,11 @@ const mysql = require("mysql");
  * 创建连接池, 防止连接超时失效504 link👉https://github.com/mysqljs/mysql#pooling-connections
  */
 const pool = mysql.createPool({
-    host: "47.112.232.140",
-    // host: "localhost", // 在家
+    // host: "47.112.232.140",
+    host: "localhost", // 在家
     user: "root",
-    password: "Lyk1105*",
-    // password: "rootroot", // 在家
+    // password: "Lykang1105*",
+    password: "rootroot", // 在家
     port: '3306',
     database: "myblog"
 })

@@ -184,8 +184,7 @@ CREATE TABLE `users`  (
 -- ----------------------------
 -- Records of users
 -- ----------------------------
-INSERT INTO `users` VALUES (1, 'kk', 'e10adc3949ba59abbe56e057f20f883e', 1);
-INSERT INTO `users` VALUES (3, 'kk', 'c26be8aaf53b15054896983b43eb6a65', 1);
+INSERT INTO `users` VALUES (1, 'kk', '', 1);
 
 -- ----------------------------
 -- Table structure for visitors

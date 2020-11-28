@@ -242,7 +242,7 @@
 
 <script>
 import CommentCom from './CommentManage'
-import Cropper from './cropper'
+import Cropper from './Cropper'
 import { quillEditor } from 'vue-quill-editor'
 import 'quill/dist/quill.core.css'
 import 'quill/dist/quill.snow.css'
@@ -345,7 +345,7 @@ export default {
         targetUrl: {
             // 上传地址
             type: String,
-            default: '/pic/upload'
+            default: '/pic/img_upload'
         },
         multiple: {
             // 多图开关
@@ -633,7 +633,7 @@ export default {
             let form = document.getElementById('upload'),
                 formData = new FormData(form);
             formData.file = item;
-            return this.$axios({ url: "/pic/upload", method: "post", data: formData }) // 调用接口上传图片
+            return this.$axios({ url: "/pic/img_upload", method: "post", data: formData }) // 调用接口上传图片
         },
         /* ********* 富文本编辑器图片上传操作 *********** */
 

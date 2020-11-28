@@ -77,8 +77,8 @@ router.post("/pic/img_upload", function (req, res) {
     form.uploadDir = "./upload";
     form.keepExtensions = true;
     form.parse(req, function (err, fields, files) {
-        console.log(fields);
-        console.log(files);
+        // console.log(fields);
+        // console.log(files);
         if (err) {
             console.log(err);
             res.json({ code: 0, msg: "上传失败！" })

@@ -1,40 +1,66 @@
 <template>
-    <div id="Editor"></div>
+    <div>
+        <div id="Editor"></div>
+        <button @click="getText" style="position:absolute;bottom:2em;">get text</button>
+    </div>
 </template>
 
 <script>
+import { IsURL } from "../utils/utils.js";
 export default {
-    mounted() {
-        const editor = new wangEditor("#Editor");
-        editor.highlight = hljs; // 代码高亮
-        Object.assign(editor.config, {
-            showFullScreen: true, // 是否显示全屏按钮
-            uploadImgAccept: ['jpg', 'jpeg', 'png', 'gif', 'bmp'], // 限制上传图片类型
-            uploadImgMaxLength: 1, // 一次最多上传 1张图片
-            uploadImgServer: "/pic/img_upload", // 图片上传接口图片
-            linkImgCallback: this.internetPic, // 上传网络图片成功回调
-            uploadImgMaxSize: 2 * 1024 * 1024, // 限制上传图片大小为 2M
-            uploadImgTimeout: 60 * 1000, // 上传图片超时时间
-            uploadFileName : 'file',
-            uploadImgParams :{
-                param:"holy fuck...."
-            }
-            // customUploadImg(resultFiles, insertImgFn) {
-            //     console.log(resultFiles);
-                // resultFiles 是 input 中选中的文件列表
-                // insertImgFn 是获取图片 url 后，插入到编辑器的方法
-
-                // 上传图片，返回结果，将图片插入到编辑器中
-                // insertImgFn(imgUrl)
-            // }
-        });
-        console.log(editor.config);
-        editor.create();
+    data () {
+        return {
+            editor: null
+        }
     },
     methods: {
-        internetPic(src) {
+        editorInit () {
+            this.editor = new wangEditor("#Editor");
+            this.editor.highlight = hljs; // 代码高亮
+            Object.assign(this.editor.config, {
+                showFullScreen: true, // 是否显示全屏按钮
+                uploadImgAccept: ["jpg", "jpeg", "png", "gif", "bmp"], // 限制上传图片类型
+                uploadImgMaxLength: 1, // 一次最多上传 1张图片
+                uploadImgServer: "/pic/img_upload", // 图片上传接口图片
+                linkImgCallback: this.internetPic, // 上传网络图片成功回调
+                uploadImgMaxSize: 2 * 1024 * 1024, // 限制上传图片大小为 2M
+                uploadImgTimeout: 60 * 1000, // 上传图片超时时间
+                uploadFileName: "file",
+                // uploadImgParams :{
+                //     param:"holy fuck...."
+                // },
+                // customUploadImg (resultFiles, insertImgFn) {
+                //     // resultFiles 是 input 中选中的文件列表
+                //     // insertImgFn 是获取图片 url 后，插入到编辑器的方法
+
+                //     // 上传图片，返回结果，将图片插入到编辑器中
+                //     insertImgFn(imgUrl)
+                // },
+                // linkImgCheck (imgSrc) { }, // 网络图片地址的校验... 不搞了
+                linkCheck (text, link) {
+                    return IsURL(link) ? true : "插入的不是URL地址, 请重新输入";
+                },
+                pasteFilterStyle: false, // 关闭粘贴样式过滤
+                pasteIgnoreImg: false // 忽略粘贴的图片 - 先不忽略
+            });
+            // console.log(this.editor.config);
+            this.editor.create();
+        },
+        internetPic (src) { // 上传网络图片成功回调
             console.log(src);
+        },
+        getText () {
+            let html = this.editor.txt.html()
+            console.log(html);
         }
+    },
+    mounted () {
+        this.editorInit()
+    },
+    beforeDestroy () {
+        // 销毁编辑器
+        this.editor.destroy()
+        this.editor = null
     }
 };
 </script>
