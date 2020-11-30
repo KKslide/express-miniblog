@@ -1,6 +1,6 @@
 <template>
     <div>
-        <div id="Editor"></div>
+        <div id="wangEditor"></div>
         <button @click="getText" style="position:absolute;bottom:2em;">get text</button>
     </div>
 </template>
@@ -15,7 +15,7 @@ export default {
     },
     methods: {
         editorInit () {
-            this.editor = new wangEditor("#Editor");
+            this.editor = new wangEditor("#wangEditor");
             this.editor.highlight = hljs; // 代码高亮
             Object.assign(this.editor.config, {
                 showFullScreen: true, // 是否显示全屏按钮
@@ -44,7 +44,9 @@ export default {
                 pasteIgnoreImg: false // 忽略粘贴的图片 - 先不忽略
             });
             // console.log(this.editor.config);
+            let str = `<p><img src="http://127.0.0.1/upload_1dc2887034c5645174663dd260e5834c.png" style="max-width:100%;"><br></p>`;
             this.editor.create();
+            this.editor.txt.html(str);
         },
         internetPic (src) { // 上传网络图片成功回调
             console.log(src);
@@ -66,7 +68,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-#Editor {
+#wangEditor {
     width: 100%;
     height: 100vh;
     padding: 10px;

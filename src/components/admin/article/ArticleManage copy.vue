@@ -29,7 +29,7 @@
                 <template slot-scope="scope">
                     <el-button
                         size="mini"
-                        @click="dialog=true; editorInit(); handleEdit(scope.$index, scope.row)"
+                        @click="dialog=true; handleEdit(scope.$index, scope.row)"
                     >编辑</el-button>
                     <el-button
                         size="mini"
@@ -50,19 +50,9 @@
         </el-dialog>
         <!-- 评论列表弹窗 -->
 
-        <el-button
-            type="text"
-            @click="
-                dialog = true;
-                dialogType = 'add';
-                drawer_title = '添加文章';
-                minpic_url_list = [];
-                imageUrl = '';
-                rest();
-                editorInit();
-            "
-            >添加文章</el-button
-        >
+        <el-button type="text"
+            @click="dialog = true;dialogType='add'; rest();drawer_title='添加文章';minpic_url_list=[];imageUrl=''"
+        >添加文章</el-button>
 
         <el-divider class="pager_divider"></el-divider>
         <!-- 分页组件 -->
@@ -211,13 +201,29 @@
                     </el-form-item>
                     <!-- 文章内容 -->
                     <el-form-item label="文章内容" :label-width="formLabelWidth" prop="content">
-                        <div id="wangEditor"></div>
+                        <quill-editor ref="myQuillEditor" v-model="form.content" class="myQuillEditor" :options="editorOption" />
+                        <form id="upload" class="hidden" enctype="multipart/form-data" method="post" >
+                            <!--用来上传图片-->
+                            <input
+                                type="file"
+                                name="image"
+                                id="selectImg"
+                                accept="image/gif, image/jpeg, image/png"
+                                @change="inputChangeImg"
+                                multiple
+                            />
+                            <input type="button" value="提交" @click="uploadPic" />
+                        </form>
                     </el-form-item>
                 </el-form>
                 <div class="demo-drawer__footer" style="margin-bottom:10px;">
-                    <el-button @click="dialog = false; editorDestroy();">取 消</el-button>
+                    <el-button @click="dialog = false">取 消</el-button>
                     <!-- <el-button type="primary" @click="$refs.drawer.closeDrawer()" :loading="loading" >{{ loading ? '提交中 ...' : '确 定' }}</el-button> -->
-                    <el-button type="primary" @click="submit" :loading="loading" >{{ loading ? '提交中 ...' : '确 定' }}</el-button>
+                    <el-button
+                        type="primary"
+                        @click="submit"
+                        :loading="loading"
+                    >{{ loading ? '提交中 ...' : '确 定' }}</el-button>
                 </div>
             </div>
         </el-drawer>
@@ -225,12 +231,28 @@
 </template>
 
 <script>
-import CommentCom from './CommentManage' // 评论模块
+import CommentCom from './CommentManage'
 import Cropper from './cropper'
-import { IsURL } from "../../../utils/utils"
+import { quillEditor } from 'vue-quill-editor'
 import 'quill/dist/quill.core.css'
 import 'quill/dist/quill.snow.css'
 import 'quill/dist/quill.bubble.css'
+const toolbarOptions = [ // 富文本编辑器配置
+    ['bold', 'italic', 'underline', 'strike'],        // toggled buttons
+    ['blockquote', 'code-block'],
+    [{ 'header': 1 }, { 'header': 2 }],               // custom button values
+    [{ 'list': 'ordered' }, { 'list': 'bullet' }],
+    [{ 'script': 'sub' }, { 'script': 'super' }],      // superscript/subscript
+    [{ 'indent': '-1' }, { 'indent': '+1' }],          // outdent/indent
+    [{ 'direction': 'rtl' }],                         // text direction
+    [{ 'size': ['small', false, 'large', 'huge'] }],  // custom dropdown
+    [{ 'header': [1, 2, 3, 4, 5, 6, false] }],
+    [{ 'color': [] }, { 'background': [] }],          // dropdown with defaults from theme
+    [{ 'font': [] }],
+    [{ 'align': [] }],
+    ['link', 'image', 'video'],
+    ['clean']                                         // remove formatting button
+];
 let that;
 export default {
     data() {
@@ -282,8 +304,22 @@ export default {
             },
             isShow: "1",
             formLabelWidth: '90px',
-            editor: null, // wangEditor编辑器实例
             editorOption: { //   富文本编辑器配置
+                placeholder: "请在这里编辑文章内容",
+                modules: {
+                    toolbar: {
+                        container: toolbarOptions,  // 工具栏
+                        handlers: {
+                            'image': function (value) {
+                                if (value) {
+                                    document.getElementById("selectImg").click();    //调用选择图片
+                                } else {
+                                    this.quill.format('image', false);
+                                }
+                            }
+                        }
+                    }
+                }
             },
             rules: { // 校验规则
                 title: [{ required: true, message: '写一下文章标题啦', trigger: 'blur' }],
@@ -329,7 +365,7 @@ export default {
     },
     //   *************cropper组件配置****************
     components: {
-        // quillEditor,
+        quillEditor,
         Cropper,
         CommentCom
     },
@@ -381,7 +417,6 @@ export default {
             }
             this.$confirm('保存草稿功能未开放, 确定要关闭吗 ?')
                 .then(_ => {
-                    this.editorDestroy()
                     done();
                 })
                 .catch(_ => { });
@@ -558,45 +593,39 @@ export default {
                 this.hideUpload = false
             }
             this.isShow = row.is_show == '是' ? '1' : '0';
-            this.$nextTick(_=>{
-                this.editor.txt.html(this.form.composition);
-            })
         },
-
-        /* ********* wangEditor编辑器的配置 *********** */
-        editorInit () { // wangEditor编辑器的配置
-            this.$nextTick(_=>{
-                this.editor = new wangEditor("#wangEditor");
-                this.editor.highlight = hljs; // 代码高亮
-                Object.assign(this.editor.config, {
-                    height:180,
-                    showFullScreen: true, // 是否显示全屏按钮
-                    uploadImgAccept: ["jpg", "jpeg", "png", "gif", "bmp"], // 限制上传图片类型
-                    uploadImgMaxLength: 1, // 一次最多上传 1张图片
-                    uploadImgServer: "/pic/img_upload", // 图片上传接口图片
-                    linkImgCallback: this.internetPic, // 上传网络图片成功回调
-                    uploadImgMaxSize: 2 * 1024 * 1024, // 限制上传图片大小为 2M
-                    uploadImgTimeout: 60 * 1000, // 上传图片超时时间
-                    uploadFileName: "file",
-                    linkCheck (text, link) {
-                        return IsURL(link) ? true : "插入的不是URL地址, 请重新输入";
-                    },
-                    pasteFilterStyle: false, // 关闭粘贴样式过滤
-                    pasteIgnoreImg: false, // 忽略粘贴的图片 - 先不忽略
-                    onblur: html => this.form.content = html, // 编辑区域 和 blur（失焦）- 同步form表单
-                    onfocus: html => this.form.content = html, // 编辑区域 focus（聚焦）- 同步form表单
-                });
-                this.editor.create();
-            })
+        /* ********* 富文本编辑器图片上传操作 *********** */
+        selectImg() {  //选择图片
+            document.getElementById("selectImg").click();
         },
-        internetPic (src) { // 上传网络图片成功回调
-            console.log(src);
+        inputChangeImg: function () { // input 选择图片时的操作
+            let that = this;
+            let input = document.getElementById('selectImg');
+            if (input.files && input.files[0]) {
+                let item = input.files[0];
+                let reader = new FileReader();
+                reader.readAsDataURL(item);
+                reader.onload = function () {
+                    let url = this.result;
+                    that.uploadPic(item).then(res => {
+                        that.handleSuccess(res.data)
+                    })
+                }
+            }
         },
-        editorDestroy () { // 销毁编辑器
-            this.editor.destroy()
-            this.editor = null
+        handleSuccess(res) {
+            let quill = this.$refs.myQuillEditor.quill
+            let length = quill.getSelection().index;    // 获取光标所在位置
+            quill.insertEmbed(length, 'image', res.imageUrl);   // 插入图片  res.url为服务器返回的图片地址  
+            quill.setSelection(length + 1);              // 调整光标到最后
         },
-        /* ********* wangEditor编辑器的配置 *********** */
+        uploadPic: function (item) {  //提交图片
+            let form = document.getElementById('upload'),
+                formData = new FormData(form);
+            formData.file = item;
+            return this.$axios({ url: "/pic/img_upload", method: "post", data: formData }) // 调用接口上传图片
+        },
+        /* ********* 富文本编辑器图片上传操作 *********** */
 
         /* ************* cropper截图上传 ************** */
         handlePreviewSingle(file) {//点击进行图片展示
@@ -627,9 +656,8 @@ export default {
             // 自定义upload事件
             this.$refs.uploading.style.display = 'block'
             let imgData = new FormData();
-            let fileOfBlob = new File([data],'uploadPic.'+data.type.split('/')[1]);
-            imgData.append('file', fileOfBlob);
-            imgData.image = fileOfBlob;
+            imgData.append('file', data);
+            imgData.image = data;
             this.$axios.post(this.targetUrl, imgData).then(res => {
                 // 上传完成后隐藏正在上传
                 this.$refs.uploading.style.display = 'none'
@@ -751,11 +779,7 @@ export default {
     height: unset !important;
 }
 
-// *********************** wangEditor富文本编辑器 ************************
-#wangEditor{
-    padding: 10px;
-}
-// *********************** wangEditor富文本编辑器 ************************
+// *********************** 富文本编辑器 ************************
 #article {
     padding: 15px;
 }

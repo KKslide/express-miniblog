@@ -88,10 +88,9 @@ router.post("/pic/img_upload", function (req, res) {
                 code: 1,
                 msg: "上传成功！",
                 errno: 0,
-                // path: 'http://' + ip + '/' + path.basename(files.file.path),
-                // data:[ 'http://' + ip + '/' + path.basename(files.file.path) ]
                 path: 'http://' + ip + '/' + path.basename(Object.values(files)[0].path),
-                data:[ 'http://' + ip + '/' + path.basename(Object.values(files)[0].path) ]
+                data:[ 'http://' + ip + '/' + path.basename(Object.values(files)[0].path) ],
+                imageUrl: 'http://' + ip + '/' + path.basename(Object.values(files)[0].path),
             })
         }
     })
