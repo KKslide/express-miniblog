@@ -41,7 +41,7 @@ module.exports.picUpload = function (req, res, callback) {
             }
             if (respInfo.statusCode == 200) {
                 var imageSrc = imageUrl + respBody.key;
-                res.end(JSON.stringify({ status: '200', msg: '上传成功', imageUrl: imageSrc }));
+                res.end(JSON.stringify({ status: '200', errno: 0, msg: '上传成功', imageUrl: imageSrc, data: [imageSrc] }));
                 console.log(respBody);
             } else {
                 res.end(JSON.stringify({ status: '-1', msg: '上传失败', error: JSON.stringify(respBody) }));
