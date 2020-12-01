@@ -107,12 +107,7 @@
                     <!-- 文章分类 -->
                     <el-form-item label="文章分类" :label-width="formLabelWidth" prop="category">
                         <el-select v-model="form.category" placeholder="请选文章分类">
-                            <el-option
-                                v-for="(v,i) in categoryData"
-                                :key="i"
-                                :label="v.name"
-                                :value="v.id"
-                            ></el-option>
+                            <el-option v-for="(v,i) in categoryData" :key="i" :label="v.name" :value="v.id" ></el-option>
                         </el-select>
                     </el-form-item>
                     <!-- 文章简介 -->
@@ -120,11 +115,7 @@
                         <el-input v-model="form.description" autocomplete="off"></el-input>
                     </el-form-item>
                     <!-- 视频链接 -->
-                    <el-form-item
-                        v-if="form.category==isVideo('Vlog')"
-                        label="视频链接"
-                        :label-width="formLabelWidth"
-                    >
+                    <el-form-item v-if="form.category==isVideo('Vlog')" label="视频链接" :label-width="formLabelWidth" >
                         <el-input v-model="form.video_src" autocomplete="off"></el-input>
                     </el-form-item>
                     <!-- 缩略图 -->
@@ -226,8 +217,8 @@
 
 <script>
 import CommentCom from './CommentManage' // 评论模块
-import Cropper from './cropper'
-import { IsURL } from "../../../utils/utils"
+import Cropper from './Cropper'
+import { IsURL, deepClone } from "../../../utils/utils"
 import 'quill/dist/quill.core.css'
 import 'quill/dist/quill.snow.css'
 import 'quill/dist/quill.bubble.css'
@@ -299,7 +290,7 @@ export default {
         targetUrl: {
             // 上传地址
             type: String,
-            default: '/pic/img_upload'
+            default: '/pic/upload'
         },
         multiple: {
             // 多图开关
@@ -573,7 +564,7 @@ export default {
                     showFullScreen: true, // 是否显示全屏按钮
                     uploadImgAccept: ["jpg", "jpeg", "png", "gif", "bmp"], // 限制上传图片类型
                     uploadImgMaxLength: 1, // 一次最多上传 1张图片
-                    uploadImgServer: "/pic/img_upload", // 图片上传接口图片
+                    uploadImgServer: "/pic/upload", // 图片上传接口图片
                     linkImgCallback: this.internetPic, // 上传网络图片成功回调
                     uploadImgMaxSize: 2 * 1024 * 1024, // 限制上传图片大小为 2M
                     uploadImgTimeout: 60 * 1000, // 上传图片超时时间
@@ -585,12 +576,13 @@ export default {
                     pasteIgnoreImg: false, // 忽略粘贴的图片 - 先不忽略
                     onblur: html => this.form.content = html, // 编辑区域 和 blur（失焦）- 同步form表单
                     onfocus: html => this.form.content = html, // 编辑区域 focus（聚焦）- 同步form表单
+                    onchange: html => this.form.content = html, // 编辑区域 focus（鼠标点击、键盘打字等）- 同步form表单
                 });
                 this.editor.create();
             })
         },
         internetPic (src) { // 上传网络图片成功回调
-            console.log(src);
+            // console.log(src);
         },
         editorDestroy () { // 销毁编辑器
             this.editor.destroy()
@@ -600,8 +592,8 @@ export default {
 
         /* ************* cropper截图上传 ************** */
         handlePreviewSingle(file) {//点击进行图片展示
-            console.log('aaaaa',this.dialogImageUrl);
-            console.log(this.imageUrl);
+            // console.log('aaaaa',this.dialogImageUrl);
+            // console.log(this.imageUrl);
             this.dialogImageUrl = this.imageUrl
             this.dialogVisible = true
         },
@@ -758,89 +750,5 @@ export default {
 // *********************** wangEditor富文本编辑器 ************************
 #article {
     padding: 15px;
-}
-.editor {
-    line-height: normal !important;
-    height: 800px;
-}
-.ql-snow .ql-tooltip[data-mode="link"]::before {
-    content: "请输入链接地址:";
-}
-.ql-snow .ql-tooltip.ql-editing a.ql-action::after {
-    border-right: 0px;
-    content: "保存";
-    padding-right: 0px;
-}
-
-.ql-snow .ql-tooltip[data-mode="video"]::before {
-    content: "请输入视频地址:";
-}
-
-.ql-snow .ql-picker.ql-size .ql-picker-label::before,
-.ql-snow .ql-picker.ql-size .ql-picker-item::before {
-    content: "14px";
-}
-.ql-snow .ql-picker.ql-size .ql-picker-label[data-value="small"]::before,
-.ql-snow .ql-picker.ql-size .ql-picker-item[data-value="small"]::before {
-    content: "10px";
-}
-.ql-snow .ql-picker.ql-size .ql-picker-label[data-value="large"]::before,
-.ql-snow .ql-picker.ql-size .ql-picker-item[data-value="large"]::before {
-    content: "18px";
-}
-.ql-snow .ql-picker.ql-size .ql-picker-label[data-value="huge"]::before,
-.ql-snow .ql-picker.ql-size .ql-picker-item[data-value="huge"]::before {
-    content: "32px";
-}
-
-.ql-snow .ql-picker.ql-header .ql-picker-label::before,
-.ql-snow .ql-picker.ql-header .ql-picker-item::before {
-    content: "文本";
-}
-.ql-snow .ql-picker.ql-header .ql-picker-label[data-value="1"]::before,
-.ql-snow .ql-picker.ql-header .ql-picker-item[data-value="1"]::before {
-    content: "标题1";
-}
-.ql-snow .ql-picker.ql-header .ql-picker-label[data-value="2"]::before,
-.ql-snow .ql-picker.ql-header .ql-picker-item[data-value="2"]::before {
-    content: "标题2";
-}
-.ql-snow .ql-picker.ql-header .ql-picker-label[data-value="3"]::before,
-.ql-snow .ql-picker.ql-header .ql-picker-item[data-value="3"]::before {
-    content: "标题3";
-}
-.ql-snow .ql-picker.ql-header .ql-picker-label[data-value="4"]::before,
-.ql-snow .ql-picker.ql-header .ql-picker-item[data-value="4"]::before {
-    content: "标题4";
-}
-.ql-snow .ql-picker.ql-header .ql-picker-label[data-value="5"]::before,
-.ql-snow .ql-picker.ql-header .ql-picker-item[data-value="5"]::before {
-    content: "标题5";
-}
-.ql-snow .ql-picker.ql-header .ql-picker-label[data-value="6"]::before,
-.ql-snow .ql-picker.ql-header .ql-picker-item[data-value="6"]::before {
-    content: "标题6";
-}
-
-.ql-snow .ql-picker.ql-font .ql-picker-label::before,
-.ql-snow .ql-picker.ql-font .ql-picker-item::before {
-    content: "标准字体";
-}
-.ql-snow .ql-picker.ql-font .ql-picker-label[data-value="serif"]::before,
-.ql-snow .ql-picker.ql-font .ql-picker-item[data-value="serif"]::before {
-    content: "衬线字体";
-}
-.ql-snow .ql-picker.ql-font .ql-picker-label[data-value="monospace"]::before,
-.ql-snow .ql-picker.ql-font .ql-picker-item[data-value="monospace"]::before {
-    content: "等宽字体";
-}
-.ql-align-center {
-    text-align: center;
-}
-.ql-align-right {
-    text-align: right;
-}
-.ql-align-left {
-    text-align: left;
 }
 </style>

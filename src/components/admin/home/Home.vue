@@ -87,8 +87,8 @@ export default {
         document.querySelector("body").style.background = "#131417";
         this.getData();
         window.onresize = _ => {
-            this.$refs.lineChart.chartResize();
-            this.$refs.pieChart.chartResize();
+            this.$refs.lineChart && this.$refs.lineChart.chartResize();
+            this.$refs.pieChart && this.$refs.pieChart.chartResize();
         }
     },
     beforeDestroy() {

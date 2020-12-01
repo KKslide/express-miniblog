@@ -223,6 +223,7 @@ export default {
     },
     beforeDestroy(){
         this.chartEle.dispose()
+        this.chartEle = null
     }
 }
 </script>

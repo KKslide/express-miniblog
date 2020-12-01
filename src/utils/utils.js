@@ -22,4 +22,22 @@ const IsURL = function (str_url) { // 校验是否为网络地址
     }
 }
 
-export { IsURL }
+/**
+ * 深拷贝函数
+ * @param {Object} obj 传入一个需要深度克隆的对象或数组
+ */
+const deepClone = function (obj) {
+    var target = {};
+    for (var key in obj) {
+        if (Object.prototype.hasOwnProperty.call(obj, key)) {
+            if (typeof obj[key] === 'object') {
+                target[key] = deepClone(obj[key]);
+            } else {
+                target[key] = obj[key];
+            }
+        }
+    }
+    return target;
+}
+
+export { IsURL, deepClone }

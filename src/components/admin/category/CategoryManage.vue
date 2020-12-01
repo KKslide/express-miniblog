@@ -248,10 +248,9 @@ export default {
             let tempForm = new FormData();
             tempForm.append('file',files.raw);
             this.$refs.uploading.style.display = 'block';
-            this.$axios.post('/pic/img_upload',tempForm).then(res=>{
+            this.$axios.post('/pic/upload',tempForm).then(res=>{
                 this.$refs.uploading.style.display = 'none';
                 if(res.status==200){
-                    console.log(res);
                     this.categoryDetail.banner = res.data.imageUrl;
                 }else {
                     // 上传失败则显示上传失败，如多图则从图片列表删除图片

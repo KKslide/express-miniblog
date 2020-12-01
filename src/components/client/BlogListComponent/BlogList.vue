@@ -28,7 +28,9 @@
                         <div class="blog_list row" v-if="isAll">
                             <div class="shadow_outfit clearfix col-md-9" v-for="(main_item,index) in formedBlogList" :key="index" :data-pos="index">
                                 <div class="blog_list_item col-xs-12 col-md-7 col-md-offset-2" v-for="(item,index) in main_item" :key="index" >
-                                    <h3 class="blog_title" v-text="item.blogTitle"></h3>
+                                        <h3 class="blog_title">
+                                            <router-link class="blog_title_link" :to="{ name: 'logcontent', params: { contentid: item.id } }" v-text="item.blogTitle" :title="item.blogTitle"></router-link>
+                                        </h3>
                                     <p class="blog_info">
                                         <i class="fa fa-eye" ></i>
                                         {{item.blogViewNum}} |
@@ -97,6 +99,7 @@
 import Header from '../public/Header';
 import Footer from "../public/Footer";
 import LazyImg from '../public/LazyImg';
+import { deepClone } from "../../../utils/utils";
 export default {
     data() {
         return {
@@ -126,19 +129,6 @@ export default {
         goto(id) {
             this.$router.push({ name: 'logcontent', params: { contentid: id } })
         },
-        deepClone(obj) {
-            var target = {};
-            for(var key in obj) {
-                if (Object.prototype.hasOwnProperty.call(obj, key)) {
-                    if (typeof obj[key] === 'object') {
-                        target[key] = this.deepClone(obj[key]); 
-                    } else {
-                        target[key] = obj[key];
-                    }
-                }
-            }
-            return target;
-        },
         getArticles() {
             this.$axios({
                 url: '/index/getpage',
@@ -161,7 +151,7 @@ export default {
                             "blogPic" : v.minpic_url
                         });
                     });
-                    this.sortList = this.deepClone(this.blogList);
+                    this.sortList = deepClone(this.blogList);
                     this.catList = res.data.catList.filter(v=>{return v.name!='Vlog'});
 
                     this.catList.forEach((cat_v)=>{
@@ -240,8 +230,19 @@ export default {
                 white-space: nowrap;
                 text-overflow: ellipsis;
                 overflow: hidden;
+                a.blog_title_link{
+                    color:rgba(0,0,0,.75);
+                    text-decoration: none;
+                    transition: all .3s;
+                }
             }
-            // p.blog_info{}
+            h3.blog_title{
+                a.blog_title_link:hover{
+                    transform: scale(1.1);
+                    color:rgba(0,0,0,.9);
+                    text-shadow: 1px 0px 3px rgba(0,0,0,.6);
+                }
+            }
             h4.blog_intro{
                 margin: 15px 0;
             }
