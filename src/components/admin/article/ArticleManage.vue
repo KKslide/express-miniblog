@@ -219,9 +219,6 @@
 import CommentCom from './CommentManage' // 评论模块
 import Cropper from './Cropper'
 import { IsURL, deepClone } from "../../../utils/utils"
-import 'quill/dist/quill.core.css'
-import 'quill/dist/quill.snow.css'
-import 'quill/dist/quill.bubble.css'
 let that;
 export default {
     data() {
@@ -320,7 +317,6 @@ export default {
     },
     //   *************cropper组件配置****************
     components: {
-        // quillEditor,
         Cropper,
         CommentCom
     },
