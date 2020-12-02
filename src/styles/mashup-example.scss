@@ -109,6 +109,14 @@ p {
     }
 }
 
+/* 作品管理 图片上传组件样式 */
+#workManage{
+    .avatar-uploader .el-upload.el-upload--picture-card{
+        width: 100px !important;
+        height: 120px !important;
+    }
+}
+
 /* table 单元格样式重写 - 超出设置省略号 */
 .cell_nowrap>div.cell {
     white-space: nowrap;
