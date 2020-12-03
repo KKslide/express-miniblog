@@ -92,6 +92,7 @@ export default {
             bannerHeight:88,
             file:'',
             reupload: true, // 控制"重新上传"开关
+            reuploadWidth: this.height * 0.7, // 动态改变”重新上传“大小
             categoryData: [],
             categoryDetail: {
                 id: "",

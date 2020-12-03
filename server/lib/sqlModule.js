@@ -117,7 +117,7 @@ module.exports.loginQuery = function (options, callback) {
 }
 
 /**
- * 后台管理页一些恶心查询↓
+ * 后台管理页一些复杂查询↓
  */
 /* 管理页首页数据 */
 module.exports.getDashboardData = function (callback) {

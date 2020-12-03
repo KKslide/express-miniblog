@@ -261,6 +261,71 @@ module.exports.editArticle = function (req, res) {
     })
 }
 
+/* *********************作品管理********************* */
+/* 作品-获取 */
+module.exports.getWorkList = function (req, res) {
+    var opt = {
+        table: 'work',
+        type: 'all'
+    }
+    dbMoudle.doQuery(opt, (err, data) => {
+        res.json(data);
+    });
+}
+/* 作品-新增 */
+module.exports.addWork = function (req, res) {
+    var img = req.body.img || 'http://example.kkslide.fun/banner.jpg';
+    var obj = {
+        'table': 'work',
+        'data': {
+            'name': `'${req.body.name}'`,
+            'tag': `'${req.body.tag}'`,
+            'img': `'${req.body.img || "http://example.kkslide.fun/banner.jpg"}'`,
+            'description': `'${req.body.description}'`,
+            'link': `'${req.body.link}'`,
+            'addtime': `'${req.body.addtime || util.getNow()}'`,
+            'symbol': `'${req.body.symbol}'`,
+            'is_del': `0`
+        }
+    }
+    dbMoudle.doAdd(obj, (err, data) => {
+        res.json({ code: 1, msg: "success" });
+    })
+}
+/* 文章评论-删除 */
+module.exports.delWork = function (req, res) {
+    var opt = {
+        id: req.body.id || req.query.id,
+        table: 'work'
+    }
+    dbMoudle.doDel(opt, (err, data) => {
+        res.json({ code: 1, msg: "删除成功" });
+    })
+}
+/* 文章评论-编辑 */
+module.exports.editWork = function (req, res) {
+    var opt = {
+        'table': 'work',
+        'id': req.body.id,
+        'data': {
+            'name': `'${req.body.name}'`,
+            'tag': `'${req.body.tag}'`,
+            'img': `'${req.body.img}'`,
+            'description': `'${req.body.description}'`,
+            'link': `'${req.body.link}'`,
+            'addtime': `'${util.getNow()}'`,
+            'symbol': `'${req.body.symbol}'`
+        }
+    };
+    dbMoudle.doEdit(opt, (err) => {
+        if (err) {
+            res.json({ code: 0, err: err })
+        } else {
+            res.json({ code: 1, msg: "修改成功" });
+        }
+    })
+}
+
 /* *********************评论管理********************* */
 /* 文章评论-获取 */
 module.exports.getComment = function (req, res) {

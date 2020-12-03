@@ -11,6 +11,8 @@ router.get('/index/getpage', handler.getIndexPage);
 router.post('/index/getcontent', handler.getContentPage);
 /* 评论文章 */
 router.post('/index/comment', handler.Comment);
+/* 获取作品列表 */
+router.post('/index/getworklist', handler.getWorkList);
 /* 留言 */
 router.post('/index/message/add', handler.leaveMessage);
 
@@ -55,6 +57,16 @@ router.post('/admin/articles/del', handler.delArticle);
 /* 文章-修改 */
 router.post('/admin/articles/edit', handler.editArticle)
 
+/* 作品 */
+/* 作品-获取 */
+router.get('/admin/work', handler.getWorkList);
+/* 作品-新增 */
+router.post('/admin/work/add', handler.addWork);
+/* 作品-删除 */
+router.post('/admin/work/del', handler.delWork)
+/* 作品-编辑 */
+router.post('/admin/work/edit', handler.editWork)
+
 /* 评论 */
 /* 评论-获取 */
 router.get('/admin/comment', handler.getComment);
@@ -89,7 +101,7 @@ router.post("/pic/img_upload", function (req, res) {
                 msg: "上传成功！",
                 errno: 0,
                 path: 'http://' + ip + '/' + path.basename(Object.values(files)[0].path),
-                data:[ 'http://' + ip + '/' + path.basename(Object.values(files)[0].path) ],
+                data: ['http://' + ip + '/' + path.basename(Object.values(files)[0].path)],
                 imageUrl: 'http://' + ip + '/' + path.basename(Object.values(files)[0].path),
             })
         }

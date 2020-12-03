@@ -249,7 +249,21 @@ export default {
     'header-com': Header,
     'footer-com': Footer
   },
+  methods:{
+    getWorkList(){ // 获取作品列表页面
+        this.$axios({
+            url:"/index/getworklist",
+            method:"post",
+            data:{
+                list_type:'work'
+            }
+        }).then(res=>{
+            console.log(res);
+        })
+    }
+  },
   mounted(){
+    this.getWorkList()
     this.$nextTick(_=>{
         new Grid(document.querySelector('.grid'))
         imagesLoaded(document.querySelectorAll('.box__img'), () => document.body.classList.remove('loading'));
