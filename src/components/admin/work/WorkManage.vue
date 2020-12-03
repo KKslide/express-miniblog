@@ -3,9 +3,7 @@
         <el-table :data="workDataList" border style="width: 100%" :cell-class-name="setIdColumn" >
             <el-table-column prop="id" label="作品ID号" width="100"></el-table-column>
             <el-table-column prop="name" label="作品名称"></el-table-column>
-            <el-table-column prop="tag" label="标签">
-                <template slot-scope="scope"><span v-html="scope.row.tag == 'undefined' ? '-' : scope.row.tag"></span></template>
-            </el-table-column>
+            <el-table-column prop="tag" label="标签"></el-table-column>
             <el-table-column prop="img" label="缩略图">
                 <template slot-scope="scope">
                     <el-image
@@ -15,19 +13,16 @@
                     ></el-image>
                 </template>
             </el-table-column>
-            <el-table-column prop="description" label="描述">
-                <template slot-scope="scope"><span v-html="scope.row.description =='undefined' ? '-' : scope.row.description"></span></template>
-            </el-table-column>
+            <el-table-column prop="description" label="描述"></el-table-column>
             <el-table-column prop="link" label="链接"></el-table-column>
             <el-table-column prop="addtime" label="修改时间">
                 <template slot-scope="scope">
                     <p>{{ scope.row.addtime | date }}</p>
                 </template>
             </el-table-column>
-            <el-table-column prop="symbol" label="符号" width="100">
-                <template slot-scope="scope">
-                    <span v-html="scope.row.symbol =='undefined' ? '-' : scope.row.symbol"></span>
-                </template>
+            <el-table-column prop="symbol" label="符号" width="100"></el-table-column>
+            <el-table-column prop="style_type" label="前端样式">
+                <template slot-scope="scope"><span v-html="'样式-'+scope.row.style_type"></span></template>
             </el-table-column>
             <el-table-column label="操作">
                 <template slot-scope="scope">
@@ -38,7 +33,7 @@
         </el-table>
         <el-button type="text" @click='open'>新增作品</el-button>
         <!-- dialog组件 -->
-        <el-dialog :title="handleType=='add'?'添加作品':'编辑作品'"  :visible.sync="dialogVisible" width="50%" :before-close="handleClose">
+        <el-dialog :title="handleType=='add'?'添加作品':'编辑作品'" top="8vh"  :visible.sync="dialogVisible" width="50%" :before-close="handleClose">
             <el-form :model="curEditWorkData" ref="curEditWorkData" label-width="120px" :rules="rules" >
                 <el-form-item label="作品名称" prop="name">
                     <el-input v-model="curEditWorkData.name" autocomplete="off"></el-input>
@@ -90,6 +85,16 @@
                 <el-form-item label="作品图标" prop="symbol">
                     <el-input v-model="curEditWorkData.symbol" autocomplete="off"></el-input>
                 </el-form-item>
+                <el-form-item label="前端样式" prop="style_type">
+                    <el-select v-model="curEditWorkData.style_type" popper-class="workManageDialog" placeholder="请选择" @change="$forceUpdate()">
+                        <el-option
+                            v-for="item in styleTypeList"
+                            :key="item.val"
+                            :label="item.label"
+                            :value="item.val">
+                        </el-option>
+                    </el-select>
+                </el-form-item>
             </el-form>
             <span slot="footer" class="dialog-footer">
                 <el-button @click="handleClose">取 消</el-button>
@@ -119,6 +124,7 @@ export default {
                 //     link:"https://kkslide.github.io/CSS-Collection.github.io/05-thanos-snap-effect/index.html",
                 //     addtime:"2020-06-17 17:26:44",
                 //     symbol:"&#x2600;&#xfe0e;"
+                //     style_type: "1"
                 // }
             ],
             curEditWorkData:{
@@ -127,14 +133,18 @@ export default {
                 img:"",
                 description:"",
                 link:"",
-                symbol:""
+                symbol:"",
+                style_type: ""
             },
+            styleTypeList:new Array(10).fill(0).map((v,i)=>{
+                return {label:"样式-"+(i+1),val:(i+1)+""}
+            }),
             rules:{
                 name:[{ required: true, message: '内容不能为空', trigger: 'blur' }],
                 img:[{required:true,message:'要上传图片呀!!',trigger:'blur'}],
-                // description:[{required:true,message:'描述内容!!',trigger:'blur'}],
+                description:[{required:true,message:'描述内容!!',trigger:'blur'}],
                 link:[{required:true,message:'这里要填写GitHub链接!!',trigger:'blur'}],
-                // symbol:[{required:true,message:'图标写一下!!',trigger:'blur'}],
+                symbol:[{required:true,message:'图标写一下!!',trigger:'blur'}],
             }
         }
     },
@@ -244,26 +254,11 @@ export default {
                     message: '已取消删除'
                 });
             });
-            // **************************
-            //   this.$axios({
-            //     url: '/admin/categories/del',
-            //     method: 'post',
-            //     data: {
-            //       id: row._id
-            //     }
-            //   }).then(res => {
-            //     if (res.data.code == 1) {
-            //       this.$message({
-            //         type: 'success',
-            //         message: res.data.msg
-            //       });
-            //     }
-            //   })
         },
         edit(index, row) { // 编辑按钮
             this.handleType="edit";
             Object.assign(this.curEditWorkData,row);
-              this.dialogVisible=true;
+            this.dialogVisible=true;
         },
         setIdColumn({ row, column, rowIndex }) { // 设置栏目样式
             if (column.property == 'link' || column.property == 'addtime') {
@@ -298,7 +293,7 @@ export default {
         height: 120px;
         // max-height: 120px;
         display: block;
-        margin: 0 auto;
+        margin: -1px 0px 0px -1px;
     }
     .avatar-uploader .el-upload {
         border: 1px dashed #d9d9d9;

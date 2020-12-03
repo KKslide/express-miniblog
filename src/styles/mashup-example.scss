@@ -116,6 +116,12 @@ p {
         height: 120px !important;
     }
 }
+/* 作品管理 下拉框的最后一个显示不完全 看着难受 */
+.workManageDialog{
+    li.el-select-dropdown__item:last-child{
+        margin-bottom: 10px;
+    }
+}
 
 /* table 单元格样式重写 - 超出设置省略号 */
 .cell_nowrap>div.cell {
