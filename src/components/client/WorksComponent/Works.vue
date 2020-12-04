@@ -8,90 +8,90 @@
                 <div class="content">
                     <div class="grid">
                         <!-- 循环体: 根据不同样式, 渲染不同的样式组合 -->
-                        <a class="grid__item" v-for="(item,index) in worklist" :key="index" :href="'#preview-'+item.id" >
+                        <a class="grid__item" v-for="(item,index) in worklist" :key="index" :href="'#preview-'+item.id">
                             <div class="box" v-if="item.style_type=='1'">
                                 <div class="box__shadow"></div>
-                                <img class="box__img" src="../../../assets/img/1.jpg" alt="Some image"/>
-                                <h3 class="box__title"><span class="box__title-inner" data-hover="Memo">Memo</span></h3>
-                                <h4 class="box__text"><span class="box__text-inner">Beast</span></h4>
-                                <div class="box__deco">&#10014;</div>
-                                <p class="box__content">"Sometimes we go surfing when it's stormy weather"</p>
+                                <img class="box__img" :src="item.img" :alt="item.name"/>
+                                <h3 class="box__title"><span class="box__title-inner" :data-hover="item.name" v-html="item.name"></span></h3>
+                                <h4 class="box__text"><span class="box__text-inner" v-html="item.tag"></span></h4>
+                                <div class="box__deco" v-html="item.symbol"></div>
+                                <p class="box__content" v-html='`"${item.description}"`'></p>
                             </div>
                             
                             <div class="box" v-else-if="item.style_type=='2'">
                                 <div class="box__shadow"></div>
-                                <img class="box__img" src="../../../assets/img/2.jpg" alt="Some image"/>
-                                <h3 class="box__title box__title--straight box__title--bottom"><span class="box__title-inner" data-hover="Gun">Gun</span></h3>
-                                <h4 class="box__text box__text--bottom"><span class="box__text-inner box__text-inner--rotated1">Rain</span></h4>
-                                <div class="box__deco box__deco--top">&#10115;</div>
+                                <img class="box__img" :src="item.img" :alt="item.name"/>
+                                <h3 class="box__title box__title--straight box__title--bottom"><span class="box__title-inner" :data-hover="item.name" v-html="item.name"></span></h3>
+                                <h4 class="box__text box__text--bottom"><span class="box__text-inner box__text-inner--rotated1" v-html="item.tag"></span></h4>
+                                <div class="box__deco box__deco--top" v-html="item.symbol"></div>
                             </div>
 
                             <div class="box" v-else-if="item.style_type=='3'">
                                 <div class="box__shadow"></div>
-                                <img class="box__img" src="../../../assets/img/3.jpg" alt="Some image"/>
-                                <h3 class="box__title"><span class="box__title-inner" data-hover="West">West</span></h3>
-                                <h4 class="box__text box__text--topcloser"><span class="box__text-inner">Green</span></h4>
-                                <div class="box__deco">&#10032;</div>
+                                <img class="box__img" :src="item.img" :alt="item.name"/>
+                                <h3 class="box__title"><span class="box__title-inner" :data-hover="item.name" v-html="item.name"></span></h3>
+                                <h4 class="box__text box__text--topcloser"><span class="box__text-inner" v-html="item.tag"></span></h4>
+                                <div class="box__deco" v-html="item.symbol"></div>
                             </div>
 
                             <div class="box" v-else-if="item.style_type=='4'">
                                 <div class="box__shadow"></div>
-                                <img class="box__img" src="../../../assets/img/5.jpg" alt="Some image"/>
-                                <h3 class="box__title"><span class="box__title-inner" data-hover="Catch">Catch</span></h3>
-                                <h4 class="box__text box__text--bottom box__text--right"><span class="box__text-inner box__text-inner--rotated3">Fire</span></h4>
+                                <img class="box__img" :src="item.img" :alt="item.name"/>
+                                <h3 class="box__title"><span class="box__title-inner" :data-hover="item.name" v-html="item.name"></span></h3>
+                                <h4 class="box__text box__text--bottom box__text--right"><span class="box__text-inner box__text-inner--rotated3" v-html="item.tag"></span></h4>
                             </div>
 
                             <div class="box" v-else-if="item.style_type=='5'">
                                 <div class="box__shadow"></div>
-                                <img class="box__img" src="../../../assets/img/6.jpg" alt="Some image"/>
-                                <h3 class="box__title"><span class="box__title-inner" data-hover="Lim">Lim</span></h3>
-                                <h4 class="box__text box__text--bottomcloser"><span class="box__text-inner">Breed</span></h4>
+                                <img class="box__img" :src="item.img" :alt="item.name"/>
+                                <h3 class="box__title"><span class="box__title-inner" :data-hover="item.name" v-html="item.name"></span></h3>
+                                <h4 class="box__text box__text--bottomcloser"><span class="box__text-inner" v-html="item.tag"></span></h4>
                             </div>
 
                             <div class="box" v-else-if="item.style_type=='6'">
                                 <div class="box__shadow"></div>
-                                <img class="box__img" src="../../../assets/img/7.jpg" alt="Some image"/>
-                                <h3 class="box__title"><span class="box__title-inner" data-hover="Hard">Hard</span></h3>
-                                <h4 class="box__text"><span class="box__text-inner">Fast</span></h4>
-                                <p class="box__content">"Love stronger, stranger! Love stronger."</p>
+                                <img class="box__img" :src="item.img" :alt="item.name"/>
+                                <h3 class="box__title"><span class="box__title-inner" :data-hover="item.name" v-html="item.name"></span></h3>
+                                <h4 class="box__text"><span class="box__text-inner" v-html="item.tag"></span></h4>
+                                <p class="box__content" v-html="item.description"></p>
                             </div>
 
                             <div class="box" v-else-if="item.style_type=='7'">
                                 <div class="box__shadow"></div>
-                                <img class="box__img" src="../../../assets/img/8.jpg" alt="Some image"/>
-                                <h3 class="box__title box__title--straight box__title--bottom"><span class="box__title-inner" data-hover="Red">Red</span></h3>
-                                <h4 class="box__text box__title--bottom"><span class="box__text-inner box__text-inner--rotated1">Life</span></h4>
+                                <img class="box__img" :src="item.img" :alt="item.name"/>
+                                <h3 class="box__title box__title--straight box__title--bottom"><span class="box__title-inner" :data-hover="item.name" v-html="item.name"></span></h3>
+                                <h4 class="box__text box__title--bottom"><span class="box__text-inner box__text-inner--rotated1" v-html="item.tag"></span></h4>
                             </div>
 
                             <div class="box" v-else-if="item.style_type=='8'">
                                 <div class="box__shadow"></div>
-                                <img class="box__img" src="../../../assets/img/4.jpg" alt="Some image"/>
-                                <h3 class="box__title"><span class="box__title-inner" data-hover="Jack">Jack</span></h3>
-                                <h4 class="box__text box__text--bottom"><span class="box__text-inner">Bust</span></h4>
-                                <div class="box__deco">&#10108;</div>
+                                <img class="box__img" :src="item.img" :alt="item.name"/>
+                                <h3 class="box__title"><span class="box__title-inner" :data-hover="item.name" v-html="item.name"></span></h3>
+                                <h4 class="box__text box__text--bottom"><span class="box__text-inner" v-html="item.tag"></span></h4>
+                                <div class="box__deco" v-html="item.symbol"></div>
                             </div>
 
                             <div class="box" v-else-if="item.style_type=='9'">
                                 <div class="box__shadow"></div>
-                                <img class="box__img" src="../../../assets/img/10.jpg" alt="Some image"/>
-                                <h3 class="box__title"><span class="box__title-inner" data-hover="Wild">Wild</span></h3>
-                                <h4 class="box__text box__text--bottom"><span class="box__text-inner">Zack</span></h4>
+                                <img class="box__img" :src="item.img" :alt="item.name"/>
+                                <h3 class="box__title"><span class="box__title-inner" :data-hover="item.name" v-html="item.name"></span></h3>
+                                <h4 class="box__text box__text--bottom"><span class="box__text-inner" v-html="item.tag"></span></h4>
                             </div>
 
                             <div class="box" v-else-if="item.style_type=='10'">
                                 <div class="box__shadow"></div>
-                                <img class="box__img" src="../../../assets/img/11.jpg" alt="Some image"/>
-                                <h3 class="box__title box__title--bottom"><span class="box__title-inner" data-hover="Lost">Lost</span></h3>
-                                <h4 class="box__text"><span class="box__text-inner box__text-inner--rotated2">Rust</span></h4>
-                                <p class="box__content">"Call it a hurricane or call it freedom, Frank"</p>
+                                <img class="box__img" :src="item.img" :alt="item.name"/>
+                                <h3 class="box__title box__title--bottom"><span class="box__title-inner" :data-hover="item.name" v-html="item.name"></span></h3>
+                                <h4 class="box__text"><span class="box__text-inner box__text-inner--rotated2" v-html="item.tag"></span></h4>
+                                <p class="box__content" v-html="item.description"></p>
                             </div>
 
                             <div class="box" v-else-if="item.style_type=='11'">
                                 <div class="box__shadow"></div>
-                                <img class="box__img" src="../../../assets/img/12.jpg" alt="Some image"/>
-                                <h3 class="box__title box__title--straight box__title--left"><span class="box__title-inner" data-hover="Grit">Grit</span></h3>
-                                <h4 class="box__text box__text--bottom box__text--right"><span class="box__text-inner box__text-inner--rotated3">Mud</span></h4>
-                                <div class="box__deco box__deco--top">&#10153;</div>
+                                <img class="box__img" :src="item.img" :alt="item.name"/>
+                                <h3 class="box__title box__title--straight box__title--left"><span class="box__title-inner" :data-hover="item.name" v-html="item.name"></span></h3>
+                                <h4 class="box__text box__text--bottom box__text--right"><span class="box__text-inner box__text-inner--rotated3" v-html="item.tag"></span></h4>
+                                <div class="box__deco box__deco--top" v-html="item.symbol"></div>
                             </div>
                         </a>
                     </div>
@@ -103,92 +103,92 @@
                     <div class="overlay__item" v-for="(item,index) in worklist" :key="index*Math.random()" :id="'preview-'+item.id">
                         <div class="box" v-if="item.style_type=='1'">
                             <div class="box__shadow"></div>
-                            <img class="box__img box__img--original" src="../../../assets/img/original/1.jpg" alt="Some image"/>
-                            <h3 class="box__title"><span class="box__title-inner">Memo</span></h3>
-                            <h4 class="box__text"><span class="box__text-inner">Beast</span></h4>
-                            <div class="box__deco">&#10014;</div>
+                            <img class="box__img box__img--original" :src="item.img" :alt="item.name"/>
+                            <h3 class="box__title"><span class="box__title-inner" v-html="item.name"></span></h3>
+                            <h4 class="box__text"><span class="box__text-inner" v-html="item.tag"></span></h4>
+                            <div class="box__deco" v-html="item.symbol"></div>
                         </div>
 
                         <div class="box" v-else-if="item.style_type=='2'">
                             <div class="box__shadow"></div>
-                            <img class="box__img box__img--original" src="../../../assets/img/original/2.jpg" alt="Some image"/>
-                            <h3 class="box__title box__title--straight box__title--bottom"><span class="box__title-inner">Gun</span></h3>
-                            <h4 class="box__text box__text--bottom"><span class="box__text-inner box__text-inner--rotated1">Rain</span></h4>
-                            <div class="box__deco box__deco--top">&#10115;</div>
+                            <img class="box__img box__img--original" :src="item.img" :alt="item.name"/>
+                            <h3 class="box__title box__title--straight box__title--bottom"><span class="box__title-inner" v-html="item.name"></span></h3>
+                            <h4 class="box__text box__text--bottom"><span class="box__text-inner box__text-inner--rotated1" v-html="item.tag"></span></h4>
+                            <div class="box__deco box__deco--top" v-html="item.symbol"></div>
                         </div>
 
                         <div class="box" v-else-if="item.style_type=='3'">
                             <div class="box__shadow"></div>
-                            <img class="box__img box__img--original" src="../../../assets/img/original/3.jpg" alt="Some image"/>
-                            <h3 class="box__title"><span class="box__title-inner">West</span></h3>
-                            <h4 class="box__text box__text--topcloser"><span class="box__text-inner">Green</span></h4>
-                            <div class="box__deco">&#10032;</div>
+                            <img class="box__img box__img--original" :src="item.img" :alt="item.name"/>
+                            <h3 class="box__title"><span class="box__title-inner" v-html="item.name"></span></h3>
+                            <h4 class="box__text box__text--topcloser"><span class="box__text-inner" v-html="item.tag"></span></h4>
+                            <div class="box__deco" v-html="item.symbol"></div>
                         </div>
 
                         <div class="box" v-else-if="item.style_type=='4'">
                             <div class="box__shadow"></div>
-                            <img class="box__img box__img--original" src="../../../assets/img/original/5.jpg" alt="Some image"/>
-                            <h3 class="box__title"><span class="box__title-inner">Catch</span></h3>
-                            <h4 class="box__text box__text--bottom box__text--right"><span class="box__text-inner box__text-inner--rotated3">Fire</span></h4>
+                            <img class="box__img box__img--original" :src="item.img" :alt="item.name"/>
+                            <h3 class="box__title"><span class="box__title-inner" v-html="item.name"></span></h3>
+                            <h4 class="box__text box__text--bottom box__text--right"><span class="box__text-inner box__text-inner--rotated3" v-html="item.tag"></span></h4>
                         </div>
 
                         <div class="box" v-else-if="item.style_type=='5'">
                             <div class="box__shadow"></div>
-                            <img class="box__img box__img--original" src="../../../assets/img/original/6.jpg" alt="Some image"/>
-                            <h3 class="box__title"><span class="box__title-inner">Lim</span></h3>
-                            <h4 class="box__text box__text--bottomcloser"><span class="box__text-inner">Breed</span></h4>
+                            <img class="box__img box__img--original" :src="item.img" :alt="item.name"/>
+                            <h3 class="box__title"><span class="box__title-inner" v-html="item.name"></span></h3>
+                            <h4 class="box__text box__text--bottomcloser"><span class="box__text-inner" v-html="item.tag"></span></h4>
                         </div>
 
                         <div class="box" v-else-if="item.style_type=='6'">
                             <div class="box__shadow"></div>
-                            <img class="box__img box__img--original" src="../../../assets/img/original/7.jpg" alt="Some image"/>
-                            <h3 class="box__title"><span class="box__title-inner">Hard</span></h3>
-                            <h4 class="box__text"><span class="box__text-inner">Fast</span></h4>
+                            <img class="box__img box__img--original" :src="item.img" :alt="item.name"/>
+                            <h3 class="box__title"><span class="box__title-inner" v-html="item.name"></span></h3>
+                            <h4 class="box__text"><span class="box__text-inner" v-html="item.tag"></span></h4>
                         </div>
 
                         <div class="box" v-else-if="item.style_type=='7'">
                             <div class="box__shadow"></div>
-                            <img class="box__img box__img--original" src="../../../assets/img/original/8.jpg" alt="Some image"/>
-                            <h3 class="box__title box__title--straight box__title--bottom"><span class="box__title-inner">Red</span></h3>
-                            <h4 class="box__text box__title--bottom"><span class="box__text-inner box__text-inner--rotated1">Life</span></h4>
+                            <img class="box__img box__img--original" :src="item.img" :alt="item.name"/>
+                            <h3 class="box__title box__title--straight box__title--bottom"><span class="box__title-inner" v-html="item.name"></span></h3>
+                            <h4 class="box__text box__title--bottom"><span class="box__text-inner box__text-inner--rotated1" v-html="item.tag"></span></h4>
                         </div>
 
                         <div class="box" v-else-if="item.style_type=='8'">
                             <div class="box__shadow"></div>
-                            <img class="box__img box__img--original" src="../../../assets/img/original/9.jpg" alt="Some image"/>
-                            <h3 class="box__title"><span class="box__title-inner">Jack</span></h3>
-                            <h4 class="box__text box__text--bottom"><span class="box__text-inner">Bust</span></h4>
-                            <div class="box__deco">&#10108;</div>
+                            <img class="box__img box__img--original" :src="item.img" :alt="item.name"/>
+                            <h3 class="box__title"><span class="box__title-inner" v-html="item.name"></span></h3>
+                            <h4 class="box__text box__text--bottom"><span class="box__text-inner" v-html="item.tag"></span></h4>
+                            <div class="box__deco" v-html="item.symbol"></div>
                         </div>
 
                         <div class="box" v-else-if="item.style_type=='9'">
                             <div class="box__shadow"></div>
-                            <img class="box__img box__img--original" src="../../../assets/img/original/10.jpg" alt="Some image"/>
-                            <h3 class="box__title"><span class="box__title-inner">Wild</span></h3>
-                            <h4 class="box__text box__text--bottom"><span class="box__text-inner">Zack</span></h4>
+                            <img class="box__img box__img--original" :src="item.img" :alt="item.name"/>
+                            <h3 class="box__title"><span class="box__title-inner" v-html="item.name"></span></h3>
+                            <h4 class="box__text box__text--bottom"><span class="box__text-inner" v-html="item.tag"></span></h4>
                         </div>
 
                         <div class="box" v-else-if="item.style_type=='10'">
                             <div class="box__shadow"></div>
-                            <img class="box__img box__img--original" src="../../../assets/img/original/11.jpg" alt="Some image"/>
-                            <h3 class="box__title box__title--bottom"><span class="box__title-inner">Lost</span></h3>
-                            <h4 class="box__text"><span class="box__text-inner box__text-inner--rotated2">Rust</span></h4>
+                            <img class="box__img box__img--original" :src="item.img" :alt="item.name"/>
+                            <h3 class="box__title box__title--bottom"><span class="box__title-inner" v-html="item.name"></span></h3>
+                            <h4 class="box__text"><span class="box__text-inner box__text-inner--rotated2" v-html="item.tag"></span></h4>
                         </div>
 
                         <div class="box" v-else-if="item.style_type=='11'">
                             <div class="box__shadow"></div>
-                            <img class="box__img box__img--original" src="../../../assets/img/original/12.jpg" alt="Some image"/>
-                            <h3 class="box__title box__title--straight box__title--left"><span class="box__title-inner">Grit</span></h3>
-                            <h4 class="box__text box__text--bottom box__text--right"><span class="box__text-inner box__text-inner--rotated3">Mud</span></h4>
-                            <div class="box__deco box__deco--top">&#10153;</div>
+                            <img class="box__img box__img--original" :src="item.img" :alt="item.name"/>
+                            <h3 class="box__title box__title--straight box__title--left"><span class="box__title-inner" v-html="item.name"></span></h3>
+                            <h4 class="box__text box__text--bottom box__text--right"><span class="box__text-inner box__text-inner--rotated3" v-html="item.tag"></span></h4>
+                            <div class="box__deco box__deco--top" v-html="item.symbol"></div>
                         </div>
                         
-                        <p class="overlay__content" v-html="item.description"></p>
+                        <p class="overlay__content" v-html="item.description+`\n<a href='${item.link}' target='_blank'>🔗LINK</a>`"></p>
                     </div>
+
                     <button class="overlay__close">
                         <svg class="icon icon--cross">
                             <svg id="icon-cross" viewBox="0 0 24 23">
-                                <title>cross</title>
                                 <path d="M23.865 3.677c.197-.383.164-.818-.008-1.18.048-.41-.06-.827-.448-1.147L22.323.457c-.636-.524-1.632-.689-2.25 0a155.348 155.348 0 0 1-8.797 9.001C9.011 7.342 6.72 5.255 4.443 3.165c-.8-.734-1.956-.503-2.458.37C1.253 3.9.659 4.374.168 5.182c-.233.386-.215.872 0 1.258 1.47 2.635 4.31 4.951 6.646 7.083-.313.28-.623.562-.942.836-3.146 2.702-5.268 4.416-1.331 7.187.053.037.107.029.161.05.076.036.148.06.232.074.026 0 .05.005.075.003.082.007.16.027.243.011 2.117-.415 4.085-2.074 5.872-3.9 1.74 1.715 3.592 3.353 5.63 4.325.485.232 1.063.097 1.436-.227.626.047 1.197-.342 1.484-.901.042-.026.07-.041.116-.07.91-.569.993-1.701.32-2.482-1.522-1.762-3.138-3.438-4.787-5.084 2.968-2.9 6.674-6.027 8.542-9.667z"></path>
                             </svg>
                         </svg>
@@ -204,11 +204,13 @@
 <script>
 import Header from '../public/Header'
 import Footer from '../public/Footer'
-import {Grid} from './list'
+import {Grid} from './Grid'
 export default {
     data(){
         return{
-            worklist:[]
+            worklist:[],
+            curLink: "",
+            animateDom:null
         }
     },
     components: {
@@ -226,18 +228,24 @@ export default {
         }).then(res=>{
             this.worklist = res.data
         })
-    }
+    },
   },
   created(){
+    document.querySelector("body").classList.add("loading")
     this.getWorkList()
   },
   mounted(){
-    this.$nextTick(_=>{
-        setTimeout(() => {
-            imagesLoaded(document.querySelectorAll('.box__img'), () => document.body.classList.remove('loading'));
-            new Grid(document.querySelector('.grid'))
-        }, 300);
+      this.$nextTick(_=>{
+        imagesLoaded(document.querySelectorAll('.box__img'), () => {
+            document.body.classList.remove('loading');
+            setTimeout(() => {
+                this.animateDom = new Grid(document.querySelector('.grid'))
+            }, 300);
+        });
     })
+  },
+  beforeDestroy(){
+      this.animateDom = null;
   }
 }
 </script>
@@ -263,18 +271,18 @@ export default {
 }
 
 /* Page Loader */
-.js .loading::before {
+.loading::before {
 	content: '';
 	position: fixed;
-	z-index: 100000;
+	z-index: 1030;
 	top: 0;
 	left: 0;
 	width: 100%;
 	height: 100%;
-	background: var(--color-bg);
+	background:  #ececec;
 }
 
-.js .loading::after {
+.loading::after {
 	content: '';
 	position: fixed;
 	z-index: 100000;
@@ -286,7 +294,7 @@ export default {
 	pointer-events: none;
 	border-radius: 50%;
 	opacity: 0.4;
-	background: var(--color-link);
+	background: #000;
 	animation: loaderAnim 0.7s linear infinite alternate forwards;
 }
 
@@ -574,7 +582,8 @@ a:focus {
 .overlay__close {
 	position: absolute;
 	top: 90px;
-	right: 10px;
+    right: 10px;
+    z-index: 999;
 	background: none;
 	border: 0;
 	margin: 1rem;
@@ -590,7 +599,10 @@ a:focus {
 	font-size: 1rem;
 	line-height: 1.5;
 	max-width: 25rem;
-	margin: 1rem 0 0 10vw;
+    margin: 1rem 0 0 10vw;
+    a{
+        text-decoration: none !important;
+    }
 }
 
 @media screen and (min-width: 55em) {

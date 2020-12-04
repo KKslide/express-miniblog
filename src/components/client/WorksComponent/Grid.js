@@ -223,6 +223,9 @@
                     rotationZ: 0
                 });
             }
+            setTimeout(() => {
+                this.contentItem.style.zIndex = 999;
+            }, 300);
         }
         hide () {
             this.DOM.el.classList.remove('overlay--open');
@@ -238,6 +241,7 @@
                     document.body.classList.remove('preview-open');
                     // hide preview
                     this.contentItem.style.opacity = 0;
+                    this.contentItem.style.zIndex = '';
                     // hide revealer
                     TweenMax.to(this.DOM.reveal, .5, {
                         delay: 0,

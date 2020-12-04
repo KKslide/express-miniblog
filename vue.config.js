@@ -1,5 +1,5 @@
-const webpack = require('webpack')
-const path = require("path")
+// const webpack = require('webpack')
+// const path = require("path")
 
 const proxyUrl = process.env.NODE_ENV === 'production'
     ? 'http://47.112.232.140'  // 开发

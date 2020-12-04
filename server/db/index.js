@@ -16,7 +16,7 @@ const pool = mysql.createPool({
     host: "localhost", // 在家
     user: "root",
     // password: "Lykang1105*",
-    password: "rootroot", // 在家
+    password: "root", // 在家
     port: '3306',
     database: "myblog"
 })

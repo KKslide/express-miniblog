@@ -16,12 +16,12 @@ export default {
     var timer = null;
     timer = setTimeout(() => {
       bar.style.right = '-40px';
-    }, 3000);
+    }, 8000);
     bar.ontouchstart = function () {
       this.style.right = '3px';
       setTimeout(() => {
         bar.style.right = '-40px';
-      }, 5000);
+      }, 8000);
     }
     bar.onmouseover = function () {
       this.style.right = '3px';

@@ -314,6 +314,7 @@ module.exports.editWork = function (req, res) {
             'description': `'${req.body.description}'`,
             'link': `'${req.body.link}'`,
             'addtime': `'${util.getNow()}'`,
+            'style_type': `'${req.body.style_type}'`,
             'symbol': `'${req.body.symbol}'`
         }
     };
