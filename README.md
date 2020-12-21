@@ -15,7 +15,7 @@
 
 ## 截图：
 <div>    
-<img src="./screenshot/snipaste_20200501_172623.jpg" height="200" style='margin-right:10px'/>
+<img src="./screenshot/snipaste_20200501_172623.jpg" height="200" style="margin-right:10px"/>
 <img src="./screenshot/snipaste_20200501_172650.jpg" height="200"/>
 </div> 
 
@@ -64,7 +64,7 @@
         host: "localhost",
         user: "root",
         password: "rootroot",
-        port: '3306',
+        port: "3306",
         database: "myblog"
     });
 ```
