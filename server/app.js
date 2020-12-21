@@ -9,7 +9,7 @@ var history = require('connect-history-api-fallback');
 
 var app = express();
 
-app.use(history());
+// app.use(history());
 
 // 跨域
 // app.all('*', function (req, res, next) {
