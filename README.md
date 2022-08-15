@@ -3,7 +3,7 @@
 <!-- 🌍
 *[English](/docs/README-en.md) ∙ [简体中文](README.md)* -->
 
-*👉 link online: [http://www.kkslide.fun](http://www.kkslide.fun)*
+*👉 link online: [http://www.kkslide.fun](http://www.kkslide.fun)  (oh no.. 域名到期了, 接下来准备换个别的)*
 
 ***
 
