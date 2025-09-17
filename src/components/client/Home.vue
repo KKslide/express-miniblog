@@ -82,7 +82,7 @@ export default {
 <style lang="less" scoped>
 .hero-full-container {
     // background-image: url("http://example.kkslide.fun/space.jpg");
-    background-image: url("http://example.kkslide.fun/space-2.jpg");
+    background-image: url("/static/img/kk-mirror.jpeg");
 }
 .text-content {
     h1 {

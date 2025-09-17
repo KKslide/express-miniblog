@@ -1,4 +1,8 @@
 var util = require('../util/util');
+var getIP = function(req) {
+  return util.getClientIp(req).match(/(25[0-5]|2[0-4]\d|[0-1]\d{2}|[1-9]?\d)\.(25[0-5]|2[0-4]\d|[0-1]\d{2}|[1-9]?\d)\.(25[0-5]|2[0-4]\d|[0-1]\d{2}|[1-9]?\d)\.(25[0-5]|2[0-4]\d|[0-1]\d{2}|[1-9]?\d)/)[0]
+}
+
 /* sql操作 */
 var dbMoudle = require('./sqlModule');
 
@@ -21,6 +25,12 @@ module.exports.getIndexPage = function (req, res) {
     })
 }
 
+module.exports.getIndexPage_v2 = function (req, res) {
+  dbMoudle.getIndexPageData_v2({}, (err, data) => {
+    res.json(data)
+  })
+}
+
 /* 获取详情页 */
 module.exports.getContentPage = function (req, res) {
     var opt = {
@@ -32,17 +42,27 @@ module.exports.getContentPage = function (req, res) {
     })
 }
 
+module.exports.getContentPage_v2 = function(req, res) {
+  var opt = {
+      id: req.body.contentid || req.query.contentid
+    }
+  dbMoudle.getContentDetail_v2(opt, (err, data) => {
+    res.json(data);
+  })
+}
+
 /* 评论文章 */
 module.exports.Comment = function (req, res) {
+    const ip = getIP(req)
     var opt = {
         'table': 'comment',
-        'id': `'${req.body.contentid || req.query.contentid}'`,
+        'id': req.body.contentid || req.query.contentid,
         'data': {
-            'a_id': `${req.body.contentid || req.query.contentid}`,
-            'user': `'${req.body.visitor || req.query.visitor || util.getClientIp(req).match(/(25[0-5]|2[0-4]\d|[0-1]\d{2}|[1-9]?\d)\.(25[0-5]|2[0-4]\d|[0-1]\d{2}|[1-9]?\d)\.(25[0-5]|2[0-4]\d|[0-1]\d{2}|[1-9]?\d)\.(25[0-5]|2[0-4]\d|[0-1]\d{2}|[1-9]?\d)/)[0]}'`,
-            'comment': `'${req.body.comment || req.query.body.comment}'`,
-            'ip': `'${util.getClientIp(req).match(/(25[0-5]|2[0-4]\d|[0-1]\d{2}|[1-9]?\d)\.(25[0-5]|2[0-4]\d|[0-1]\d{2}|[1-9]?\d)\.(25[0-5]|2[0-4]\d|[0-1]\d{2}|[1-9]?\d)\.(25[0-5]|2[0-4]\d|[0-1]\d{2}|[1-9]?\d)/)[0]}'`,
-            'time': `'${util.getNow()}'`
+            'a_id': req.body.contentid || req.query.contentid,
+            'user': req.body.visitor || req.query.visitor || ip,
+            'comment': req.body.comment || req.query.body.comment,
+            'ip': ip,
+            'time': util.getNow()
         }
     }
     dbMoudle.doAdd(opt, (err, data) => {
@@ -59,10 +79,10 @@ module.exports.leaveMessage = function (req, res) {
     var opt = {
         'table': 'messages',
         'data': {
-            'addtime': `'${util.getNow()}'`,
-            'viewer': `'${req.query.viewer || req.body.viewer}'`,
-            'message': `'${req.query.message || req.body.message}'`,
-            'ip': `'${util.getClientIp(req).match(/(25[0-5]|2[0-4]\d|[0-1]\d{2}|[1-9]?\d)\.(25[0-5]|2[0-4]\d|[0-1]\d{2}|[1-9]?\d)\.(25[0-5]|2[0-4]\d|[0-1]\d{2}|[1-9]?\d)\.(25[0-5]|2[0-4]\d|[0-1]\d{2}|[1-9]?\d)/)[0]}'`
+            'addtime': util.getNow(),
+            'viewer': req.query.viewer || req.body.viewer,
+            'message': req.query.message || req.body.message,
+            'ip': getIP(req)
         }
     }
     dbMoudle.doAdd(opt, (err, data) => {
@@ -79,8 +99,8 @@ module.exports.visitRecord = function (req, res) {
     var opt = {
         'table': 'visitors',
         'data': {
-            'ip': `'${util.getClientIp(req).match(/(25[0-5]|2[0-4]\d|[0-1]\d{2}|[1-9]?\d)\.(25[0-5]|2[0-4]\d|[0-1]\d{2}|[1-9]?\d)\.(25[0-5]|2[0-4]\d|[0-1]\d{2}|[1-9]?\d)\.(25[0-5]|2[0-4]\d|[0-1]\d{2}|[1-9]?\d)/)[0]}'`,
-            'time': `'${util.getNow()}'`,
+            'ip': getIP(req),
+            'time': util.getNow(),
         }
     }
     dbMoudle.doAdd(opt, (err, data) => {
@@ -128,6 +148,34 @@ module.exports.doLogin = function (req, res) {
     });
 }
 
+module.exports.doLogin_v2 = function(req, res) {
+  let opt = {
+      username: req.body.username || req.query.username || "",
+      password: req.body.password || req.query.password || ""
+  }
+  dbMoudle.loginQuery(opt, (err, data) => {
+        if (err) {
+            res.json({ code: 0, msg: '请求错误', err: err });
+        }
+        let userInfo = data;
+        if (data.length == 0) {
+            res.json({ code: 0, msg: "用户名或密码错误！" });
+            return false;
+        } else {
+            req.session.logData = { login: true }
+
+            res.json({
+                code: 1,
+                msg: '登陆成功! ',
+                userInfo: {
+                    id: userInfo[0].id,
+                    username: userInfo[0].username
+                }
+            });
+        }
+    });
+}
+
 /* *********************管理页首页********************* */
 module.exports.getDashboard = function (req, res) {
     dbMoudle.getDashboardData((err, data) => {
@@ -155,14 +203,14 @@ module.exports.getCategory = function (req, res) {
 /* 分类-新增 */
 module.exports.addCategory = function (req, res) {
     var name = req.body.name;
-    var banner = req.body.banner || 'http://example.kkslide.fun/banner.jpg';
+    var banner = req.body.banner;
     var obj = {
         'table': 'category',
         'data': {
-            'name': `'${name}'`,
-            'banner': "'http://example.kkslide.fun/banner.jpg'",
-            'addtime': `'${util.getNow()}'`,
-            'edittime': `'${util.getNow()}'`
+            'name': name,
+            'banner': banner,
+            'addtime': util.getNow(),
+            'edittime': util.getNow()
         }
     }
     dbMoudle.doAdd(obj, (err, data) => {
@@ -185,9 +233,9 @@ module.exports.editCategory = function (req, res) {
         'table': 'category',
         'id': req.body.id,
         'data': {
-            'name': `"${req.body.name}"`,
-            'banner': `"${req.body.banner}"`,
-            'edittime': `"${util.getNow()}"`
+            'name': req.body.name,
+            'banner': req.body.banner,
+            'edittime': util.getNow()
         }
     }
     dbMoudle.doEdit(obj, (err) => {
@@ -213,14 +261,14 @@ module.exports.addArticle = function (req, res) {
     var obj = {
         'table': 'article',
         'data': {
-            'title': `'${req.body.title}'`,
-            'category': `'${req.body.category}'`,
-            'composition': `'${req.body.content}'`,
-            'description': `'${req.body.description}'`,
-            'addtime': `'${util.getNow()}'`,
+            'title': req.body.title,
+            'category': req.body.category,
+            'composition': req.body.content || req.body.composition,
+            'description': req.body.description,
+            'addtime': util.getNow(),
             'viewnum': 0,
-            'minpic_url': `'${req.body.minpic_url}'`,
-            'video_src': `'${req.body.video_src}'`
+            'minpic_url': req.body.minpic_url,
+            'video_src': req.body.video_src
         }
     }
     dbMoudle.doAdd(obj, (err, data) => {
@@ -243,13 +291,13 @@ module.exports.editArticle = function (req, res) {
         'table': 'article',
         'id': req.body.id,
         'data': {
-            'title': `'${req.body.title}'`,
-            'category': `'${req.body.category}'`,
-            'composition': `'${req.body.content}'`,
-            'description': `'${req.body.description}'`,
-            'minpic_url': `'${req.body.minpic_url}'`,
-            'video_src': `'${req.body.video_src}'`,
-            'is_show': `'${req.body.is_show}'`
+            'title': req.body.title,
+            'category': req.body.category,
+            'composition': req.body.content || req.body.composition,
+            'description': req.body.description,
+            'minpic_url': req.body.minpic_url,
+            'video_src': req.body.video_src,
+            'is_show': req.body.is_show
         }
     };
     dbMoudle.doEdit(opt, (err) => {
@@ -292,7 +340,7 @@ module.exports.addWork = function (req, res) {
         res.json({ code: 1, msg: "success" });
     })
 }
-/* 文章评论-删除 */
+/* 作品-删除 */
 module.exports.delWork = function (req, res) {
     var opt = {
         id: req.body.id || req.query.id,
@@ -302,7 +350,7 @@ module.exports.delWork = function (req, res) {
         res.json({ code: 1, msg: "删除成功" });
     })
 }
-/* 文章评论-编辑 */
+/* 作品-编辑 */
 module.exports.editWork = function (req, res) {
     var opt = {
         'table': 'work',

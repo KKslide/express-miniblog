@@ -218,6 +218,7 @@ export default {
     props: ['propData'],
     watch: {
         propData(val) {
+            console.log('val ==>>>>', val)
             this.getChart()
         }
     },

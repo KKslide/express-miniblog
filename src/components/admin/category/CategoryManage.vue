@@ -97,9 +97,7 @@ export default {
             categoryDetail: {
                 id: "",
                 name: "",
-                banner: "http://example.kkslide.fun/banner.jpg",
-                // addtime: "",
-                // edittime: "",
+                banner: "",
             },
             rules:{
                 name:[{ required: true, message: '内容不能为空', trigger: 'blur' }],
@@ -162,7 +160,7 @@ export default {
         open(){
             this.dialogVisible=true;
             this.categoryDetail.name="";
-            this.categoryDetail.banner="http://example.kkslide.fun/banner.jpg";
+            this.categoryDetail.banner="";
             this.handleType="add";
         },
         del(index, row) { // 删除按钮
@@ -248,7 +246,7 @@ export default {
             let tempForm = new FormData();
             tempForm.append('file',files.raw);
             this.$refs.uploading.style.display = 'block';
-            this.$axios.post('/pic/upload',tempForm).then(res=>{
+            this.$axios.post('/pic/img_upload',tempForm).then(res=>{
                 this.$refs.uploading.style.display = 'none';
                 if(res.status==200){
                     this.categoryDetail.banner = res.data.imageUrl;

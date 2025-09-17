@@ -50,8 +50,7 @@ export default {
   z-index: 9999;
   background-color: #fff;
   transition: right 0.5s;
-  i {
-  }
+  // i { }
   span {
     transform: translateX(4px);
     font-size: 10px;

@@ -1,6 +1,10 @@
+# 沉迷搬砖... 暂停更新了🥵
+
+***
+
 # ExpressBlog
 
-*👉 link online: [http://www.kkslide.fun](http://www.kkslide.fun)*
+*👉 link online: [http://www.kkslide.fun](http://www.kkslide.fun)*(已失效🥵)
 
 ***
 

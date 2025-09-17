@@ -83,6 +83,7 @@ export default new VueRouter({
             path: '/admin',
             name: 'admin',
             component: AdminComponent,
+            redirect: { name: 'admhome' },
             children: [
                 {
                     path: 'admhome',

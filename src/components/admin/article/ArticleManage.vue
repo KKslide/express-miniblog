@@ -88,7 +88,7 @@
             size="85%"
             :modal-append-to-body="true"
         >
-            <div class="demo-drawer__content" style="padding:0 15px 10px 15px;">
+            <div class="demo-drawer__content" style="padding:0 15px 60px 15px;">
                 <el-form :model="form" ref="form" :rules="rules">
                     <!-- 文章标题 -->
                     <el-form-item label="文章标题" :label-width="formLabelWidth" prop="title">
@@ -202,10 +202,14 @@
                     </el-form-item>
                     <!-- 文章内容 -->
                     <el-form-item label="文章内容" :label-width="formLabelWidth" prop="content">
-                        <div id="wangEditor"></div>
+                      <!-- <div id="wangEditor"></div> -->
+                      <div id="wangEditor-wrapper">
+                        <div id="wangEditor-toolbar"></div>
+                        <div id="wangEditor-content" style="height: 300px;"></div>
+                      </div>
                     </el-form-item>
                 </el-form>
-                <div class="demo-drawer__footer" style="margin-bottom:10px;">
+                <div id="drawer-footer" class="demo-drawer__footer">
                     <el-button @click="dialog = false; editorDestroy();">取 消</el-button>
                     <!-- <el-button type="primary" @click="$refs.drawer.closeDrawer()" :loading="loading" >{{ loading ? '提交中 ...' : '确 定' }}</el-button> -->
                     <el-button type="primary" @click="submit" :loading="loading" >{{ loading ? '提交中 ...' : '确 定' }}</el-button>
@@ -216,10 +220,10 @@
 </template>
 
 <script>
+const { Boot, createEditor, createToolbar } = window.wangEditor;
 import CommentCom from './CommentManage' // 评论模块
 import Cropper from './Cropper'
 import { IsURL, deepClone } from "../../../utils/utils"
-let that;
 export default {
     data() {
         return {
@@ -287,7 +291,8 @@ export default {
         targetUrl: {
             // 上传地址
             type: String,
-            default: '/pic/upload'
+            // default: '/pic/upload'
+            default: '/pic/img_upload'
         },
         multiple: {
             // 多图开关
@@ -546,36 +551,57 @@ export default {
             }
             this.isShow = row.is_show == '是' ? '1' : '0';
             this.$nextTick(_=>{
-                this.editor.txt.html(this.form.composition);
+                // this.editor.txt.html(this.form.composition);
+                this.editor.setHtml(this.form.composition)
             })
         },
 
         /* ********* wangEditor编辑器的配置 *********** */
-        editorInit () { // wangEditor编辑器的配置
-            this.$nextTick(_=>{
-                this.editor = new wangEditor("#wangEditor");
-                this.editor.highlight = hljs; // 代码高亮
-                Object.assign(this.editor.config, {
-                    height:180,
-                    showFullScreen: true, // 是否显示全屏按钮
-                    uploadImgAccept: ["jpg", "jpeg", "png", "gif", "bmp"], // 限制上传图片类型
-                    uploadImgMaxLength: 1, // 一次最多上传 1张图片
-                    uploadImgServer: "/pic/upload", // 图片上传接口图片
-                    linkImgCallback: this.internetPic, // 上传网络图片成功回调
-                    uploadImgMaxSize: 2 * 1024 * 1024, // 限制上传图片大小为 2M
-                    uploadImgTimeout: 60 * 1000, // 上传图片超时时间
-                    uploadFileName: "file",
-                    linkCheck (text, link) {
-                        return IsURL(link) ? true : "插入的不是URL地址, 请重新输入";
-                    },
-                    pasteFilterStyle: false, // 关闭粘贴样式过滤
-                    pasteIgnoreImg: false, // 忽略粘贴的图片 - 先不忽略
-                    onblur: html => this.form.content = html, // 编辑区域 和 blur（失焦）- 同步form表单
-                    onfocus: html => this.form.content = html, // 编辑区域 focus（聚焦）- 同步form表单
-                    onchange: html => this.form.content = html, // 编辑区域 focus（鼠标点击、键盘打字等）- 同步form表单
+        editorInit () {
+          const that = this;
+          const editorConfig = {
+            placeholder: "请编辑博文内容...",
+            autoFocus: false,
+            onCreated(editor) {
+              editor.getMenuConfig("uploadImage").customUpload = (file, insertFn) => {
+                let tempForm = new FormData();
+                tempForm.append('file', file);
+                const uploading = that.$loading({
+                  lock: true,
+                  text: '图片上传中...',
+                  spinner: 'el-icon-loading',
+                  background: 'rgba(0, 0, 0, 0.7)'
                 });
-                this.editor.create();
+                that.$axios.post('/pic/img_upload',tempForm).then(res => {
+                    if (res.status==200) {
+                        insertFn(res.data.imageUrl)
+                    } else {
+                      alert('上传失败!')                      
+                    }
+                    uploading.close()
+                })
+              }
+            },
+            onChange(editor) {
+              const html = editor.getHtml();
+              that.form.content = html
+            },
+          };
+
+          this.$nextTick(() => {
+            that.editor = Object.seal(createEditor({
+              selector: "#wangEditor-content",
+              html: "",
+              config: editorConfig,
+              mode: "defalut", // 'default' or 'simple'
+            }));
+            createToolbar({
+              editor: that.editor,
+              selector: "#wangEditor-toolbar",
+              // config:
+              mode: "defalut"
             })
+          })
         },
         internetPic (src) { // 上传网络图片成功回调
             // console.log(src);
@@ -614,8 +640,9 @@ export default {
         upload(data) {
             // 自定义upload事件
             this.$refs.uploading.style.display = 'block'
-            let imgData = new FormData();
-            let fileOfBlob = new File([data],'uploadPic.'+data.type.split('/')[1]);
+            const imgData = new FormData();
+            const fileName = 'minpic_' + new Date().Format('yyyy_MM_dd_hh_mm_ss') + '.'
+            const fileOfBlob = new File([data], fileName + data.type.split('/')[1]);
             imgData.append('file', fileOfBlob);
             imgData.image = fileOfBlob;
             this.$axios.post(this.targetUrl, imgData).then(res => {
@@ -662,7 +689,7 @@ export default {
 }
 </script>
 
-<style lang="less"scoped>
+<style lang="less" scoped>
 // 分割线样式
 .pager_divider{
     margin: 10px 0;
@@ -739,11 +766,27 @@ export default {
     height: unset !important;
 }
 
+#drawer-footer {
+  margin-bottom: 10px;
+  position: absolute;
+  // left: 15px;
+  bottom: 0;
+  background-color: #fff;
+  padding: 15px 0;
+  width: 100%;
+}
+
 // *********************** wangEditor富文本编辑器 ************************
+#wangEditor-wrapper {
+  border-radius: 3px;
+  border: 1px solid rgba(0, 0, 0, .1);
+}
+#wangEditor-toolbar {
+  border-bottom: 1px solid rgba(0, 0, 0, .1);
+}
 #wangEditor{
     padding: 10px;
 }
-// *********************** wangEditor富文本编辑器 ************************
 #article {
     padding: 15px;
 }

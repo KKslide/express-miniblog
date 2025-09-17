@@ -75,6 +75,7 @@ export default {
       this.previews = data
     },
     uploadImg (type) {
+      console.log('type类型====>', type)
       // 将剪裁好的图片回传给父组件
       event.preventDefault()
       let that = this

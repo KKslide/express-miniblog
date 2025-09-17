@@ -2,22 +2,35 @@ var express = require('express');
 var router = express.Router();
 var handler = require('./handler.js');
 var path = require("path");
+var fs = require("fs");
 var formidable = require("formidable"); // 用来处理上传图片的
+var authMiddleware = require("../middleware/auth.js");
 
 /* ********* 前端 ********* */
 /* 获取blog列表数据 或 vlog列表数据 */
 router.get('/index/getpage', handler.getIndexPage);
+router.get('/index/getpage_v2', handler.getIndexPage_v2);
 /* 获取详情页 */
 router.post('/index/getcontent', handler.getContentPage);
+router.post('/index/getcontent_v2', handler.getContentPage_v2);
 /* 评论文章 */
 router.post('/index/comment', handler.Comment);
 /* 获取作品列表 */
 router.post('/index/getworklist', handler.getWorkList);
 /* 留言 */
+router.get('/index/message/get', handler.getMessages);
 router.post('/index/message/add', handler.leaveMessage);
+
+/* 统计访问者IP和时间 */
+router.post('/index/visit', handler.visitRecord);
 
 
 /* ********* 管理端 ******** */
+/* 转发到 /server */
+router.get('/admin', (req, res) => {
+  res.redirect('/server')
+})
+
 /* 检测是否登陆 */
 router.get('/admin/isadmin', (req, res) => {
     if (JSON.stringify(req.cookies) == "{}") {
@@ -33,6 +46,29 @@ router.get("/admin/logout", (req, res) => {
     res.cookie('userInfo', null, { expires: new Date(0) });
     res.json({ code: 1, msg: "退出成功" });
 });
+/* 登陆/登出 */
+router.post('/admin/login_v2', handler.doLogin_v2)
+router.post('/admin/logout_v2', (req, res) => {
+  req.session.destroy(err => {
+    res.clearCookie('sid');
+    res.json({ code: 1, message: '已退出登陆' });
+  });
+})
+
+router.use(authMiddleware)
+
+/* 清除cookie */
+router.get('/admin/clear', (req, res) => {
+  req.session.destroy(err => {
+    res.clearCookie('sid');
+    res.json({ code: 0, message: '已退出' });
+  });
+});
+/* 查看session */
+router.get('/admin/red', (req, res) => {
+  console.log('查看session ===>>>', req.session)
+  res.json(req.session)
+})
 
 /* 后台-首页数据 */
 router.get("/admin/getgeneral", handler.getDashboard);
@@ -75,7 +111,6 @@ router.post('/admin/comment/del', handler.delComment);
 
 /* 留言 */
 /* 留言-获取-和前端同个接口 */
-router.get('/index/message/get', handler.getMessages);
 router.get('/admin/message/get', handler.adminGetMessages);
 /* 留言-删除 */
 router.post('/admin/massage/del', handler.delMessage);
@@ -85,30 +120,49 @@ router.post('/pic/upload', handler.doUpload);
 
 /* 本地图片上传 */
 router.post("/pic/img_upload", function (req, res) {
+    console.log('来了老弟...');
     var form = new formidable.IncomingForm()
     form.uploadDir = "./upload";
     form.keepExtensions = true;
     form.parse(req, function (err, fields, files) {
-        // console.log(fields);
-        // console.log(files);
+        const file = files.file
+        const tempPath = file.path
+        let originalName = file.name
+        if (originalName.indexOf('minpic') == -1) {
+          let _tempName = originalName.split('.')
+          originalName = _tempName[0] + '_' + Date.now() + '.' + _tempName[1]
+        }
+        const targetPath = path.join(form.uploadDir, originalName)
         if (err) {
             console.log(err);
             res.json({ code: 0, msg: "上传失败！" })
         } else {
             var ip = req.headers['x-real-ip'] ? req.headers['x-real-ip'] : req.ip.replace(/::ffff:/, ''); // 有问题
-            res.json({
-                code: 1,
-                msg: "上传成功！",
-                errno: 0,
-                path: 'http://' + ip + '/' + path.basename(Object.values(files)[0].path),
-                data: ['http://' + ip + '/' + path.basename(Object.values(files)[0].path)],
-                imageUrl: 'http://' + ip + '/' + path.basename(Object.values(files)[0].path),
+            ip += ':' + (process.env.PORT || '8088')
+            fs.rename(tempPath, targetPath, err => {
+              if (err) {
+                console.log(err);
+                res.json({ code: 0, msg: "上传失败！" })
+                return
+              }
+              else {
+                setTimeout(() => {
+                    res.json({
+                        code: 1,
+                        msg: "上传成功！",
+                        errno: 0,
+                        // path: 'http://' + ip + '/' + targetPath,
+                        // data: ['http://' + ip + '/' + targetPath],
+                        // imageUrl: 'http://' + ip + '/' + targetPath,
+                        path: '/' + targetPath,
+                        data: ['/' + targetPath],
+                        imageUrl: '/' + targetPath,
+                    })
+                }, 1000);
+              }
             })
         }
     })
 });
-
-/* 统计访问者IP和时间 */
-router.post('/index/visit', handler.visitRecord);
 
 module.exports = router;
